@@ -3,7 +3,7 @@
     "strict": true,
     "outDir": "dist",
     "module": "commonjs",
-    "target": "es2022",
+    "target": "esnext",
     "removeComments": true,
     "noEmitOnError": true,
     "esModuleInterop": true,
