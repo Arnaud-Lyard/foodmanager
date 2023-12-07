@@ -1,8 +1,8 @@
 import { JwtTokenAdapter } from './jwt-token-adapter';
 
 const sutFactory = () => {
-  const secret = process.env.JWT_SECRET || 'any-secret';
-  const refreshSecret = process.env.JWT_SECRET_REFRESH || 'any-secret-refresh';
+  const secret = 'any-secret';
+  const refreshSecret = 'any-secret-refresh';
 
   const sut = new JwtTokenAdapter(secret, refreshSecret);
 

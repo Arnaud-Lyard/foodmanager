@@ -1,0 +1,15 @@
+{
+  "engines": {
+    "node": ">=20.10.0"
+  },
+  "scripts": {
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:dropAll": "docker stop $(docker ps -a -q) && docker system prune -f",
+    "pre:commit": "cd ./server && npm run pre:commit",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
+}
