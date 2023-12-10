@@ -75,7 +75,6 @@ describe('TokenRepository', () => {
   });
 
   afterAll(async () => {
-    // const deleteToken = db.token.deleteMany();
     const deleteUser = db.user.deleteMany({
       where: {
         OR: [

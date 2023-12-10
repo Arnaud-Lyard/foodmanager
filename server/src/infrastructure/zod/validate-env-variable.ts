@@ -1,9 +1,8 @@
 import z from 'zod';
+import { EnvironmentVariableValidationError } from '../../application/errors/environement-variable-validation-error';
 
-const envVariablesSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
+export const envVariablesSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production', 'test']),
   DATABASE_URL: z.string(),
   TEST_DATABASE_URL: z.string(),
   PORT: z.string(),
@@ -29,11 +28,19 @@ export function validateEnvVariables() {
   });
 
   if (!envVariables.success) {
-    const errorsFormatted: string[] = [];
-    for (const error of envVariables.error.errors) {
-      errorsFormatted.push(`${error.path} : ${error.message}`);
+    let errorsFormatted: string = '';
+    for (let i = 0; i < envVariables.error.errors.length; i++) {
+      const error = envVariables.error.errors[i];
+      if (i === 0) {
+        errorsFormatted += `${error.path} : ${error.message}`;
+      } else {
+        errorsFormatted += `, ${error.path} : ${error.message}`;
+      }
     }
-    throw new Error(`Environment variable invalid : ${errorsFormatted}`);
+    const environmentValidationError = new EnvironmentVariableValidationError(
+      `Environment variable invalid : ${errorsFormatted}`,
+    );
+    throw environmentValidationError;
     process.exit(1);
   }
 }
