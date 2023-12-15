@@ -23,6 +23,7 @@
     "pre:commit": "npm run test:coverage && npm run lint && npm run lint:ts && npm run build",
     "migrate:test": "dotenv -e .env.test prisma migrate dev",
     "migrate:dev": "dotenv -e .env prisma migrate dev",
+    "migrate:reset:dev": "dotenv -e .env prisma migrate reset",
     "migrate:reset:test": "dotenv -e .env.test prisma migrate reset",
     "generate": "prisma generate",
     "database:up": "docker compose up -d",

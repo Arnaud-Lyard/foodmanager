@@ -2,7 +2,7 @@ import { User } from '../../../../../domain/models/user/user';
 import { Prisma } from '@prisma/client';
 import { Role } from '../../../../../domain/models/role/role';
 
-export type UserWithRolesPayload = Prisma.userGetPayload<{
+export type UserWithRolesPayload = Prisma.UserGetPayload<{
   include: { userRole: { include: { role: true } } };
 }>;
 

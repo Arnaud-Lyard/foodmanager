@@ -17,10 +17,9 @@ export class IsAuthenticatedMiddleware implements Middleware {
       throw new UnauthorizedError('Invalid request');
     }
 
-    const { authorization } = request.headers;
-    let [, token] = authorization.split(/\s+/);
+    const tokenInHeader = request.headers.authorization;
+    let token = tokenInHeader.split(' ')[1];
     token = genericStringSanitizerSingleton.sanitize(token);
-
     try {
       const userId = this.jwtTokenAdapter.verify(token);
       request.headers.userId = userId;

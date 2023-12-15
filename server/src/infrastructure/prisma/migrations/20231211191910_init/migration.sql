@@ -34,12 +34,12 @@ CREATE TABLE "role" (
 );
 
 -- CreateTable
-CREATE TABLE "userRole" (
+CREATE TABLE "user_role" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "user_id" UUID NOT NULL,
     "role_id" UUID NOT NULL,
 
-    CONSTRAINT "userRole_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "user_role_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -51,11 +51,14 @@ CREATE UNIQUE INDEX "token_token_key" ON "token"("token");
 -- CreateIndex
 CREATE UNIQUE INDEX "role_name_key" ON "role"("name");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "user_role_user_id_role_id_key" ON "user_role"("user_id", "role_id");
+
 -- AddForeignKey
 ALTER TABLE "token" ADD CONSTRAINT "token_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "userRole" ADD CONSTRAINT "userRole_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_role" ADD CONSTRAINT "user_role_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "userRole" ADD CONSTRAINT "userRole_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "user_role" ADD CONSTRAINT "user_role_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE CASCADE;

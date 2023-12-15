@@ -31,7 +31,7 @@ export class LoggedUserIsTargetUserMiddleware implements Middleware {
 
     const targetUserId = `${foundUser.id}`;
 
-    if (loggedUserId !== targetUserId) {
+    if (targetUserId !== request.params.id) {
       throw new UnauthorizedError(
         'You are not allowed to manipulate target user',
       );
