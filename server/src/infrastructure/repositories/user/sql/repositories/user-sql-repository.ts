@@ -11,7 +11,8 @@ import { User } from '../../../../../domain/models/user/user';
 import { UserRequestPartialFields } from '../../../../../domain/models/user/user-request-partial-fields';
 import { UserRequestWithPasswordHash } from '../../../../../domain/models/user/user-request-required-fields';
 import db from '../../../../../infrastructure/prisma/connection';
-import { mapUserFields } from '../helpers/map-user-fields';
+import { mapManyUsersFields, mapUserFields } from '../helpers/map-user-fields';
+import { mapUserRoleFields } from '../helpers/map-user-role-fields';
 
 export class UserSqlRepository
   implements
@@ -28,7 +29,7 @@ export class UserSqlRepository
       where: { id },
     });
     if (!user) return null;
-    return user;
+    return mapUserFields(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -46,7 +47,7 @@ export class UserSqlRepository
       const user = await db.user.create({
         data: requestModel,
       });
-      return user;
+      return mapUserFields(user);
     } catch (error: any) {
       const repositoryError = new RepositoryError('Could not create User');
       repositoryError.stack = error.stack;
@@ -109,7 +110,7 @@ export class UserSqlRepository
       take: limit,
       skip: offset,
     });
-    return users;
+    return mapManyUsersFields(users);
   }
 
   async findOneWithRoles(id: string): Promise<User | null> {
@@ -118,6 +119,6 @@ export class UserSqlRepository
       include: { userRole: { include: { role: true } } },
     });
     if (!user) return null;
-    return mapUserFields(user);
+    return mapUserRoleFields(user);
   }
 }

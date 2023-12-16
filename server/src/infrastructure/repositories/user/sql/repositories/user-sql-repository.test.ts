@@ -79,15 +79,6 @@ describe('UserSqlRepository', () => {
   });
   beforeEach(async () => {});
   afterAll(async () => {
-    // const deleteUserRole = db.userRole.deleteMany({
-    //   where: {
-    //     OR: [
-    //       { userId: '97ec8c72-b728-47be-b1f7-1cb6e5611211' },
-    //       { userId: 'd038f397-c52f-4a99-a2a1-903b9c7b1023' },
-    //       { userId: '2c709031-663b-4230-9027-3aa10dd2f48b' },
-    //     ],
-    //   },
-    // });
     const deleteRole = db.role.deleteMany({
       where: {
         OR: [
@@ -120,7 +111,6 @@ describe('UserSqlRepository', () => {
       firstName: 'first_name_1',
       lastName: 'last_name_1',
       email: 'user01@email.fr',
-      passwordHash: 'password_hash_1',
     });
   });
 
@@ -159,7 +149,6 @@ describe('UserSqlRepository', () => {
     expect(createdUser.firstName).toBe('another_firstName');
     expect(createdUser.lastName).toBe('another_lastName');
     expect(createdUser.email).toBe('another@email.com');
-    expect(createdUser.passwordHash).toBe('another_hash');
   });
 
   it('should throw if data is incorrect', async () => {

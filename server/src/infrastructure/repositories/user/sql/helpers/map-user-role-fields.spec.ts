@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from '../../../../../domain/models/user/user';
-import { UserWithRolesPayload, mapUserFields } from './map-user-fields';
+import {
+  UserWithRolesPayload,
+  mapUserRoleFields,
+} from './map-user-role-fields';
 
 const sutFactory = () => {
-  const sut = mapUserFields;
+  const sut = mapUserRoleFields;
 
   return {
     sut,
   };
 };
 
-describe('mapUserFields', () => {
+describe('mapUserRoleFields', () => {
   it('should map role rows to a single user', async () => {
     const { sut } = sutFactory();
     const userWithRoles: UserWithRolesPayload = {
