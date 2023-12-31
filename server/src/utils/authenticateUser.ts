@@ -24,10 +24,7 @@ export const authenticateUser = async (
     }
 
     // Validate the access token
-    const decoded = verifyJwt<{ sub: string }>(
-      access_token,
-      "accessTokenPublicKey"
-    );
+    const decoded = verifyJwt<{ sub: string }>(access_token);
 
     if (!decoded) {
       return new AppError(401, `Invalid token or user doesn't exist`);
