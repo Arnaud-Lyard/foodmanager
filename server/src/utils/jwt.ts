@@ -1,21 +1,9 @@
 import jwt, { SignOptions } from "jsonwebtoken";
-import { TokenPrivateKeyName, TokenPublicKeyName } from "../types/auth";
-import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from "../const";
+import { JWT_ACCESS_TOKEN } from "../const";
+import { TokenPublicKeyName } from "../types/auth";
 
-export const signJwt = (
-  payload: Object,
-  keyName: TokenPrivateKeyName,
-  options: SignOptions
-) => {
-  let key = "";
-  switch (keyName) {
-    case JWT_ACCESS_TOKEN.PRIVATE_KEY:
-      key = process.env.JWT_ACCESS_TOKEN_PRIVATE_KEY;
-      break;
-    case JWT_REFRESH_TOKEN.PRIVATE_KEY:
-      key = process.env.JWT_REFRESH_TOKEN_PRIVATE_KEY;
-      break;
-  }
+export const signJwt = (payload: Object, options: SignOptions) => {
+  const key = process.env.JWT_ACCESS_TOKEN_PRIVATE_KEY;
   const privateKey = Buffer.from(key, "base64").toString("ascii");
 
   return jwt.sign(payload, privateKey, {
@@ -33,9 +21,6 @@ export const verifyJwt = <T>(
     switch (keyName) {
       case JWT_ACCESS_TOKEN.PUBLIC_KEY:
         key = process.env.JWT_ACCESS_TOKEN_PUBLIC_KEY;
-        break;
-      case JWT_REFRESH_TOKEN.PUBLIC_KEY:
-        key = process.env.JWT_REFRESH_TOKEN_PUBLIC_KEY;
         break;
     }
     const publicKey = Buffer.from(key, "base64").toString("ascii");

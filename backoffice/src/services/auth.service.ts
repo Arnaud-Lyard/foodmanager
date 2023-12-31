@@ -1,6 +1,6 @@
+import { User } from "@/types/user";
 import axios, { AxiosInstance } from "axios";
-import { getAuthorizationHeader } from "../utils/getAuthorizationHeader";
-
+import useSWR, { Fetcher } from "swr";
 export class AuthService {
   protected readonly instance: AxiosInstance;
   public constructor(url: string) {
@@ -8,43 +8,38 @@ export class AuthService {
       baseURL: url,
       timeout: 30000,
       timeoutErrorMessage: "Time out!",
+      withCredentials: true,
     });
   }
 
-  signIn = (email: string, password: string) => {
-    return this.instance
-      .post("/sign-in", {
-        email,
-        password,
-      })
-      .then((res) => {
-        return {
-          username: res.data.username,
-          avatar: res.data.avatar,
-          id: res.data.userId,
-          accessToken: res.data.access_token,
-          expiredAt: res.data.expiredAt,
-        };
-      });
+  login = (email: string, password: string) => {
+    return this.instance.post("/auth/login", {
+      email,
+      password,
+    });
   };
 
-  getMe = (userId: string) => {
-    return this.instance
-      .get(`/users/${userId}`, {
-        headers: getAuthorizationHeader(),
-      })
-      .then((res) => {
-        return res.data;
-      });
+  logout = () => {
+    return this.instance.get("/auth/logout");
+  };
+
+  user = () => {
+    const fetcher: Fetcher<User> = (url: string) =>
+      this.instance.get(url).then((res) => res.data);
+
+    const { data, error, isLoading } = useSWR("/users", fetcher);
+    return {
+      user: data?.data.user,
+      error,
+      isLoading,
+    };
   };
 
   uploadAvatar = (userId: string, newAvatar: File) => {
     const formData = new FormData();
     formData.append("file", newAvatar);
     return this.instance
-      .post(`/users/${userId}/upload`, formData, {
-        headers: getAuthorizationHeader(),
-      })
+      .post(`/users/${userId}/upload`, formData)
       .then((res) => {
         return {
           newAvatar: res.data.data.url,

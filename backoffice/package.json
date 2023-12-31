@@ -13,7 +13,8 @@
     "next": "14.0.4",
     "react": "^18",
     "react-cropper": "^2.3.3",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

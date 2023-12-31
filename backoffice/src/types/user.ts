@@ -1,7 +1,15 @@
 export type User = {
-  username: string;
-  expiredAt: number;
-  accessToken: string;
-  avatar?: string;
-  id: string;
+  data: {
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      photo?: string;
+      role: Role;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
 };
+
+type Role = "user" | "admin";

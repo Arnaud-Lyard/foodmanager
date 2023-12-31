@@ -1,17 +1,17 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useSignIn } from "../hooks/auth/useSignIn";
+import { useLogin } from "../hooks/auth/useLogin";
 
-export default function SignIn() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn } = useSignIn();
+  const { login } = useLogin();
   const router = useRouter();
   const onSubmit = () => {
     if (!email || !password) {
       alert("Please enter information");
     } else {
-      signIn(email, password)
+      login(email, password)
         .then((res) => router.push("/profile"))
         .catch((e) => alert(e));
     }
@@ -40,7 +40,7 @@ export default function SignIn() {
           onClick={onSubmit}
           className="h-10 w-80 mt-8 bg-black rounded text-white"
         >
-          Sign in
+          Login
         </button>
       </div>
     </div>

@@ -95,10 +95,11 @@ export class UserRepository {
         "passwordResetToken",
       ]
     );
-    return await prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: { id: userId },
       select,
     });
+    return user;
   }
 
   static excludeFields<T>(fields: T, excludes: (keyof T)[]): BooleanObject<T> {

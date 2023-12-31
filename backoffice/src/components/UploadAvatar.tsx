@@ -1,22 +1,23 @@
 import React, { useRef, useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import { authService } from "../services";
+import { AuthService } from "../services/auth.service";
 
 type Props = {
   avatarUrl: string;
   userId: string;
   cancelEdit: () => void;
-  refetchUser: (userId: string) => Promise<void>;
+  // refetchUser: (userId: string) => Promise<void>;
 };
 
 export const UploadAvatar: React.FC<Props> = ({
   avatarUrl,
   userId,
   cancelEdit,
-  refetchUser,
+  // refetchUser,
 }) => {
   const [cropper, setCropper] = useState<any>();
+  const authService = new AuthService("http://localhost:4000");
 
   const getCropData = async () => {
     if (cropper) {
@@ -29,7 +30,7 @@ export const UploadAvatar: React.FC<Props> = ({
         authService
           .uploadAvatar(userId, file)
           .then(() => {
-            refetchUser(userId);
+            // refetchUser(userId);
             cancelEdit();
           })
           .catch((e) => alert(e));

@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useCurrentUser } from "../hooks/auth/useCurrentUser";
 import styles from "../styles/Home.module.css";
+import { useUser } from "@/hooks/auth/useUser";
 
 export default function Home() {
-  const { user: currentUser } = useCurrentUser();
+  const { user: currentUser } = useUser();
 
   return (
     <div className={styles.container}>
@@ -22,7 +22,7 @@ export default function Home() {
 
         <p className={styles.description}>
           {currentUser
-            ? `Hello ${currentUser.username}`
+            ? `Hello ${currentUser.name}`
             : "You are not logged in !"}
         </p>
 
@@ -32,7 +32,7 @@ export default function Home() {
             <p>This is a public route for every user!</p>
           </Link>
 
-          <Link href="/sign-in" className={styles.card}>
+          <Link href="/login" className={styles.card}>
             <h2>Sign in Page &rarr;</h2>
             <p>This is a private route for unauthenticated user!</p>
           </Link>

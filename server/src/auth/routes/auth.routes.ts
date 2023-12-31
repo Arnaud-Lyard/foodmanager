@@ -3,7 +3,6 @@ import {
   forgotPasswordHandler,
   loginUserHandler,
   logoutUserHandler,
-  refreshAccessTokenHandler,
   registerUserHandler,
   resetPasswordHandler,
   verifyEmailHandler,
@@ -23,8 +22,6 @@ const router = express.Router();
 router.post("/register", validate(registerUserSchema), registerUserHandler);
 
 router.post("/login", validate(loginUserSchema), loginUserHandler);
-
-router.get("/refresh", refreshAccessTokenHandler);
 
 router.get(
   "/verifyemail/:verificationCode",
