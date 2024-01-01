@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { UploadAvatar } from "../components/UploadAvatar";
-import { useUser } from "../hooks/auth/useUser";
-import { useLogout } from "../hooks/auth/useLogout";
+import { ChangeEvent, ReactElement, useState } from "react";
+import { UploadAvatar } from "../../components/UploadAvatar";
+import { useUser } from "../../hooks/auth/useUser";
+import { useLogout } from "../../hooks/auth/useLogout";
+import { NextPageWithLayout } from "../_app";
+import DashboardLayout from "./DashboardLayout";
 
-export default function Profile() {
+const Dashboard: NextPageWithLayout = () => {
   const [editMode, setEditMode] = useState(false);
   const [newAvatarUrl, setNewAvatarUrl] = useState("");
   const { user: currentUser } = useUser();
@@ -51,4 +53,10 @@ export default function Profile() {
       )}
     </div>
   );
-}
+};
+
+Dashboard.getLayout = function getLayout(dashboard: ReactElement) {
+  return <DashboardLayout>{dashboard}</DashboardLayout>;
+};
+
+export default Dashboard;
