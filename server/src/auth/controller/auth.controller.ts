@@ -66,7 +66,7 @@ export const registerUserHandler = async (
       verificationCode,
     });
 
-    const redirectUrl = `${process.env.ORIGINS}/verifyemail/${verifyCode}`;
+    const redirectUrl = `${process.env.CLIENT_URL}/verifyemail/${verifyCode}`;
     try {
       await new Email(user, redirectUrl).sendVerificationCode();
       await switchVerificationCode({ userId: user.id, verificationCode });
@@ -221,7 +221,7 @@ export const forgotPasswordHandler = async (
     });
 
     try {
-      const url = `${process.env.ORIGINS}/resetpassword/${resetToken}`;
+      const url = `${process.env.CLIENT_URL}/password/reset/${resetToken}`;
       await new Email(user, url).sendPasswordResetToken();
 
       res.status(200).json({
@@ -254,6 +254,12 @@ export const resetPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
+    if (req.body.password !== req.body.passwordConfirm) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Password and confirm password does not match",
+      });
+    }
     // Get the user from the collection
     const passwordResetToken = crypto
       .createHash("sha256")

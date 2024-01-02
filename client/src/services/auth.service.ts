@@ -35,15 +35,24 @@ export class AuthService {
     };
   };
 
-  uploadAvatar = (userId: string, newAvatar: File) => {
-    const formData = new FormData();
-    formData.append("file", newAvatar);
-    return this.instance
-      .post(`/users/${userId}/upload`, formData)
-      .then((res) => {
-        return {
-          newAvatar: res.data.data.url,
-        };
-      });
+  forgotPassword = (email: string) => {
+    return this.instance.post("/auth/forgotpassword", {
+      email,
+    });
+  };
+
+  resetPassword = ({
+    password,
+    passwordConfirm,
+    token,
+  }: {
+    password: string;
+    passwordConfirm: string;
+    token: string;
+  }) => {
+    return this.instance.patch(`/auth/resetpassword/${token}`, {
+      password,
+      passwordConfirm,
+    });
   };
 }

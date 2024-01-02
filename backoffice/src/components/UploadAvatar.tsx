@@ -17,7 +17,7 @@ export const UploadAvatar: React.FC<Props> = ({
   // refetchUser,
 }) => {
   const [cropper, setCropper] = useState<any>();
-  const authService = new AuthService("http://localhost:4000");
+  const authService = new AuthService(process.env.NEXT_PUBLIC_SERVER_URL!);
 
   const getCropData = async () => {
     if (cropper) {
