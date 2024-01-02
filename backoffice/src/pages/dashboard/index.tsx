@@ -1,14 +1,16 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { ChangeEvent, useState } from "react";
-import { UploadAvatar } from "../components/UploadAvatar";
-import { useCurrentUser } from "../hooks/auth/useCurrentUser";
-import { useLogout } from "../hooks/auth/useLogout";
+import { ChangeEvent, ReactElement, useState } from "react";
+import { UploadAvatar } from "../../components/UploadAvatar";
+import { useUser } from "../../hooks/auth/useUser";
+import { useLogout } from "../../hooks/auth/useLogout";
+import { NextPageWithLayout } from "../_app";
+import DashboardLayout from "./DashboardLayout";
 
-export default function Profile() {
+const Dashboard: NextPageWithLayout = () => {
   const [editMode, setEditMode] = useState(false);
   const [newAvatarUrl, setNewAvatarUrl] = useState("");
-  const { user: currentUser, refetchUser } = useCurrentUser();
+  const { user: currentUser } = useUser();
   const { logout } = useLogout();
   const router = useRouter();
 
@@ -22,9 +24,9 @@ export default function Profile() {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center">
       <p className="font-bold text-2xl">Welcome back</p>
-      <div className="font-semibold">You are: {currentUser?.username}</div>
-      {currentUser?.avatar && (
-        <img alt="" className="max-w-120 max-h-80" src={currentUser.avatar} />
+      <div className="font-semibold">You are: {currentUser?.name}</div>
+      {currentUser?.photo && (
+        <img alt="" className="max-w-120 max-h-80" src={currentUser.photo} />
       )}
       <input
         type="file"
@@ -35,7 +37,7 @@ export default function Profile() {
       <button
         onClick={() => {
           logout();
-          router.push("/sign-in");
+          router.push("/login");
         }}
         className="mt-2 border border-solid border-black py-2 px-4 rounded cursor-pointer"
       >
@@ -43,7 +45,7 @@ export default function Profile() {
       </button>
       {editMode && (
         <UploadAvatar
-          refetchUser={refetchUser}
+          // refetchUser={refetchUser}
           cancelEdit={() => setEditMode(false)}
           userId={currentUser?.id || ""}
           avatarUrl={newAvatarUrl}
@@ -51,4 +53,10 @@ export default function Profile() {
       )}
     </div>
   );
-}
+};
+
+Dashboard.getLayout = function getLayout(dashboard: ReactElement) {
+  return <DashboardLayout>{dashboard}</DashboardLayout>;
+};
+
+export default Dashboard;

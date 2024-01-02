@@ -37,7 +37,7 @@ async function bootstrap() {
   // 2. Cors
   app.use(
     cors({
-      origin: [process.env.ORIGINS],
+      origin: [process.env.CLIENT_URL, process.env.BACKOFFICE_URL],
       credentials: true,
     })
   );

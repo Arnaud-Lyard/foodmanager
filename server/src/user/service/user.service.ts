@@ -37,15 +37,14 @@ export async function checkIfEmailExist(email: string): Promise<User | null> {
 }
 
 export const signTokens = async (user: Prisma.UserCreateInput) => {
-  const access_token = signJwt({ sub: user.id }, "accessTokenPrivateKey", {
-    expiresIn: `${process.env.ACCESS_TOKEN_EXPIRES_IN}m`,
-  });
+  const access_token = signJwt(
+    { sub: user.id },
+    {
+      expiresIn: `${process.env.ACCESS_TOKEN_EXPIRES_IN}m`,
+    }
+  );
 
-  const refresh_token = signJwt({ sub: user.id }, "refreshTokenPrivateKey", {
-    expiresIn: `${process.env.REFRESH_TOKEN_EXPIRES_IN}m`,
-  });
-
-  return { access_token, refresh_token };
+  return { access_token };
 };
 
 export async function findUniqueUser(userId: string): Promise<User | null> {

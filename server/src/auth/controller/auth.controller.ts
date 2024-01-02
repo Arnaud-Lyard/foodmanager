@@ -1,14 +1,10 @@
-import { Prisma } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import config from "config";
 import crypto from "crypto";
 import { CookieOptions, NextFunction, Request, Response } from "express";
 import {
   checkIfEmailExist,
   createUser,
   findByEmail,
-  findUniqueUser,
-  findUser,
   findUserByPasswordResetToken,
   findUserByVerificationCode,
   signTokens,
@@ -19,7 +15,6 @@ import {
 } from "../../user/service/user.service";
 import AppError from "../../utils/appError";
 import Email from "../../utils/email";
-import { signJwt, verifyJwt } from "../../utils/jwt";
 import {
   ForgotPasswordInput,
   LoginUserInput,
@@ -41,14 +36,6 @@ const accessTokenCookieOptions: CookieOptions = {
     Date.now() + Number(process.env.ACCESS_TOKEN_EXPIRES_IN) * 60 * 1000
   ),
   maxAge: Number(process.env.ACCESS_TOKEN_EXPIRES_IN) * 60 * 1000,
-};
-
-const refreshTokenCookieOptions: CookieOptions = {
-  ...cookiesOptions,
-  expires: new Date(
-    Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_IN) * 60 * 1000
-  ),
-  maxAge: Number(process.env.REFRESH_TOKEN_EXPIRES_IN) * 60 * 1000,
 };
 
 export const registerUserHandler = async (
@@ -79,7 +66,7 @@ export const registerUserHandler = async (
       verificationCode,
     });
 
-    const redirectUrl = `${process.env.ORIGINS}/verifyemail/${verifyCode}`;
+    const redirectUrl = `${process.env.CLIENT_URL}/verifyemail/${verifyCode}`;
     try {
       await new Email(user, redirectUrl).sendVerificationCode();
       await switchVerificationCode({ userId: user.id, verificationCode });
@@ -130,64 +117,13 @@ export const loginUserHandler = async (
     }
 
     // Sign Tokens
-    const { access_token, refresh_token } = await signTokens(user);
-    res.cookie("access_token", access_token, accessTokenCookieOptions);
-    res.cookie("refresh_token", refresh_token, refreshTokenCookieOptions);
-    res.cookie("logged_in", true, {
-      ...accessTokenCookieOptions,
-      httpOnly: false,
-    });
-
-    res.status(200).json({
-      status: "success",
-      access_token,
-    });
-  } catch (err: any) {
-    next(err);
-  }
-};
-
-export const refreshAccessTokenHandler = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const refresh_token = req.cookies.refresh_token;
-
-    const message = "Could not refresh access token";
-
-    if (!refresh_token) {
-      return next(new AppError(403, message));
-    }
-
-    // Validate refresh token
-    const decoded = verifyJwt<{ sub: string }>(
-      refresh_token,
-      "refreshTokenPublicKey"
-    );
-    if (!decoded) {
-      return next(new AppError(403, message));
-    }
-
-    // Check if user still exist
-    const user = await findUniqueUser(decoded.sub);
-    if (!user) {
-      return next(new AppError(403, message));
-    }
-    // Sign new access token
-    const access_token = signJwt({ sub: user.id }, "accessTokenPrivateKey", {
-      expiresIn: `${process.env.ACCESS_TOKEN_EXPIRES_IN}m`,
-    });
-
-    // 4. Add Cookies
+    const { access_token } = await signTokens(user);
     res.cookie("access_token", access_token, accessTokenCookieOptions);
     res.cookie("logged_in", true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
 
-    // 5. Send response
     res.status(200).json({
       status: "success",
       access_token,
@@ -199,7 +135,6 @@ export const refreshAccessTokenHandler = async (
 
 function logout(res: Response) {
   res.cookie("access_token", "", { maxAge: 1 });
-  res.cookie("refresh_token", "", { maxAge: 1 });
   res.cookie("logged_in", "", { maxAge: 1 });
 }
 
@@ -286,7 +221,7 @@ export const forgotPasswordHandler = async (
     });
 
     try {
-      const url = `${process.env.ORIGINS}/resetpassword/${resetToken}`;
+      const url = `${process.env.CLIENT_URL}/password/reset/${resetToken}`;
       await new Email(user, url).sendPasswordResetToken();
 
       res.status(200).json({
@@ -319,6 +254,12 @@ export const resetPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
+    if (req.body.password !== req.body.passwordConfirm) {
+      return res.status(400).json({
+        status: "fail",
+        message: "Password and confirm password does not match",
+      });
+    }
     // Get the user from the collection
     const passwordResetToken = crypto
       .createHash("sha256")
