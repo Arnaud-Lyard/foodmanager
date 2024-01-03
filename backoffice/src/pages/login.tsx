@@ -3,25 +3,44 @@ import { useState } from "react";
 import { useLogin } from "../hooks/auth/useLogin";
 import Image from "next/image";
 import Link from "next/link";
+import Notification from "../components/Notification";
+import { NotificationType } from "@/types/notification";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState<NotificationType>(
+    NotificationType.SUCCESS
+  );
+  const [notificationMessage, setNotificationMessage] = useState("");
   const { login } = useLogin();
   const router = useRouter();
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!email || !password) {
-      alert("Please enter information");
-    } else {
-      login(email, password)
-        .then((res) => router.push("/dashboard"))
-        .catch((e) => alert(e));
-    }
+    login(email, password)
+      .then(() => {
+        router.push("/dashboard");
+      })
+      .catch((e) => {
+        setNotification(true);
+        setNotificationType(NotificationType.ERROR);
+        setNotificationMessage(
+          e.response.data.message ?? e.response.data.errors[0].message
+        );
+        setTimeout(() => {
+          setNotification(false);
+        }, 5000);
+      });
   };
 
   return (
     <>
+      <Notification
+        isVisible={notification}
+        notificationType={notificationType}
+        message={notificationMessage}
+      />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
