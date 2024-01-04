@@ -7,7 +7,7 @@ import {
   resetPasswordHandler,
   verifyEmailHandler,
 } from "../controller/auth.controller";
-import { deserializeUser } from "../../middleware/deserializeUser";
+import { authenticateUser } from "../../middleware/authenticateUser";
 import { validate } from "../../middleware/validate";
 import {
   forgotPasswordSchema,
@@ -29,7 +29,7 @@ router.get(
   verifyEmailHandler
 );
 
-router.get("/logout", deserializeUser, logoutUserHandler);
+router.get("/logout", authenticateUser, logoutUserHandler);
 
 router.post(
   "/forgotpassword",

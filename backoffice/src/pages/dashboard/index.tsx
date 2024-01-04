@@ -1,11 +1,37 @@
-import { PaperClipIcon } from "@heroicons/react/20/solid";
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
+import { useUser } from "../../hooks/auth/useUser";
 import { NextPageWithLayout } from "../_app";
 import DashboardLayout from "./DashboardLayout";
-import { useUser } from "../../hooks/auth/useUser";
+import { useUpload } from "@/hooks/image/useUpload";
 
 const Dashboard: NextPageWithLayout = () => {
   const { user } = useUser();
+  const { upload } = useUpload();
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) {
+      // notification
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+
+    upload(formData)
+      .then(() => {
+        // notification
+      })
+      .catch((e) => {
+        // notification
+      });
+  };
 
   return (
     <div>
@@ -47,56 +73,22 @@ const Dashboard: NextPageWithLayout = () => {
             <dt className="text-sm font-medium leading-6 text-gray-900">
               Attachments
             </dt>
-            <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-              <ul
-                role="list"
-                className="divide-y divide-gray-100 rounded-md border border-gray-200"
-              >
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      className="h-5 w-5 flex-shrink-0 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">
-                        resume_back_end_developer.pdf
-                      </span>
-                      <span className="flex-shrink-0 text-gray-400">2.4mb</span>
-                    </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Download
-                    </a>
-                  </div>
-                </li>
-                <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                  <div className="flex w-0 flex-1 items-center">
-                    <PaperClipIcon
-                      className="h-5 w-5 flex-shrink-0 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                      <span className="truncate font-medium">
-                        coverletter_back_end_developer.pdf
-                      </span>
-                      <span className="flex-shrink-0 text-gray-400">4.5mb</span>
-                    </div>
-                  </div>
-                  <div className="ml-4 flex-shrink-0">
-                    <a
-                      href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Download
-                    </a>
-                  </div>
-                </li>
-              </ul>
+            <dd className="flex mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <form onSubmit={submitForm}>
+                <input
+                  type="file"
+                  name="file"
+                  accept="image/*"
+                  multiple={false}
+                  onChange={handleFileChange}
+                />
+                <button
+                  type="submit"
+                  className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  Change
+                </button>
+              </form>{" "}
             </dd>
           </div>
         </dl>

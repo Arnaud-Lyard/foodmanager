@@ -84,6 +84,19 @@ export class UserRepository {
     });
   }
 
+  static async saveUserImage({
+    userId,
+    imageUrl,
+  }: {
+    userId: string;
+    imageUrl: string;
+  }): Promise<User> {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { photo: imageUrl },
+    });
+  }
+
   static async findByUserId(userId: string): Promise<User | null> {
     const select = this.excludeFields<Prisma.UserFieldRefs>(
       prisma.user.fields,

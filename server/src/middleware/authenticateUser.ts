@@ -3,7 +3,7 @@ import { findUniqueUser } from "../user/service/user.service";
 import AppError from "../utils/appError";
 import { verifyJwt } from "../utils/jwt";
 
-export const deserializeUser = async (
+export const authenticateUser = async (
   req: Request,
   res: Response,
   next: NextFunction

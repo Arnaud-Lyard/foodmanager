@@ -9,6 +9,7 @@ import { PrismaClient } from "@prisma/client";
 import authRouter from "./auth/routes/auth.routes";
 import userRouter from "./user/routes/user.routes";
 import AppError from "./utils/appError";
+import multer from "multer";
 
 // import nodemailer from 'nodemailer';
 // (async function () {

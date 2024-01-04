@@ -4,7 +4,7 @@ import { findUniqueUser } from "../user/service/user.service";
 import AppError from "../utils/appError";
 import { verifyJwt } from "../utils/jwt";
 
-export const authenticateUser = async (
+export const getUserInformations = async (
   req: Request
 ): Promise<User | AppError> => {
   try {
