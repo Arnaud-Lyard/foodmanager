@@ -27,11 +27,12 @@ export class AuthService {
     const fetcher: Fetcher<User> = (url: string) =>
       this.instance.get(url).then((res) => res.data);
 
-    const { data, error, isLoading } = useSWR("/users", fetcher);
+    const { data, error, isLoading, mutate } = useSWR("/users", fetcher);
     return {
       user: data?.data.user,
       error,
       isLoading,
+      mutate,
     };
   };
 

@@ -2,12 +2,19 @@ import { ReactElement, useState } from "react";
 import { useUser } from "../../hooks/auth/useUser";
 import { NextPageWithLayout } from "../_app";
 import DashboardLayout from "./DashboardLayout";
-import { useUpload } from "@/hooks/image/useUpload";
+import { useUpload } from "../../hooks/image/useUpload";
+import { NotificationType } from "../../types/notification";
+import Notification from "../../components/Notification";
 
 const Dashboard: NextPageWithLayout = () => {
-  const { user } = useUser();
+  const { user, mutate } = useUser();
   const { upload } = useUpload();
   const [file, setFile] = useState<File | null>(null);
+  const [notification, setNotification] = useState(false);
+  const [notificationType, setNotificationType] = useState<NotificationType>(
+    NotificationType.SUCCESS
+  );
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -18,7 +25,12 @@ const Dashboard: NextPageWithLayout = () => {
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!file) {
-      // notification
+      setNotification(true);
+      setNotificationType(NotificationType.ERROR);
+      setNotificationMessage("You need to select a file before uploading it.");
+      setTimeout(() => {
+        setNotification(false);
+      }, 5000);
       return;
     }
     const formData = new FormData();
@@ -26,15 +38,34 @@ const Dashboard: NextPageWithLayout = () => {
 
     upload(formData)
       .then(() => {
-        // notification
+        setNotification(true);
+        setNotificationType(NotificationType.SUCCESS);
+        setNotificationMessage("File uploaded successfully.");
+        setTimeout(() => {
+          setNotification(false);
+        }, 5000);
+        mutate();
       })
       .catch((e) => {
-        // notification
+        setNotification(true);
+        setNotificationType(NotificationType.ERROR);
+        setNotificationMessage(
+          e.response.data.message ?? e.response.data.errors[0].message
+        );
+        setTimeout(() => {
+          setNotification(false);
+        }, 5000);
       });
   };
 
   return (
     <div>
+      <Notification
+        isVisible={notification}
+        notificationType={notificationType}
+        message={notificationMessage}
+      />
+
       <div className="px-4 sm:px-0">
         <h3 className="text-base font-semibold leading-7 text-gray-900">
           Administrator Information

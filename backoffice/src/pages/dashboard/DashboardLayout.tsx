@@ -9,23 +9,29 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  CircleStackIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "../../hooks/auth/useUser";
+import next from "next";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+  {
+    name: "Product",
+    href: "/dashboard/addproduct",
+    icon: CircleStackIcon,
+  },
+  { name: "Projects", href: "#", icon: FolderIcon },
+  { name: "Calendar", href: "#", icon: CalendarIcon },
+  { name: "Documents", href: "#", icon: DocumentDuplicateIcon },
+  { name: "Reports", href: "#", icon: ChartPieIcon },
 ];
 const teams = [
-  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+  { id: 1, name: "Heroicons", href: "#", initial: "H" },
+  { id: 2, name: "Tailwind Labs", href: "#", initial: "T" },
+  { id: 3, name: "Workcation", href: "#", initial: "W" },
 ];
 
 function classNames(...classes: any[]) {
@@ -35,6 +41,11 @@ function classNames(...classes: any[]) {
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useUser();
+  const [currentNavigation, setCurrentNavigation] = useState("Dashboard");
+
+  const handleCurrentNavigation = (name: string) => {
+    setCurrentNavigation(name);
+  };
 
   return (
     <>
@@ -98,8 +109,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         className="h-8 w-auto"
                         src="./next.svg"
                         alt="Your Company"
-                        width={10}
-                        height={10}
+                        width={100}
+                        height={100}
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">
@@ -111,15 +122,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                 <Link
                                   href={item.href}
                                   className={classNames(
-                                    item.current
+                                    currentNavigation === item.name
                                       ? "bg-indigo-700 text-white"
                                       : "text-indigo-200 hover:text-white hover:bg-indigo-700",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
+                                  onClick={() =>
+                                    handleCurrentNavigation(item.name)
+                                  }
                                 >
                                   <item.icon
                                     className={classNames(
-                                      item.current
+                                      currentNavigation === item.name
                                         ? "text-white"
                                         : "text-indigo-200 group-hover:text-white",
                                       "h-6 w-6 shrink-0"
@@ -142,11 +156,14 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                 <Link
                                   href={team.href}
                                   className={classNames(
-                                    team.current
+                                    currentNavigation === team.name
                                       ? "bg-indigo-700 text-white"
                                       : "text-indigo-200 hover:text-white hover:bg-indigo-700",
                                     "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
+                                  onClick={() =>
+                                    handleCurrentNavigation(team.name)
+                                  }
                                 >
                                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
                                     {team.initial}
@@ -175,8 +192,8 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 className="h-8 w-auto"
                 src="./next.svg"
                 alt="Your Company"
-                width={10}
-                height={10}
+                width={100}
+                height={100}
               />
             </div>
             <nav className="flex flex-1 flex-col">
@@ -188,15 +205,16 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         <Link
                           href={item.href}
                           className={classNames(
-                            item.current
+                            currentNavigation === item.name
                               ? "bg-indigo-700 text-white"
                               : "text-indigo-200 hover:text-white hover:bg-indigo-700",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
+                          onClick={() => handleCurrentNavigation(item.name)}
                         >
                           <item.icon
                             className={classNames(
-                              item.current
+                              currentNavigation === item.name
                                 ? "text-white"
                                 : "text-indigo-200 group-hover:text-white",
                               "h-6 w-6 shrink-0"
@@ -219,11 +237,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         <Link
                           href={team.href}
                           className={classNames(
-                            team.current
+                            currentNavigation === team.name
                               ? "bg-indigo-700 text-white"
                               : "text-indigo-200 hover:text-white hover:bg-indigo-700",
                             "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                           )}
+                          onClick={() => handleCurrentNavigation(team.name)}
                         >
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
                             {team.initial}
@@ -241,10 +260,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   >
                     <Image
                       className="h-8 w-8 rounded-full bg-indigo-700"
-                      src="./next.svg"
+                      src={`${user?.photo ?? "./next.svg"}`}
                       alt=""
-                      width={10}
-                      height={10}
+                      width={1024}
+                      height={1024}
                     />
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">{user?.name}</span>
@@ -271,10 +290,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <span className="sr-only">Your profile</span>
             <Image
               className="h-8 w-8 rounded-full bg-indigo-700"
-              src="./next.svg"
+              src={`${user?.photo ?? "./next.svg"}`}
               alt=""
-              width={10}
-              height={10}
+              width={1024}
+              height={1024}
             />
           </a>
         </div>

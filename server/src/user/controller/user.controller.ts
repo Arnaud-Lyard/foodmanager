@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { getUserInformations } from "../../utils/getUserInformations";
+import fs from "fs-extra";
 import AppError from "../../utils/appError";
+import { getUserInformations } from "../../utils/getUserInformations";
 import { UserRepository } from "../repository/user.repository";
 
 export const getUserHandler = async (
@@ -41,6 +42,15 @@ export const uploadUserImageHandler = async (
       return next(new AppError(400, "Please upload a file"));
     }
 
+    const fileName = user.photo?.split("/uploads/")[1];
+
+    if (fileName) {
+      try {
+        await fs.unlink(`public/uploads/${fileName}`);
+      } catch (err: any) {
+        next(err);
+      }
+    }
     const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
       file.filename
     }`;
