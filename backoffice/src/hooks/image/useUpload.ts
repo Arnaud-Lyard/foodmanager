@@ -1,10 +1,10 @@
-import { AuthService } from "@/services/auth.service";
+import { UserService } from "../../services/user.service";
 
 export const useUpload = () => {
   const upload = async (formData: FormData) => {
-    const authService = new AuthService(process.env.NEXT_PUBLIC_SERVER_URL!);
+    const userService = new UserService(process.env.NEXT_PUBLIC_SERVER_URL!);
 
-    await authService.upload(formData);
+    await userService.upload(formData);
   };
   return { upload };
 };

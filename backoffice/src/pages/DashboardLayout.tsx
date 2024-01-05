@@ -13,14 +13,14 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
-import { useUser } from "../../hooks/auth/useUser";
+import { useUser } from "../hooks/auth/useUser";
 import next from "next";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: HomeIcon },
+  { name: "Dashboard", href: "/", icon: HomeIcon },
   {
     name: "Product",
-    href: "/dashboard/addproduct",
+    href: "/product",
     icon: CircleStackIcon,
   },
   { name: "Projects", href: "#", icon: FolderIcon },
@@ -253,9 +253,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     ))}
                   </ul>
                 </li>
-                <li className="-mx-6 mt-auto">
+                <li
+                  className="-mx-6 mt-auto"
+                  onClick={() => handleCurrentNavigation("Dashboard")}
+                >
                   <Link
-                    href="/dashboard"
+                    href="/"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-indigo-700"
                   >
                     <Image
@@ -284,9 +287,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
           <div className="flex-1 text-sm font-semibold leading-6 text-white">
-            Dashboard
+            {currentNavigation}
           </div>
-          <a href="#">
+          <Link href="/" onClick={() => handleCurrentNavigation("Dashboard")}>
             <span className="sr-only">Your profile</span>
             <Image
               className="h-8 w-8 rounded-full bg-indigo-700"
@@ -295,7 +298,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               width={1024}
               height={1024}
             />
-          </a>
+          </Link>
         </div>
 
         <main className="py-10 lg:pl-72">

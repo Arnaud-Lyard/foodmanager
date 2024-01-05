@@ -36,15 +36,6 @@ export class AuthService {
     };
   };
 
-  upload = async (formData: FormData) => {
-    return this.instance
-      .post("/users/upload", formData)
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   uploadAvatar = (userId: string, newAvatar: File) => {
     const formData = new FormData();
     formData.append("file", newAvatar);

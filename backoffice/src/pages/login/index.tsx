@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useLogin } from "../hooks/auth/useLogin";
+import { useLogin } from "../../hooks/auth/useLogin";
 import Image from "next/image";
 import Link from "next/link";
-import Notification from "../components/Notification";
+import Notification from "../../components/Notification";
 import { NotificationType } from "@/types/notification";
 
 export default function Login() {
@@ -20,7 +20,7 @@ export default function Login() {
     event.preventDefault();
     login(email, password)
       .then(() => {
-        router.push("/dashboard");
+        router.push("/");
       })
       .catch((e) => {
         setNotification(true);

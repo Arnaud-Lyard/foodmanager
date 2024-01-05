@@ -1,15 +1,15 @@
 import { ReactElement, useState } from "react";
-import { useUser } from "../../hooks/auth/useUser";
-import { NextPageWithLayout } from "../_app";
+import { useUser } from "../hooks/auth/useUser";
+import { NextPageWithLayout } from "./_app";
 import DashboardLayout from "./DashboardLayout";
-import { useUpload } from "../../hooks/image/useUpload";
-import { NotificationType } from "../../types/notification";
-import Notification from "../../components/Notification";
+import { useUpload } from "../hooks/image/useUpload";
+import { NotificationType } from "../types/notification";
+import Notification from "../components/Notification";
 
 const Dashboard: NextPageWithLayout = () => {
   const { user, mutate } = useUser();
   const { upload } = useUpload();
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<File | "">("");
   const [notification, setNotification] = useState(false);
   const [notificationType, setNotificationType] = useState<NotificationType>(
     NotificationType.SUCCESS
@@ -22,7 +22,7 @@ const Dashboard: NextPageWithLayout = () => {
     }
   };
 
-  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!file) {
       setNotification(true);
@@ -44,9 +44,8 @@ const Dashboard: NextPageWithLayout = () => {
         setTimeout(() => {
           setNotification(false);
         }, 5000);
-        mutate();
       })
-      .catch((e) => {
+      .catch((e: any) => {
         setNotification(true);
         setNotificationType(NotificationType.ERROR);
         setNotificationMessage(
@@ -56,6 +55,8 @@ const Dashboard: NextPageWithLayout = () => {
           setNotification(false);
         }, 5000);
       });
+    await mutate();
+    setFile("");
   };
 
   return (
