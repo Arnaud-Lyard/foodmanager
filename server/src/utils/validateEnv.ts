@@ -17,6 +17,7 @@ const envSchema = z.object({
 
   CLIENT_URL: z.string(),
   BACKOFFICE_URL: z.string(),
+  SERVER_URL: z.string(),
 
   EMAIL_USER: z.string(),
   EMAIL_PASS: z.string(),
@@ -40,6 +41,7 @@ export function validateEnv() {
     ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN,
     CLIENT_URL: process.env.CLIENT_URL,
     BACKOFFICE_URL: process.env.BACKOFFICE_URL,
+    SERVER_URL: process.env.SERVER_URL,
 
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASS: process.env.EMAIL_PASS,

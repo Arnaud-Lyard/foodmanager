@@ -13,10 +13,12 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, callback) => {
     const name = file.originalname.split(" ").join("_");
-    console.log(name);
     const extension = MIME_TYPES[file.mimetype];
     callback(null, name + getTimeNow() + "." + extension);
   },
 });
 
-export const uploadFile = multer({ storage: storage }).single("file");
+export const uploadFile = multer({
+  storage: storage,
+  limits: { fileSize: 5000000 },
+}).single("file");

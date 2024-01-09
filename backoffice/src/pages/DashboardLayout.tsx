@@ -1,20 +1,19 @@
-import { Fragment, ReactNode, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   CalendarIcon,
   ChartPieIcon,
+  CircleStackIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
-  UsersIcon,
   XMarkIcon,
-  CircleStackIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, ReactNode, useEffect, useState } from "react";
 import { useUser } from "../hooks/auth/useUser";
-import next from "next";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -41,11 +40,24 @@ function classNames(...classes: any[]) {
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useUser();
-  const [currentNavigation, setCurrentNavigation] = useState("Dashboard");
+  const [currentNavigation, setCurrentNavigation] = useState("");
+  const router = useRouter();
 
   const handleCurrentNavigation = (name: string) => {
     setCurrentNavigation(name);
   };
+
+  useEffect(() => {
+    const currentPath = router.pathname;
+
+    const matchedNavigation = navigation.find(
+      (nav) => nav.href === currentPath
+    );
+
+    if (matchedNavigation) {
+      setCurrentNavigation(matchedNavigation.name);
+    }
+  }, [router.pathname]);
 
   return (
     <>

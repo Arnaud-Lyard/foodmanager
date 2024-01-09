@@ -8,4 +8,4 @@ export type Product = {
   year: number;
 };
 
-export type NewProduct = Omit<Product, "id">;
+export type NewProduct = Omit<Product, "id" | "image">;

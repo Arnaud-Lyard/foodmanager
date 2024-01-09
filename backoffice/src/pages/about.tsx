@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import DashboardLayout from "./DashboardLayout";
-import type { NextPageWithLayout } from "../_app";
+import type { NextPageWithLayout } from "./_app";
 
 const About: NextPageWithLayout = () => {
   return <p>hello world</p>;

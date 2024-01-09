@@ -64,6 +64,7 @@ export const registerUserHandler = async (
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
       verificationCode,
+      photo: `${process.env.SERVER_URL}/uploads/default.png`,
     });
 
     const redirectUrl = `${process.env.CLIENT_URL}/verifyemail/${verifyCode}`;

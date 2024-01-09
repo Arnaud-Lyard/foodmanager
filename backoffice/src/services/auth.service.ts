@@ -1,25 +1,19 @@
 import { User } from "@/types/user";
-import axios, { AxiosInstance } from "axios";
+import { AxiosResponse } from "axios";
 import useSWR, { Fetcher } from "swr";
-export class AuthService {
-  protected readonly instance: AxiosInstance;
-  public constructor(url: string) {
-    this.instance = axios.create({
-      baseURL: url,
-      timeout: 30000,
-      timeoutErrorMessage: "Time out!",
-      withCredentials: true,
-    });
-  }
-
-  login = (email: string, password: string) => {
-    return this.instance.post("/auth/login", {
+import { AxiosService } from "./axios.service";
+export class AuthService extends AxiosService {
+  login = async (
+    email: string,
+    password: string
+  ): Promise<AxiosResponse<{ status: string; access_token: string }>> => {
+    return await this.instance.post("/auth/login", {
       email,
       password,
     });
   };
 
-  logout = () => {
+  logout = async (): Promise<AxiosResponse<{ status: string }>> => {
     return this.instance.get("/auth/logout");
   };
 
