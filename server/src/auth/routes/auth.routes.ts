@@ -1,6 +1,7 @@
 import express from "express";
 import {
   forgotPasswordHandler,
+  loginAdminHandler,
   loginUserHandler,
   logoutUserHandler,
   registerUserHandler,
@@ -22,6 +23,8 @@ const router = express.Router();
 router.post("/register", validate(registerUserSchema), registerUserHandler);
 
 router.post("/login", validate(loginUserSchema), loginUserHandler);
+
+router.post("/adminlogin", validate(loginUserSchema), loginAdminHandler);
 
 router.get(
   "/verifyemail/:verificationCode",

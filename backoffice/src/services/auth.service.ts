@@ -7,7 +7,7 @@ export class AuthService extends AxiosService {
     email: string,
     password: string
   ): Promise<AxiosResponse<{ status: string; access_token: string }>> => {
-    return await this.instance.post("/auth/login", {
+    return await this.instance.post("/auth/adminlogin", {
       email,
       password,
     });
