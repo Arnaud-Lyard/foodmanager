@@ -4,6 +4,7 @@ import { useAddProduct } from "../hooks/product/useAddProduct";
 import { NotificationType } from "../types/notification";
 import DashboardLayout from "./DashboardLayout";
 import type { NextPageWithLayout } from "./_app";
+import { PhotoIcon } from "@heroicons/react/24/outline";
 
 const Product: NextPageWithLayout = () => {
   const [designation, setDesignation] = useState("");
@@ -73,6 +74,12 @@ const Product: NextPageWithLayout = () => {
     }
   };
 
+  const handleDrop = (event: React.DragEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const droppedFiles = event.dataTransfer.files;
+    setFile(droppedFiles[0]);
+  };
+
   return (
     <>
       <Notification
@@ -139,104 +146,132 @@ const Product: NextPageWithLayout = () => {
                 </div>
               </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:py-6">
+              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                 <label
-                  htmlFor="file"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  htmlFor="cover-photo"
+                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
                 >
                   Image
                 </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <input
-                    id="file"
-                    ref={inputRef}
-                    type="file"
-                    name="file"
-                    accept="image/*"
-                    multiple={false}
-                    onChange={handleUploadImage}
-                    required
-                    className="rounded-md bg-white px-2.5 py-1.5 text-sm leading-6 text-gray-600 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  />
+                <div
+                  className="mt-2 sm:col-span-2 sm:mt-0"
+                  onDrop={handleDrop}
+                  onDragOver={(event) => event.preventDefault()}
+                >
+                  <div className="flex max-w-2xl justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                    <div className="text-center text-sm leading-6 text-gray-600">
+                      {file ? (
+                        <p>{file.name}</p>
+                      ) : (
+                        <PhotoIcon
+                          className="mx-auto h-12 w-12 text-gray-300"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                        <label
+                          htmlFor="file"
+                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                        >
+                          <span>Upload a file</span>
+                          <input
+                            id="file"
+                            ref={inputRef}
+                            type="file"
+                            name="file"
+                            accept="image/*"
+                            multiple={false}
+                            onChange={handleUploadImage}
+                            required
+                            className="sr-only"
+                          />
+                        </label>
+                        <p className="pl-1">or drag and drop</p>
+                      </div>
+                      <p className="text-xs leading-5 text-gray-600">
+                        PNG, JPG up to 5MB
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <div>
-            <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Details
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
-              Add product details.
-            </p>
+        <div>
+          <h2 className="text-base font-semibold leading-7 text-gray-900">
+            Details
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm leading-6 text-gray-600">
+            Add product details.
+          </p>
 
-            <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Price
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <input
-                    type="number"
-                    name="price"
-                    id="price"
-                    step={0.01}
-                    min={0}
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  />
-                </div>
+          <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+              >
+                Price
+              </label>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <input
+                  type="number"
+                  name="price"
+                  id="price"
+                  step={0.01}
+                  min={0}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                />
               </div>
+            </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="year"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
-                >
-                  Year
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <input
-                    type="number"
-                    name="year"
-                    id="year"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                    min={1900}
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  />
-                </div>
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+              <label
+                htmlFor="year"
+                className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+              >
+                Year
+              </label>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <input
+                  type="number"
+                  name="year"
+                  id="year"
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  min={1900}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                />
               </div>
+            </div>
 
-              <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                <label
-                  htmlFor="capacity"
-                  className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+            <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+              <label
+                htmlFor="capacity"
+                className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5"
+              >
+                Capacity
+              </label>
+              <div className="mt-2 sm:col-span-2 sm:mt-0">
+                <select
+                  id="capacity"
+                  name="capacity"
+                  defaultValue={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                  required
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                 >
-                  Capacity
-                </label>
-                <div className="mt-2 sm:col-span-2 sm:mt-0">
-                  <select
-                    id="capacity"
-                    name="capacity"
-                    defaultValue={capacity}
-                    onChange={(e) => setCapacity(e.target.value)}
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                  >
-                    <option value="0.75">0,75</option>
-                    <option value="0.375">0,375</option>
-                    <option value="1.5">1,5</option>
-                    <option value="3">3</option>
-                  </select>
-                </div>
+                  <option value="0.75">0,75</option>
+                  <option value="0.375">0,375</option>
+                  <option value="1.5">1,5</option>
+                  <option value="3">3</option>
+                </select>
               </div>
             </div>
           </div>
