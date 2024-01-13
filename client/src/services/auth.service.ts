@@ -1,25 +1,19 @@
 import { User } from "@/types/user";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import useSWR, { Fetcher } from "swr";
-export class AuthService {
-  protected readonly instance: AxiosInstance;
-  public constructor(url: string) {
-    this.instance = axios.create({
-      baseURL: url,
-      timeout: 30000,
-      timeoutErrorMessage: "Time out!",
-      withCredentials: true,
-    });
-  }
-
-  login = (email: string, password: string) => {
+import { AxiosService } from "./axios.service";
+export class AuthService extends AxiosService {
+  login = (
+    email: string,
+    password: string
+  ): Promise<AxiosResponse<{ status: string; access_token: string }>> => {
     return this.instance.post("/auth/login", {
       email,
       password,
     });
   };
 
-  logout = () => {
+  logout = (): Promise<AxiosResponse<{ status: string }>> => {
     return this.instance.get("/auth/logout");
   };
 
@@ -27,11 +21,12 @@ export class AuthService {
     const fetcher: Fetcher<User> = (url: string) =>
       this.instance.get(url).then((res) => res.data);
 
-    const { data, error, isLoading } = useSWR("/users", fetcher);
+    const { data, error, isLoading, mutate } = useSWR("/users", fetcher);
     return {
       user: data?.data.user,
       error,
       isLoading,
+      mutate,
     };
   };
 
