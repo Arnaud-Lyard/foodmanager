@@ -1,13 +1,14 @@
 import express from "express";
 import {
   forgotPasswordHandler,
+  loginAdminHandler,
   loginUserHandler,
   logoutUserHandler,
   registerUserHandler,
   resetPasswordHandler,
   verifyEmailHandler,
 } from "../controller/auth.controller";
-import { deserializeUser } from "../../middleware/deserializeUser";
+import { authenticateUser } from "../../middleware/authenticateUser";
 import { validate } from "../../middleware/validate";
 import {
   forgotPasswordSchema,
@@ -23,13 +24,15 @@ router.post("/register", validate(registerUserSchema), registerUserHandler);
 
 router.post("/login", validate(loginUserSchema), loginUserHandler);
 
+router.post("/adminlogin", validate(loginUserSchema), loginAdminHandler);
+
 router.get(
   "/verifyemail/:verificationCode",
   validate(verifyEmailSchema),
   verifyEmailHandler
 );
 
-router.get("/logout", deserializeUser, logoutUserHandler);
+router.get("/logout", authenticateUser, logoutUserHandler);
 
 router.post(
   "/forgotpassword",

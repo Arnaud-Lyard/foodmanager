@@ -10,7 +10,7 @@ export const useResetPassword = () => {
     passwordConfirm: string;
     token: string;
   }) => {
-    const authService = new AuthService(process.env.NEXT_PUBLIC_SERVER_URL!);
+    const authService = new AuthService();
 
     await authService.resetPassword({ password, passwordConfirm, token });
   };
