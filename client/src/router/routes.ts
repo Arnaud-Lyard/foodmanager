@@ -1,11 +1,13 @@
 export const PUBLIC_ROUTES = {
-  LOGIN: "/login",
+  LOGIN: "/connection",
+  HOME: "/",
 } as const;
 
 export const PROTECTED_ROUTES = {
   HISTORY: "/tableaudebord/historique",
   DELIVERY: "/tableaudebord/livraison",
   USER: "/tableaudebord/utilisateur",
+  LOGOUT: "/deconnexion",
 } as const;
 
 type PublicRouteKeys = keyof typeof PUBLIC_ROUTES;
