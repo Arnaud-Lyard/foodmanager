@@ -49,12 +49,12 @@ async function bootstrap() {
   if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
   // ROUTES
-  app.use("/auth", authRouter);
-  app.use("/users", userRouter);
-  app.use("/products", productRouter);
+  app.use("api/auth", authRouter);
+  app.use("api/users", userRouter);
+  app.use("api/products", productRouter);
 
   // Testing
-  app.get("/api/healthchecker", (_, res: Response) => {
+  app.get("/api/", (_, res: Response) => {
     res.status(200).json({
       status: "success",
       message: "Welcome to NodeJs with Prisma and PostgreSQL",

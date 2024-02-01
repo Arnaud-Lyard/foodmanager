@@ -11,7 +11,7 @@ services:
       timeout: 5s
       retries: 5
     ports:
-      - 5433:5432
+      - 5435:5432
     volumes:
       - relaxinghippoquestsdatabase:/var/lib/postgresql/data
 
@@ -21,6 +21,7 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL={$DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase:5432/dbname?schema=public}
+      - NODE_ENV=${NODE_ENV:-production}
       - PORT=${PORT:-4000}
       - POSTGRES_HOST=${POSTGRES_HOST:-relaxinghippoquestsdatabase}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
