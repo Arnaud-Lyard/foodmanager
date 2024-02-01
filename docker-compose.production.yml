@@ -1,0 +1,65 @@
+services:
+  relaxinghippoquestsdatabase:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5433:5432
+    volumes:
+      - relaxinghippoquestsdatabase:/var/lib/postgresql/data
+
+  relaxinghippoquestsserver:
+    depends_on:
+      relaxinghippoquestsdatabase:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL={$DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase:5432/dbname?schema=public}
+      - PORT=${PORT:-4000}
+      - POSTGRES_HOST=${POSTGRES_HOST:-relaxinghippoquestsdatabase}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - EMAIL_USER=${EMAIL_USER:-user@user.com}
+      - EMAIL_PASS=${EMAIL_PASS:-password}
+      - EMAIL_HOST=${EMAIL_HOST:-host}
+      - EMAIL_PORT=${EMAIL_PORT:-port}
+      - JWT_ACCESS_TOKEN_PRIVATE_KEY=${JWT_ACCESS_TOKEN_PRIVATE_KEY:-private}
+      - JWT_ACCESS_TOKEN_PUBLIC_KEY=${JWT_ACCESS_TOKEN_PUBLIC_KEY:-public}
+      - ACCESS_TOKEN_EXPIRES_IN=${ACCESS_TOKEN_EXPIRES_IN:-15}
+      - BACKOFFICE_URL=${BACKOFFICE_URL:-url}
+      - CLIENT_URL=${CLIENT_URL:-url}
+      - SERVER_URL=${SERVER_URL:-url}
+    image: arnaudlyard/relaxing-hippoquests-server
+    healthcheck:
+      test: "curl --fail --request GET -H 'content-type:application/json' --url 'http://localhost:4000/graphql?query=%7B__typename%7D'"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  relaxinghippoquestsclient:
+    image: arnaudlyard/relaxing-hippoquests-client
+
+  nginx:
+    image: nginx:1.21.3
+    depends_on:
+      relaxinghippoquestsclient:
+        condition: service_started
+      relaxinghippoquestsserver:
+        condition: service_healthy
+    restart: always
+    ports:
+      - ${GATEWAY_PORT:-8055}:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./logs:/var/log/nginx
+
+volumes:
+  relaxinghippoquestsdatabase:
