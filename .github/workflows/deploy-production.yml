@@ -44,7 +44,6 @@ jobs:
           context: "{{defaultContext}}:client"
           file: "Dockerfile.production"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/relaxing-hippoquests-client
-          args: ${{ secrets.VITE_SERVER_API_URL }}
   notify:
     needs:
       - build-and-push-client

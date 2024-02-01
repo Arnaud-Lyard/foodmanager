@@ -9,16 +9,11 @@ COPY package*.json ./
 RUN npm i -g pnpm
 RUN pnpm i
 
-COPY e2e e2e
 COPY public public
 COPY src src
-COPY playwright.config.ts playwright.config.ts
-COPY tsconfig.app.json tsconfig.app.json
 COPY tsconfig.json tsconfig.json
 COPY tsconfig.node.json tsconfig.node.json
-COPY tsconfig.vitest.json tsconfig.vitest.json
 COPY vite.config.ts vite.config.ts
-COPY vitest.config.ts vitest.config.ts
 COPY index.html index.html
 
 ARG VITE_SERVER_API_URL
