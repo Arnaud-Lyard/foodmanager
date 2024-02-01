@@ -24,6 +24,9 @@ COPY index.html index.html
 ARG VITE_SERVER_API_URL
 ENV VITE_SERVER_API_URL ${VITE_SERVER_API_URL}
 
+# Debugging statement
+RUN echo "VITE_SERVER_API_URL: ${VITE_SERVER_API_URL}"
+
 RUN npm run build
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
