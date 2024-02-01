@@ -1,0 +1,39 @@
+FROM node:lts-alpine as build-stage
+
+RUN apk --no-cache add curl
+
+RUN mkdir /app
+WORKDIR /app
+COPY package*.json ./
+COPY .npmrc .npmrc
+
+RUN npm i -g pnpm
+RUN pnpm i
+
+COPY e2e e2e
+COPY public public
+COPY src src
+COPY playwright.config.ts playwright.config.ts
+COPY tsconfig.app.json tsconfig.app.json
+COPY tsconfig.json tsconfig.json
+COPY tsconfig.node.json tsconfig.node.json
+COPY tsconfig.vitest.json tsconfig.vitest.json
+COPY vite.config.ts vite.config.ts
+COPY vitest.config.ts vitest.config.ts
+COPY index.html index.html
+COPY .env .env
+
+ARG VITE_SERVER_API_URL
+ENV VITE_SERVER_API_URL ${VITE_SERVER_API_URL}
+
+RUN npm run build
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:alpine
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
+## Remove default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
+# Copy from the stage 0
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
