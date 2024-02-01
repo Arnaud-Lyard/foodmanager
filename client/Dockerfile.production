@@ -20,7 +20,6 @@ COPY tsconfig.vitest.json tsconfig.vitest.json
 COPY vite.config.ts vite.config.ts
 COPY vitest.config.ts vitest.config.ts
 COPY index.html index.html
-COPY .env.production .env.production
 
 ARG VITE_SERVER_API_URL
 ENV VITE_SERVER_API_URL ${VITE_SERVER_API_URL}

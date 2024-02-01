@@ -9,6 +9,9 @@ export default defineConfig({
   server: {
     port: 3000
   },
+  define: {
+    VITE_SERVER_API_URL: process.env.VITE_SERVER_API_URL
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
