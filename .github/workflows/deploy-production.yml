@@ -53,4 +53,4 @@ jobs:
       - name: Call VPS webhook to update production
         uses: wei/curl@master
         with:
-          args: ${{ secrets.WEBHOOK_PRODUCTION_URL }}
+          args: ${{ secrets.WEBHOOK_PRODUCTION_URL }}/hooks/update-relaxing-hippoquests-production
