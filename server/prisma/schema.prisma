@@ -8,11 +8,14 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  name     String   @db.VarChar(255)
-  email    String   @unique
-  photo    String?  @db.VarChar(255)
-  verified Boolean? @default(false)
+  id       String         @id @default(uuid())
+  pseudo   String         @db.VarChar(255)
+  email    String         @unique
+  avatar   String?        @db.VarChar(255)
+  verified Boolean?       @default(false)
+  esl      String?        @db.VarChar(255)
+  twitter  String?        @db.VarChar(255)
+  grade    GradeEnumType? @default(player)
 
   password String
   role     RoleEnumType? @default(user)
@@ -30,22 +33,12 @@ model User {
   @@map(name: "user")
 }
 
-model Product {
-  id          String @id @default(uuid())
-  designation String @db.VarChar(255)
-  description String @db.Text
-  price       String @db.VarChar(255)
-  capacity    String @db.VarChar(255)
-  image       String @db.VarChar(255)
-  year        String @db.VarChar(255)
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map(name: "product")
-}
-
 enum RoleEnumType {
   user
   admin
+}
+
+enum GradeEnumType {
+  player
+  manager
 }

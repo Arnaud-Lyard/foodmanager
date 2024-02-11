@@ -1,13 +1,19 @@
 -- CreateEnum
 CREATE TYPE "RoleEnumType" AS ENUM ('user', 'admin');
 
+-- CreateEnum
+CREATE TYPE "GradeEnumType" AS ENUM ('player', 'manager');
+
 -- CreateTable
 CREATE TABLE "user" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(255) NOT NULL,
+    "pseudo" VARCHAR(255) NOT NULL,
     "email" TEXT NOT NULL,
-    "photo" VARCHAR(255),
+    "avatar" VARCHAR(255),
     "verified" BOOLEAN DEFAULT false,
+    "esl" VARCHAR(255),
+    "twitter" VARCHAR(255),
+    "grade" "GradeEnumType" DEFAULT 'player',
     "password" TEXT NOT NULL,
     "role" "RoleEnumType" DEFAULT 'user',
     "verification_code" TEXT,
@@ -17,21 +23,6 @@ CREATE TABLE "user" (
     "password_reset_at" TIMESTAMP(3),
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "product" (
-    "id" TEXT NOT NULL,
-    "designation" VARCHAR(255) NOT NULL,
-    "description" TEXT NOT NULL,
-    "price" VARCHAR(255) NOT NULL,
-    "capacity" VARCHAR(255) NOT NULL,
-    "image" VARCHAR(255) NOT NULL,
-    "year" VARCHAR(255) NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

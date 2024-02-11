@@ -6,7 +6,7 @@
       <ul grade="list"
         class="mx-auto mt-5 mb-5 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-2">
         <li v-for="player in players" :key="player.pseudo">
-          <img class="mx-auto h-56 w-56 rounded-full" :src="player.image" alt="" />
+          <img class="mx-auto h-56 w-56 rounded-full" :src="player.avatar" :alt="player.avatar" />
           <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{{ player.pseudo }}</h3>
           <p class="text-sm leading-6 text-gray-600">{{ player.grade }}</p>
           <ul grade="list" class="mt-6 flex justify-center gap-x-6">
@@ -42,7 +42,7 @@ const players = [
   {
     pseudo: 'Pseudo1',
     grade: 'Manager',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
@@ -50,7 +50,7 @@ const players = [
   {
     pseudo: 'Pseudo2',
     grade: 'Manager',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
@@ -58,7 +58,7 @@ const players = [
   {
     pseudo: 'Pseudo3',
     grade: 'Player',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
@@ -66,7 +66,7 @@ const players = [
   {
     pseudo: 'Pseudo4',
     grade: 'Player',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
@@ -74,7 +74,7 @@ const players = [
   {
     pseudo: 'PSeudo5',
     grade: 'Player',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
@@ -82,7 +82,7 @@ const players = [
   {
     pseudo: 'Pseudo6',
     grade: 'Player',
-    image:
+    avatar:
       'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
     twitter: '#',
     esl: '#',
