@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id       String         @id @default(uuid())
+  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   pseudo   String         @db.VarChar(255)
   email    String         @unique
   avatar   String?        @db.VarChar(255)
@@ -28,9 +28,30 @@ model User {
   passwordResetToken String?   @map("password_reset_token")
   passwordResetAt    DateTime? @map("password_reset_at")
 
+  player Player?
+
   @@unique([email, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
   @@map(name: "user")
+}
+
+model Player {
+  id       String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nickname String            @db.VarChar(255)
+  faction  String            @db.VarChar(255)
+  league   String            @db.VarChar(255)
+  winrate  Int               @map("win_rate") @db.Integer
+  mmr      Int               @db.Integer
+  points   Int               @db.Integer
+  wins     Int               @db.Integer
+  losses   Int               @db.Integer
+  ties     Int               @db.Integer
+  matches  Int               @db.Integer
+  progress ProgressEnumType? @default(equal)
+  user     User              @relation(fields: [userId], references: [id])
+  userId   String            @unique @map("user_id") @db.Uuid
+
+  @@map(name: "player")
 }
 
 enum RoleEnumType {
@@ -41,4 +62,10 @@ enum RoleEnumType {
 enum GradeEnumType {
   player
   manager
+}
+
+enum ProgressEnumType {
+  up
+  equal
+  down
 }
