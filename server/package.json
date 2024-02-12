@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --exit-child src/app.ts",
+    "start": "ts-node-dev --respawn --transpile-only --exit-child --poll src/app.ts",
     "db:migrate": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma migrate dev && pnpm prisma generate",
     "db:push": "npx prisma db push",
     "db:seed": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma db seed",
