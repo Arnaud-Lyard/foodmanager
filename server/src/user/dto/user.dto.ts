@@ -1,7 +1,7 @@
 export interface UserDto {
-  name: string;
+  pseudo: string;
   email: string;
   password: string;
   verificationCode?: string | null;
-  photo: string;
+  avatar: string;
 }

@@ -107,3 +107,7 @@ export async function updateUserPassword({
     passwordResetAt,
   });
 }
+
+export async function getTeamUsers() {
+  return await UserRepository.getTeamUsers();
+}

@@ -5,13 +5,13 @@
       </div>
       <ul grade="list"
         class="mx-auto mt-5 mb-5 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-        <li v-for="player in players" :key="player.pseudo">
-          <img class="mx-auto h-56 w-56 rounded-full" :src="player.avatar" :alt="player.avatar" />
-          <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{{ player.pseudo }}</h3>
-          <p class="text-sm leading-6 text-gray-600">{{ player.grade }}</p>
+        <li v-for="teamUser in teamUsers" :key="teamUser.pseudo">
+          <img class="mx-auto h-56 w-56 rounded-full" :src="teamUser.avatar" :alt="teamUser.avatar" />
+          <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{{ teamUser.pseudo }}</h3>
+          <p class="text-sm leading-6 text-gray-600">{{ teamUser.grade }}</p>
           <ul grade="list" class="mt-6 flex justify-center gap-x-6">
             <li>
-              <a :href="player.twitter" class="text-gray-400 hover:text-gray-500">
+              <a :href="teamUser.twitter" class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">Twitter</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 31.812 26">
                   <path
@@ -21,7 +21,7 @@
               </a>
             </li>
             <li>
-              <a :href="player.esl" class="text-gray-400 hover:text-gray-500">
+              <a :href="teamUser.esl" class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">ESL</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24" grade="img">
                   <path
@@ -38,54 +38,18 @@
 </template>
 
 <script setup lang="ts">
-const players = [
-  {
-    pseudo: 'Pseudo1',
-    grade: 'Manager',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-  {
-    pseudo: 'Pseudo2',
-    grade: 'Manager',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-  {
-    pseudo: 'Pseudo3',
-    grade: 'Player',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-  {
-    pseudo: 'Pseudo4',
-    grade: 'Player',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-  {
-    pseudo: 'PSeudo5',
-    grade: 'Player',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-  {
-    pseudo: 'Pseudo6',
-    grade: 'Player',
-    avatar:
-      'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-    twitter: '#',
-    esl: '#',
-  },
-]
+import { onMounted, ref } from 'vue';
+import { User } from '../types/user.ts';
+import { userService } from '../services/user.service.ts';
+
+const teamUsers = ref<User[]>([])
+
+onMounted(async () => {
+  try {
+    const teamUsersData = await userService.getTeamUser();
+    teamUsers.value = teamUsersData.teamUsers.sort((a, b) => a.grade.localeCompare(b.grade));
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>
