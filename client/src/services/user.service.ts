@@ -11,7 +11,7 @@ export class UserService extends HttpService {
   async getTeamUser() {
     const {
       data: { teamUsers, status },
-    } = await this.instance.get<TeamUserResponse>(`/users/team`);
+    } = await this.instance.get<TeamUserResponse>(`api/users/team`);
     return { teamUsers, status };
   }
 }
