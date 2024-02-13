@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: cd server && npm i -g pnpm && pnpm install && pnpm build
       - name: generate prisma schema
-        run: npx prisma generate
+        run: cd server && npx prisma generate
       - name: Apply all pending migrations to the database
         run: cd server && npx prisma migrate deploy
         env:
