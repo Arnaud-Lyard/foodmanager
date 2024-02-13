@@ -20,7 +20,7 @@ services:
       relaxinghippoquestsdatabase:
         condition: service_healthy
     environment:
-      - DATABASE_URL={$DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase/dbname?schema=public}
+      - DATABASE_URL=${DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase/dbname?schema=public}
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=${PORT:-4000}
       - POSTGRES_HOST=${POSTGRES_HOST:-relaxinghippoquestsdatabase}
