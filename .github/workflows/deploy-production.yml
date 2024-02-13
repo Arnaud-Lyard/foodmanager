@@ -55,7 +55,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
       - name: Install dependencies
-        run: npm i -g pnpm && pnpm install && pnpm build
+        run: cd server && npm i -g pnpm && pnpm install && pnpm build
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
         env:
