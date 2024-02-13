@@ -5,17 +5,17 @@
         <tbody class="divide-y divide-gray-200 bg-white">
           <tr v-for="player in players" :key="player.id">
             <td class="w-full max-w-0 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none sm:pl-0">
-              {{ player.pseudo }}
+              {{ player.nickname }}
               <dl class="font-normal lg:hidden">
                 <dt class="sr-only">Faction</dt>
-                <dd class="mt-1 truncate text-gray-700">{{ player.faction }}</dd>
+                <dd class="mt-1 truncate text-gray-700">{{ player.race }}</dd>
                 <dt class="sr-only sm:hidden">Email</dt>
                 <dd class="mt-1 truncate text-gray-500 sm:hidden">{{ player.league }}</dd>
               </dl>
             </td>
-            <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ player.faction }}</td>
+            <td class="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{{ player.race }}</td>
             <td class="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{{ player.league }}</td>
-            <td class="px-3 py-4 text-sm text-gray-500">{{ player.winrate }} </td>
+            <td class="px-3 py-4 text-sm text-gray-500">{{ player.winrate }}%</td>
             <td class="px-3 py-4" v-if="player.progress === 'up'">
               <ChevronUpIcon class="h-4 w-4 block text-center mx-auto fill-current text-green-600" />
             </td>
@@ -37,15 +37,18 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
 } from '@heroicons/vue/24/outline';
+import { onMounted, ref } from 'vue';
+import { Player } from '../types/player';
+import { playerService } from '../services/player.service';
 
-const players = [
-  { id: "1", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'master', winrate: '90%', progress: 'up' },
-  { id: "2", pseudo: 'Lindsay Walton', faction: 'Infernal', league: 'silver', winrate: '55%', progress: 'up' },
-  { id: "3", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '40%', progress: 'down' },
-  { id: "4", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '70%', progress: 'up' },
-  { id: "5", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '50%', progress: 'equal' },
-  { id: "6", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '50%', progress: 'equal' },
-  { id: "7", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '50%', progress: 'equal' },
-  { id: "8", pseudo: 'Lindsay Walton', faction: 'Vanguard', league: 'bronze', winrate: '50%', progress: 'equal' },
-]
+const players = ref<Player[]>([])
+
+onMounted(async () => {
+  try {
+    const playersData = await playerService.getAllPlayers();
+    players.value = playersData.players.sort((a, b) => b.mmr - a.mmr);
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>

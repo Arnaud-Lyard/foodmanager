@@ -1,6 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
+  /* Reset the database */
+  await prisma.player.deleteMany();
+  await prisma.user.deleteMany();
+
+  /* Seed the database */
   const alice = await prisma.user.upsert({
     where: { id: "1a751e3a-8884-4f29-98d7-81d3f5cbc712" },
     update: {},
@@ -86,7 +91,7 @@ async function main() {
   });
 
   const user = await prisma.user.upsert({
-    where: { id: "1a751e3a-8884-4f29-98d7-81d3f5cbc712" },
+    where: { id: "1a751e3a-8884-4f29-98d7-81d3f5cbc713" },
     update: {},
     create: {
       pseudo: "user",
@@ -127,7 +132,49 @@ async function main() {
     },
   });
 
+  const player1 = await prisma.player.upsert({
+    where: { id: "1a751e3a-8884-4f29-98d7-81d3f5cbc715" },
+    update: {},
+    create: {
+      userId: alice.id,
+      nickname: "alicename",
+      rank: 10,
+      race: "vanguard",
+      league: "master",
+      winrate: 80.5,
+      mmr: 1500,
+      points: 1600,
+      wins: 80,
+      losses: 20,
+      ties: 0,
+      matches: 100,
+      progress: "up",
+    },
+  });
+
+  const player2 = await prisma.player.upsert({
+    where: { id: "1a751e3a-8884-4f29-98d7-81d3f5cbc716" },
+    update: {},
+    create: {
+      userId: bob.id,
+      nickname: "bobname",
+      rank: 11,
+      race: "infernal",
+      league: "diamond",
+      winrate: 70.5,
+      mmr: 1400,
+      points: 1500,
+      wins: 70,
+      losses: 30,
+      ties: 0,
+      matches: 100,
+      progress: "down",
+    },
+  });
+
   console.log({ alice, bob, john, mat, user, admin });
+
+  console.log({ player1, player2 });
 }
 main()
   .then(async () => {

@@ -38,7 +38,8 @@ model User {
 model Player {
   id       String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   nickname String            @db.VarChar(255)
-  faction  String            @db.VarChar(255)
+  rank     Int               @db.Integer
+  race     String            @db.VarChar(255)
   league   String            @db.VarChar(255)
   winrate  Int               @map("win_rate") @db.Integer
   mmr      Int               @db.Integer
