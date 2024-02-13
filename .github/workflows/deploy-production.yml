@@ -44,10 +44,28 @@ jobs:
           context: "{{defaultContext}}:client"
           file: "Dockerfile.production"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/relaxing-hippoquests-client
+  deploy:
+    needs:
+      - build-and-push-client
+      - build-and-push-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+      - name: Install dependencies
+      - run: npm i -g pnpm && pnpm install
+      - run: pnpm build
+      - name: Apply all pending migrations to the database
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
   notify:
     needs:
       - build-and-push-client
       - build-and-push-server
+      - deploy
     runs-on: ubuntu-latest
     steps:
       - name: Call VPS webhook to update production
