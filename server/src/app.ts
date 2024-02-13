@@ -8,7 +8,6 @@ import { validateEnv } from "./utils/validateEnv";
 import { PrismaClient } from "@prisma/client";
 import authRouter from "./auth/routes/auth.routes";
 import userRouter from "./user/routes/user.routes";
-import productRouter from "./product/routes/product.routes";
 import AppError from "./utils/appError";
 import multer from "multer";
 import path from "path";
@@ -51,7 +50,6 @@ async function bootstrap() {
   // ROUTES
   app.use("api/auth", authRouter);
   app.use("api/users", userRouter);
-  app.use("api/products", productRouter);
 
   // Testing
   app.get("/api/", (_, res: Response) => {

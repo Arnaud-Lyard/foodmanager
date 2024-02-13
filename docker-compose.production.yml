@@ -20,7 +20,7 @@ services:
       relaxinghippoquestsdatabase:
         condition: service_healthy
     environment:
-      - DATABASE_URL={$DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase:5432/dbname?schema=public}
+      - DATABASE_URL={$DATABASE_URL:-postgres://postgresql://dbuser:dbpassword@relaxinghippoquestsdatabase/dbname?schema=public}
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=${PORT:-4000}
       - POSTGRES_HOST=${POSTGRES_HOST:-relaxinghippoquestsdatabase}
@@ -57,7 +57,7 @@ services:
         condition: service_healthy
     restart: always
     ports:
-      - ${GATEWAY_PORT:-8055}:80
+      - ${GATEWAY_PORT:-8000}:80
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./logs:/var/log/nginx

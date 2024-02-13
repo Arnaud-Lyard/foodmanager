@@ -3,6 +3,7 @@ import fs from "fs-extra";
 import AppError from "../../utils/appError";
 import { getUserInformations } from "../../utils/getUserInformations";
 import { UserRepository } from "../repository/user.repository";
+import { getTeamUsers } from "../service/user.service";
 
 export const getUserHandler = async (
   req: Request,
@@ -42,7 +43,7 @@ export const uploadUserImageHandler = async (
       return next(new AppError(400, "Please upload a file"));
     }
 
-    const fileName = user.photo?.split("/uploads/")[1];
+    const fileName = user.avatar?.split("/uploads/")[1];
 
     if (fileName) {
       try {
@@ -62,6 +63,26 @@ export const uploadUserImageHandler = async (
 
     res.status(200).json({
       status: "success",
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getTeamUsersHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const teamUsers = await getTeamUsers();
+    if (teamUsers instanceof AppError) {
+      return next(teamUsers);
+    }
+
+    res.status(200).json({
+      status: "success",
+      teamUsers,
     });
   } catch (err: any) {
     next(err);

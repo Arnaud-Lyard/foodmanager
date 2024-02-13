@@ -8,11 +8,14 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  name     String   @db.VarChar(255)
-  email    String   @unique
-  photo    String?  @db.VarChar(255)
-  verified Boolean? @default(false)
+  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pseudo   String         @db.VarChar(255)
+  email    String         @unique
+  avatar   String?        @db.VarChar(255)
+  verified Boolean?       @default(false)
+  esl      String?        @db.VarChar(255)
+  twitter  String?        @db.VarChar(255)
+  grade    GradeEnumType? @default(player)
 
   password String
   role     RoleEnumType? @default(user)
@@ -25,27 +28,44 @@ model User {
   passwordResetToken String?   @map("password_reset_token")
   passwordResetAt    DateTime? @map("password_reset_at")
 
+  player Player?
+
   @@unique([email, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
   @@map(name: "user")
 }
 
-model Product {
-  id          String @id @default(uuid())
-  designation String @db.VarChar(255)
-  description String @db.Text
-  price       String @db.VarChar(255)
-  capacity    String @db.VarChar(255)
-  image       String @db.VarChar(255)
-  year        String @db.VarChar(255)
+model Player {
+  id       String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  nickname String            @db.VarChar(255)
+  faction  String            @db.VarChar(255)
+  league   String            @db.VarChar(255)
+  winrate  Int               @map("win_rate") @db.Integer
+  mmr      Int               @db.Integer
+  points   Int               @db.Integer
+  wins     Int               @db.Integer
+  losses   Int               @db.Integer
+  ties     Int               @db.Integer
+  matches  Int               @db.Integer
+  progress ProgressEnumType? @default(equal)
+  user     User              @relation(fields: [userId], references: [id])
+  userId   String            @unique @map("user_id") @db.Uuid
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map(name: "product")
+  @@map(name: "player")
 }
 
 enum RoleEnumType {
   user
   admin
+}
+
+enum GradeEnumType {
+  player
+  manager
+}
+
+enum ProgressEnumType {
+  up
+  equal
+  down
 }

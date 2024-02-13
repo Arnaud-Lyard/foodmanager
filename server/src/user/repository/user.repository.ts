@@ -93,7 +93,7 @@ export class UserRepository {
   }): Promise<User> {
     return await prisma.user.update({
       where: { id: userId },
-      data: { photo: imageUrl },
+      data: { avatar: imageUrl },
     });
   }
 
@@ -113,6 +113,26 @@ export class UserRepository {
       select,
     });
     return user;
+  }
+
+  static async getTeamUsers() {
+    return await prisma.user.findMany({
+      where: {
+        OR: [{ grade: "player" }, { grade: "manager" }],
+      },
+      select: {
+        id: true,
+        pseudo: true,
+        email: true,
+        grade: true,
+        avatar: true,
+        esl: true,
+        twitter: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
   }
 
   static excludeFields<T>(fields: T, excludes: (keyof T)[]): BooleanObject<T> {

@@ -60,11 +60,11 @@ export const registerUserHandler = async (
       .digest("hex");
 
     const user = await createUser({
-      name: req.body.name,
+      pseudo: req.body.pseudo,
       email: req.body.email.toLowerCase(),
       password: hashedPassword,
       verificationCode,
-      photo: `${process.env.SERVER_URL}/uploads/default.png`,
+      avatar: `${process.env.SERVER_URL}/uploads/default.png`,
     });
 
     const redirectUrl = `${process.env.CLIENT_URL}/verifyemail/${verifyCode}`;

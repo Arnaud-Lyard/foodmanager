@@ -7,8 +7,8 @@ enum RoleEnumType {
 
 export const registerUserSchema = object({
   body: object({
-    name: string({
-      required_error: "Name is required",
+    pseudo: string({
+      required_error: "Pseudo is required",
     }),
     email: string({
       required_error: "Email address is required",
@@ -47,7 +47,7 @@ export const verifyEmailSchema = object({
 
 export const updateUserSchema = object({
   body: object({
-    name: string({}),
+    pseudo: string({}),
     email: string({}).email("Invalid email address"),
     password: string({})
       .min(8, "Password must be more than 8 characters")

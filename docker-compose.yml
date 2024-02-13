@@ -18,7 +18,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - fastfoodmanagerDatabase:/var/lib/postgresql/data
+      - fastfoodmanagerdatabase:/var/lib/postgresql/data
 
   database_test:
     container_name: database_test

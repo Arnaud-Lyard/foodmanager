@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --respawn --transpile-only --exit-child src/app.ts",
-    "db:migrate": "npx prisma migrate dev && pnpm prisma generate",
+    "start": "ts-node-dev --respawn --transpile-only --exit-child --poll src/app.ts",
+    "db:migrate": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma migrate dev && pnpm prisma generate",
     "db:push": "npx prisma db push",
+    "db:seed": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma db seed",
+    "db:reset": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma db seed npx prisma migrate reset",
     "build": "tsc",
     "start:prod": "node dist/src/app.js"
+  },
+  "prisma": {
+    "seed": "ts-node-dev prisma/seed.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

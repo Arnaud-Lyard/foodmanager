@@ -9,16 +9,6 @@ export const createUser = async (user: UserDto) => {
   return await UserRepository.createUser(user);
 };
 
-export const findUser = async (
-  where: Partial<Prisma.UserCreateInput>,
-  select?: Prisma.UserSelect
-) => {
-  return (await prisma.user.findFirst({
-    where,
-    select,
-  })) as User;
-};
-
 export async function switchVerificationCode({
   userId,
   verificationCode,
@@ -106,4 +96,8 @@ export async function updateUserPassword({
     passwordResetToken,
     passwordResetAt,
   });
+}
+
+export async function getTeamUsers() {
+  return await UserRepository.getTeamUsers();
 }
