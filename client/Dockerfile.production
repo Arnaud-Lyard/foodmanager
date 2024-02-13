@@ -17,6 +17,7 @@ COPY vite.config.ts vite.config.ts
 COPY postcss.config.js postcss.config.js
 COPY tailwind.config.js tailwind.config.js
 COPY index.html index.html
+COPY .env.production .env.production
 
 ARG VITE_SERVER_API_URL
 ENV VITE_SERVER_API_URL ${VITE_SERVER_API_URL}
