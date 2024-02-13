@@ -48,8 +48,8 @@ async function bootstrap() {
   if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
   // ROUTES
-  app.use("api/auth", authRouter);
-  app.use("api/users", userRouter);
+  app.use("/api/auth", authRouter);
+  app.use("/api/users", userRouter);
 
   // Testing
   app.get("/api/", (_, res: Response) => {
