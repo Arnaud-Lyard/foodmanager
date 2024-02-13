@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Node
         uses: actions/setup-node@v3
-      - name: Install dependencies and build
+      - name: Install dependencies and build server
         run: cd server && npm i -g pnpm && pnpm install && pnpm build
       - name: generate prisma schema
         run: cd server && npx prisma generate
