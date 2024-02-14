@@ -16,3 +16,8 @@ export interface Player {
 }
 
 type Progress = "up" | "equal" | "down";
+
+export interface PlayerResponse {
+  players: Player[];
+  status?: string;
+}

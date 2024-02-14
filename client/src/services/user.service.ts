@@ -1,4 +1,4 @@
-import { TeamUserResponse } from "../types/api";
+import { TeamUserResponse } from "../types/user";
 import { HttpService } from "./http.service";
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL;

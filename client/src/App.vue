@@ -24,4 +24,11 @@
 
 <script setup lang="ts">
 import Leaderboard from './components/Leaderboard.vue'
+
+import { useRouter } from "vue-router";
+import { globalRouter } from "./router/globalRouter";
+
+const router = useRouter();
+globalRouter.router = router;
+
 </script>

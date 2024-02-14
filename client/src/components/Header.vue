@@ -23,7 +23,7 @@
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                   :aria-current="navigation.href === $route.path ? 'page' : undefined">{{
                     navigation.name }}</router-link>
-                <router-link v-if="isConnected" v-for="navigation in privateNavigations" :key="navigation.name"
+                <router-link v-if="isLoggedIn" v-for="navigation in privateNavigations" :key="navigation.name"
                   :to="navigation.href" :class="[navigation.href === $route.path ? 'bg-gray-900 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                   :aria-current="navigation.href === $route.path ? 'page' : undefined">{{
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div class="flex items-center">
-              <div v-if="isConnected" class="flex-shrink-0">
+              <div v-if="isLoggedIn" class="flex-shrink-0">
                 <button type="button"
                   class="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                   Déconnexion
@@ -67,10 +67,11 @@
 <script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { Ref, ref } from 'vue';
+import { Ref } from 'vue';
+import { useAuthStore } from '../store/auth';
 
-// Get log status
-const isConnected = ref(true);
+const authStore = useAuthStore();
+const isLoggedIn = authStore.isLoggedIn;
 
 const publicNavigations = [
   { name: 'Accueil', href: '/', current: false },
