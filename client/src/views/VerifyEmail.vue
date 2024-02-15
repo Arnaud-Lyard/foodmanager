@@ -27,16 +27,17 @@
 
 <script setup lang="ts">
 import { CheckCircleIcon } from '@heroicons/vue/20/solid'
-import { watch } from 'vue';
+import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { authService } from '../services/auth.service';
 
 const route = useRoute()
 
-watch(
-  () => route.params.verifycode,
-  async newVerifycode => {
-    await authService.verifyEmail(newVerifycode as string)
+onMounted(async () => {
+  try {
+    await authService.verifyEmail(route.params.verifycode as string);
+  } catch (error) {
+    console.error(error)
   }
-)
+})
 </script>
