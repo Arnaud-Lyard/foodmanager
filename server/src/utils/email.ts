@@ -42,6 +42,7 @@ export default class Email {
       subject,
       url: this.url,
     });
+    console.log("html", html);
     // Create mailOptions
     const mailOptions = {
       from: this.#from,
@@ -50,9 +51,10 @@ export default class Email {
       text: convert(html),
       html,
     };
-    console.log(mailOptions);
+    console.log("mailoptions", mailOptions);
     // Send email
     const info = await this.newTransport().sendMail(mailOptions);
+    console.log("info", info);
     console.log(nodemailer.getTestMessageUrl(info));
   }
 
