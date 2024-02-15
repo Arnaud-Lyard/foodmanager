@@ -1,6 +1,6 @@
-import bcrypt from "bcryptjs";
-import crypto from "crypto";
-import { CookieOptions, NextFunction, Request, Response } from "express";
+import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
+import { CookieOptions, NextFunction, Request, Response } from 'express';
 import {
   checkIfEmailExist,
   createUser,
@@ -12,23 +12,23 @@ import {
   updateResetPasswordToken,
   updateUserPassword,
   verifyUser,
-} from "../../user/service/user.service";
-import AppError from "../../utils/appError";
-import Email from "../../utils/email";
+} from '../../user/service/user.service';
+import AppError from '../../utils/appError';
+import Email from '../../utils/email';
 import {
   ForgotPasswordInput,
   LoginUserInput,
   RegisterUserInput,
   ResetPasswordInput,
   VerifyEmailInput,
-} from "../schema/auth.schema";
+} from '../schema/auth.schema';
 
 const cookiesOptions: CookieOptions = {
   httpOnly: true,
-  sameSite: "lax",
+  sameSite: 'lax',
 };
 
-if (process.env.NODE_ENV === "production") cookiesOptions.secure = true;
+if (process.env.NODE_ENV === 'production') cookiesOptions.secure = true;
 
 const accessTokenCookieOptions: CookieOptions = {
   ...cookiesOptions,
@@ -47,18 +47,18 @@ export const registerUserHandler = async (
     const isEmailExist = await checkIfEmailExist(req.body.email);
     if (isEmailExist !== null) {
       return res.status(409).json({
-        status: "fail",
-        message: "Email already exist, please use another email address",
+        status: 'fail',
+        message: 'Email already exist, please use another email address',
       });
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-    const verifyCode = crypto.randomBytes(32).toString("hex");
+    const verifyCode = crypto.randomBytes(32).toString('hex');
     const verificationCode = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(verifyCode)
-      .digest("hex");
-    console.log("verificationCode", verificationCode);
+      .digest('hex');
+
     const user = await createUser({
       pseudo: req.body.pseudo,
       email: req.body.email.toLowerCase(),
@@ -68,22 +68,22 @@ export const registerUserHandler = async (
     });
 
     const redirectUrl = `${process.env.CLIENT_URL}/verification-email/${verifyCode}`;
-    console.log("redirectUrl", redirectUrl);
+
     try {
       const mail = await new Email(user, redirectUrl).sendVerificationCode();
-      console.log("mail", mail);
+
       await switchVerificationCode({ userId: user.id, verificationCode });
-      console.log("done");
+
       res.status(201).json({
-        status: "success",
+        status: 'success',
         message:
-          "An email with a verification code has been sent to your email",
+          'An email with a verification code has been sent to your email',
       });
     } catch (error) {
       await switchVerificationCode({ userId: user.id, verificationCode: null });
       return res.status(500).json({
-        status: "error",
-        message: "There was an error sending email, please try again",
+        status: 'error',
+        message: 'There was an error sending email, please try again',
       });
     }
   } catch (err: any) {
@@ -102,7 +102,7 @@ export const loginUserHandler = async (
     const user = await findByEmail(email.toLowerCase());
 
     if (!user) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Check if user is verified
@@ -110,25 +110,25 @@ export const loginUserHandler = async (
       return next(
         new AppError(
           401,
-          "You are not verified, please verify your email to login"
+          'You are not verified, please verify your email to login'
         )
       );
     }
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Sign Tokens
     const { access_token } = await signTokens(user);
-    res.cookie("access_token", access_token, accessTokenCookieOptions);
-    res.cookie("logged_in", true, {
+    res.cookie('access_token', access_token, accessTokenCookieOptions);
+    res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       access_token,
     });
   } catch (err: any) {
@@ -137,8 +137,8 @@ export const loginUserHandler = async (
 };
 
 function logout(res: Response) {
-  res.cookie("access_token", "", { maxAge: 1 });
-  res.cookie("logged_in", "", { maxAge: 1 });
+  res.cookie('access_token', '', { maxAge: 1 });
+  res.cookie('logged_in', '', { maxAge: 1 });
 }
 
 export const logoutUserHandler = async (
@@ -150,7 +150,7 @@ export const logoutUserHandler = async (
     logout(res);
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
     });
   } catch (err: any) {
     next(err);
@@ -164,19 +164,19 @@ export const verifyEmailHandler = async (
 ) => {
   try {
     const verificationCode = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(req.params.verificationCode)
-      .digest("hex");
+      .digest('hex');
 
     const user = await findUserByVerificationCode(verificationCode);
     if (!user) {
-      return next(new AppError(401, "Could not verify email"));
+      return next(new AppError(401, 'Could not verify email'));
     }
     await verifyUser(user.id);
 
     res.status(200).json({
-      status: "success",
-      message: "Email verified successfully",
+      status: 'success',
+      message: 'Email verified successfully',
     });
   } catch (err: any) {
     next(err);
@@ -196,26 +196,26 @@ export const forgotPasswordHandler = async (
     // Get the user from the collection
     const user = await findByEmail(req.body.email.toLowerCase());
     const message =
-      "You will receive a reset email if user with that email exist";
+      'You will receive a reset email if user with that email exist';
     if (!user) {
       return res.status(200).json({
-        status: "success",
+        status: 'success',
         message,
       });
     }
 
     if (!user.verified) {
       return res.status(403).json({
-        status: "fail",
-        message: "Account not verified",
+        status: 'fail',
+        message: 'Account not verified',
       });
     }
 
-    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetToken = crypto.randomBytes(32).toString('hex');
     const passwordResetToken = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(resetToken)
-      .digest("hex");
+      .digest('hex');
 
     await updateResetPasswordToken({
       userId: user.id,
@@ -228,7 +228,7 @@ export const forgotPasswordHandler = async (
       await new Email(user, url).sendPasswordResetToken();
 
       res.status(200).json({
-        status: "success",
+        status: 'success',
         message,
       });
     } catch (err: any) {
@@ -238,8 +238,8 @@ export const forgotPasswordHandler = async (
         passwordResetAt: null,
       });
       return res.status(500).json({
-        status: "error",
-        message: "There was an error sending email",
+        status: 'error',
+        message: 'There was an error sending email',
       });
     }
   } catch (err: any) {
@@ -249,9 +249,9 @@ export const forgotPasswordHandler = async (
 
 export const resetPasswordHandler = async (
   req: Request<
-    ResetPasswordInput["params"],
+    ResetPasswordInput['params'],
     Record<string, never>,
-    ResetPasswordInput["body"]
+    ResetPasswordInput['body']
   >,
   res: Response,
   next: NextFunction
@@ -259,15 +259,15 @@ export const resetPasswordHandler = async (
   try {
     if (req.body.password !== req.body.passwordConfirm) {
       return res.status(400).json({
-        status: "fail",
-        message: "Password and confirm password does not match",
+        status: 'fail',
+        message: 'Password and confirm password does not match',
       });
     }
     // Get the user from the collection
     const passwordResetToken = crypto
-      .createHash("sha256")
+      .createHash('sha256')
       .update(req.params.resetToken)
-      .digest("hex");
+      .digest('hex');
 
     const user = await findUserByPasswordResetToken({
       passwordResetToken,
@@ -275,8 +275,8 @@ export const resetPasswordHandler = async (
 
     if (!user) {
       return res.status(403).json({
-        status: "fail",
-        message: "Invalid token or token has expired",
+        status: 'fail',
+        message: 'Invalid token or token has expired',
       });
     }
 
@@ -291,8 +291,8 @@ export const resetPasswordHandler = async (
 
     logout(res);
     res.status(200).json({
-      status: "success",
-      message: "Password data updated successfully",
+      status: 'success',
+      message: 'Password data updated successfully',
     });
   } catch (err: any) {
     next(err);
@@ -310,10 +310,10 @@ export const loginAdminHandler = async (
     const user = await findByEmail(email.toLowerCase());
 
     if (!user) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(400, 'Invalid email or password'));
     }
 
-    if (user.role === "user" || user.role !== "admin") {
+    if (user.role === 'user' || user.role !== 'admin') {
       return next(new AppError(401, `You are not authorized to access`));
     }
 
@@ -322,25 +322,25 @@ export const loginAdminHandler = async (
       return next(
         new AppError(
           401,
-          "You are not verified, please verify your email to login"
+          'You are not verified, please verify your email to login'
         )
       );
     }
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return next(new AppError(400, "Invalid email or password"));
+      return next(new AppError(400, 'Invalid email or password'));
     }
 
     // Sign Tokens
     const { access_token } = await signTokens(user);
-    res.cookie("access_token", access_token, accessTokenCookieOptions);
-    res.cookie("logged_in", true, {
+    res.cookie('access_token', access_token, accessTokenCookieOptions);
+    res.cookie('logged_in', true, {
       ...accessTokenCookieOptions,
       httpOnly: false,
     });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       access_token,
     });
   } catch (err: any) {
