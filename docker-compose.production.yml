@@ -47,7 +47,7 @@ services:
 
   relaxinghippoquestsclient:
     image: arnaudlyard/relaxing-hippoquests-client
-    args:
+    environment:
       - VITE_SERVER_API_URL=${VITE_SERVER_API_URL:-url}
 
   nginx:

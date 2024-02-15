@@ -20,6 +20,7 @@ COPY index.html index.html
 
 ARG VITE_SERVER_API_URL
 ENV VITE_SERVER_API_URL=$VITE_SERVER_API_URL
+RUN echo "VITE_SERVER_API_URL is set to: $VITE_SERVER_API_URL"
 
 RUN npm run build
 
