@@ -35,6 +35,7 @@ const route = useRoute()
 
 onMounted(async () => {
   try {
+    console.log('verifycode', route.params.verifycode)
     await authService.verifyEmail(route.params.verifycode as string);
   } catch (error) {
     console.error(error)
