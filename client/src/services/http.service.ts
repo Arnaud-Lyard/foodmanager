@@ -1,16 +1,17 @@
-import axios, { AxiosInstance } from "axios";
-import { globalRouter } from "../router/globalRouter";
-import { useAuthStore } from "../store/auth";
+import axios, { AxiosInstance } from 'axios';
+import { globalRouter } from '../router/globalRouter';
+import { useAuthStore } from '../store/auth';
 
 export class HttpService {
   protected readonly instance: AxiosInstance;
   public constructor(url: string) {
+    console.log('url', url);
     this.instance = axios.create({
       baseURL: url,
       timeout: 30000,
-      timeoutErrorMessage: "Time out!",
+      timeoutErrorMessage: 'Time out!',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -19,7 +20,7 @@ export class HttpService {
       (error) => {
         if (error.response) {
           if (error.response.status === 401) {
-            globalRouter.router?.push({ name: "login" });
+            globalRouter.router?.push({ name: 'login' });
             const authStore = useAuthStore();
             authStore.logout();
           }

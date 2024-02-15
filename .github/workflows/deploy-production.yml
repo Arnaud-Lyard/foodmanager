@@ -1,8 +1,8 @@
-name: Compile and push client and server to production
+name: Compile and push client and server to production, deploy database and notify VPS
 
 on:
   push:
-    branches: ["main"]
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -22,8 +22,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          context: "{{defaultContext}}:server"
-          file: "Dockerfile.production"
+          context: '{{defaultContext}}:server'
+          file: 'Dockerfile.production'
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/relaxing-hippoquests-server
   build-and-push-client:
     runs-on: ubuntu-latest
@@ -41,8 +41,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          context: "{{defaultContext}}:client"
-          file: "Dockerfile.production"
+          context: '{{defaultContext}}:client'
+          file: 'Dockerfile.production'
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/relaxing-hippoquests-client
   deploy:
     needs:
