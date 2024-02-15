@@ -27,7 +27,8 @@ const app = express();
 async function bootstrap() {
   // TEMPLATE ENGINE
   app.set("view engine", "pug");
-  app.set("views", `${__dirname}/views`);
+  console.log("path", `${__dirname}`);
+  app.set("views", `./views`);
 
   // MIDDLEWARE
 
