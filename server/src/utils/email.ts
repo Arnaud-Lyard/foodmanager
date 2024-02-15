@@ -37,7 +37,11 @@ export default class Email {
   private async send(template: string, subject: string) {
     // Generate HTML template based on the template string
     console.log("sending email");
-    const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
+    console.log("firstname", this.#firstName);
+    console.log("subject", subject);
+    console.log("url", this.url);
+    console.log();
+    const html = pug.renderFile(`./../views/${template}.pug`, {
       firstName: this.#firstName,
       subject,
       url: this.url,
