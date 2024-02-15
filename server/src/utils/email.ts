@@ -35,31 +35,29 @@ export default class Email {
   }
 
   private async send(template: string, subject: string) {
-    // Generate HTML template based on the template string
-    console.log("sending email");
-    console.log("firstname", this.#firstName);
-    console.log("subject", subject);
-    console.log("url", this.url);
-    console.log();
-    const html = pug.renderFile(`./../views/${template}.pug`, {
-      firstName: this.#firstName,
-      subject,
-      url: this.url,
-    });
-    console.log("html", html);
-    // Create mailOptions
-    const mailOptions = {
-      from: this.#from,
-      to: this.#to,
-      subject,
-      text: convert(html),
-      html,
-    };
-    console.log("mailoptions", mailOptions);
-    // Send email
-    const info = await this.newTransport().sendMail(mailOptions);
-    console.log("info", info);
-    console.log(nodemailer.getTestMessageUrl(info));
+    try {
+      // Generate HTML template based on the template string
+      const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
+        firstName: this.#firstName,
+        subject,
+        url: this.url,
+      });
+
+      // Create mailOptions
+      const mailOptions = {
+        from: this.#from,
+        to: this.#to,
+        subject,
+        text: convert(html),
+        html,
+      };
+
+      // Send email
+      const info = await this.newTransport().sendMail(mailOptions);
+      console.log(nodemailer.getTestMessageUrl(info));
+    } catch (error) {
+      console.error("Error during send mail :", error);
+    }
   }
 
   async sendVerificationCode() {
