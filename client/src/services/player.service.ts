@@ -1,4 +1,4 @@
-import { PlayerResponse } from "../types/api";
+import { PlayerResponse } from "../types/player";
 import { HttpService } from "./http.service";
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL;

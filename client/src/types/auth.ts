@@ -8,4 +8,14 @@ export interface RegisterResponse {
   ];
 }
 
+export interface VerifyEmailResponse {
+  status: Status;
+  message?: string;
+  errors: [
+    {
+      message: string;
+    }
+  ];
+}
+
 type Status = "success" | "fail";
