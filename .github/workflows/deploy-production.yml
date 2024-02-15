@@ -43,6 +43,7 @@ jobs:
           push: true
           context: '{{defaultContext}}:client'
           file: 'Dockerfile.production'
+          build-args: 'VITE_SERVER_API_URL=${{ secrets.VITE_SERVER_API_URL }}'
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/relaxing-hippoquests-client
   deploy:
     needs:
