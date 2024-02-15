@@ -8,6 +8,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Auth from "../layouts/Auth.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
+import VerifyEmail from "../views/VerifyEmail.vue";
 
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -41,6 +42,12 @@ const routes = [
     name: "register",
     meta: { layout: Auth },
     component: Register,
+  },
+  {
+    path: "/verification-email/:verifycode",
+    name: "verifyemail",
+    meta: { layout: Auth },
+    component: VerifyEmail,
   },
   {
     path: "/mot-de-passe-oublie",

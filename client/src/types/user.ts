@@ -14,3 +14,8 @@ export interface User {
 type Grade = "player" | "manager";
 
 type Role = "user" | "admin";
+
+export interface TeamUserResponse {
+  teamUsers: User[];
+  status?: string;
+}

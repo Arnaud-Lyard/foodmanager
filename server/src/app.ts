@@ -11,6 +11,7 @@ import userRouter from "./user/routes/user.routes";
 import AppError from "./utils/appError";
 import multer from "multer";
 import path from "path";
+import playerRouter from "./player/routes/player.routes";
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -50,6 +51,7 @@ async function bootstrap() {
   // ROUTES
   app.use("/api/auth", authRouter);
   app.use("/api/users", userRouter);
+  app.use("/api/players", playerRouter);
 
   // Testing
   app.get("/api/", (_, res: Response) => {

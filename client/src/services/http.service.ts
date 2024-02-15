@@ -1,4 +1,6 @@
 import axios, { AxiosInstance } from "axios";
+import { globalRouter } from "../router/globalRouter";
+import { useAuthStore } from "../store/auth";
 
 export class HttpService {
   protected readonly instance: AxiosInstance;
@@ -11,5 +13,19 @@ export class HttpService {
         "Content-Type": "application/json",
       },
     });
+
+    this.instance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response) {
+          if (error.response.status === 401) {
+            globalRouter.router?.push({ name: "login" });
+            const authStore = useAuthStore();
+            authStore.logout();
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
   }
 }

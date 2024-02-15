@@ -67,7 +67,7 @@ export const registerUserHandler = async (
       avatar: `${process.env.SERVER_URL}/uploads/default.png`,
     });
 
-    const redirectUrl = `${process.env.CLIENT_URL}/verifyemail/${verifyCode}`;
+    const redirectUrl = `${process.env.CLIENT_URL}/verification-email/${verifyCode}`;
     try {
       await new Email(user, redirectUrl).sendVerificationCode();
       await switchVerificationCode({ userId: user.id, verificationCode });
