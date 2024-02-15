@@ -9,6 +9,6 @@ export default defineConfig({
     port: 3000,
   },
   define: {
-    VITE_BACKEND_URL: process.env.VITE_SERVER_API_URL,
+    VITE_SERVER_API_URL: process.env.VITE_SERVER_API_URL,
   },
 });
