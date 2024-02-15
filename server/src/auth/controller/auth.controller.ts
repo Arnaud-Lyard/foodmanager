@@ -58,7 +58,7 @@ export const registerUserHandler = async (
       .createHash("sha256")
       .update(verifyCode)
       .digest("hex");
-
+    console.log("verificationCode", verificationCode);
     const user = await createUser({
       pseudo: req.body.pseudo,
       email: req.body.email.toLowerCase(),
@@ -68,10 +68,12 @@ export const registerUserHandler = async (
     });
 
     const redirectUrl = `${process.env.CLIENT_URL}/verification-email/${verifyCode}`;
+    console.log("redirectUrl", redirectUrl);
     try {
-      await new Email(user, redirectUrl).sendVerificationCode();
+      const mail = await new Email(user, redirectUrl).sendVerificationCode();
+      console.log("mail", mail);
       await switchVerificationCode({ userId: user.id, verificationCode });
-
+      console.log("done");
       res.status(201).json({
         status: "success",
         message:

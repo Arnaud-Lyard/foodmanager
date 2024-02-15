@@ -24,7 +24,7 @@ export default class Email {
   private newTransport() {
     // if (process.env.NODE_ENV === 'production') {
     // }
-
+    console.log(smtp);
     return nodemailer.createTransport({
       ...smtp,
       auth: {
@@ -36,6 +36,7 @@ export default class Email {
 
   private async send(template: string, subject: string) {
     // Generate HTML template based on the template string
+    console.log("sending email");
     const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
       firstName: this.#firstName,
       subject,
@@ -49,7 +50,7 @@ export default class Email {
       text: convert(html),
       html,
     };
-
+    console.log(mailOptions);
     // Send email
     const info = await this.newTransport().sendMail(mailOptions);
     console.log(nodemailer.getTestMessageUrl(info));
