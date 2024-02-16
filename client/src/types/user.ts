@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: string;
   pseudo: string;
   email: string;
@@ -11,11 +11,18 @@ export interface User {
   updatedAt: Date;
 }
 
-type Grade = "player" | "manager";
+type Grade = 'player' | 'manager';
 
-type Role = "user" | "admin";
+type Role = 'user' | 'admin';
 
-export interface TeamUserResponse {
-  teamUsers: User[];
+export interface ITeamUserResponse {
+  teamUsers: IUser[];
   status?: string;
+}
+
+export interface IUserResponse {
+  status: string;
+  data: {
+    isConnect: boolean;
+  };
 }

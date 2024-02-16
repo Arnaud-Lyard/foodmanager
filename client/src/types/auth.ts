@@ -1,4 +1,4 @@
-export interface RegisterResponse {
+export interface IRegisterResponse {
   status: Status;
   message?: string;
   errors: [
@@ -8,7 +8,7 @@ export interface RegisterResponse {
   ];
 }
 
-export interface VerifyEmailResponse {
+export interface IVerifyEmailResponse {
   status: Status;
   message?: string;
   errors: [
@@ -18,4 +18,14 @@ export interface VerifyEmailResponse {
   ];
 }
 
-type Status = "success" | "fail";
+export interface ILoginResponse {
+  status: Status;
+  message?: string;
+  errors: [
+    {
+      message: string;
+    }
+  ];
+}
+
+type Status = 'success' | 'fail';

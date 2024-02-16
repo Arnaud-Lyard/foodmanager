@@ -35,7 +35,7 @@ services:
       - JWT_ACCESS_TOKEN_PRIVATE_KEY=${JWT_ACCESS_TOKEN_PRIVATE_KEY:-private}
       - JWT_ACCESS_TOKEN_PUBLIC_KEY=${JWT_ACCESS_TOKEN_PUBLIC_KEY:-public}
       - ACCESS_TOKEN_EXPIRES_IN=${ACCESS_TOKEN_EXPIRES_IN:-15}
-      - BACKOFFICE_URL=${BACKOFFICE_URL:-url}
+      - FULL_CLIENT_URL=${FULL_CLIENT_URL:-url}
       - CLIENT_URL=${CLIENT_URL:-url}
       - SERVER_URL=${SERVER_URL:-url}
     image: arnaudlyard/relaxing-hippoquests-server

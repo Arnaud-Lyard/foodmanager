@@ -5,7 +5,6 @@ import { useAuthStore } from '../store/auth';
 export class HttpService {
   protected readonly instance: AxiosInstance;
   public constructor(url: string) {
-    console.log('url', url);
     this.instance = axios.create({
       baseURL: url,
       timeout: 30000,
@@ -13,6 +12,7 @@ export class HttpService {
       headers: {
         'Content-Type': 'application/json',
       },
+      withCredentials: true,
     });
 
     this.instance.interceptors.response.use(

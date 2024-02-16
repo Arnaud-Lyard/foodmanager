@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 const envSchema = z.object({
   DATABASE_URL: z.string(),
@@ -16,7 +16,7 @@ const envSchema = z.object({
   ACCESS_TOKEN_EXPIRES_IN: z.string(),
 
   CLIENT_URL: z.string(),
-  BACKOFFICE_URL: z.string(),
+  FULL_CLIENT_URL: z.string(),
   SERVER_URL: z.string(),
 
   EMAIL_USER: z.string(),
@@ -40,7 +40,7 @@ export function validateEnv() {
     JWT_ACCESS_TOKEN_PUBLIC_KEY: process.env.JWT_ACCESS_TOKEN_PUBLIC_KEY,
     ACCESS_TOKEN_EXPIRES_IN: process.env.ACCESS_TOKEN_EXPIRES_IN,
     CLIENT_URL: process.env.CLIENT_URL,
-    BACKOFFICE_URL: process.env.BACKOFFICE_URL,
+    FULL_CLIENT_URL: process.env.FULL_CLIENT_URL,
     SERVER_URL: process.env.SERVER_URL,
 
     EMAIL_USER: process.env.EMAIL_USER,
@@ -51,7 +51,7 @@ export function validateEnv() {
 
   if (!envServer.success) {
     console.error(envServer.error.issues);
-    throw new Error("There is an error with the server environment variables");
+    throw new Error('There is an error with the server environment variables');
     process.exit(1);
   }
 }
