@@ -39,10 +39,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { User } from '../types/user.ts';
+import { IUser } from '../types/user.ts';
 import { userService } from '../services/user.service.ts';
 
-const teamUsers = ref<User[]>([])
+const teamUsers = ref<IUser[]>([])
 
 onMounted(async () => {
   try {

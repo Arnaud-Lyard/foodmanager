@@ -70,7 +70,7 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async () => {
   const authStore = useAuthStore();
   const { data } = await userService.getMe();
   if (!data.isConnect) {
