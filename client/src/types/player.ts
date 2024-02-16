@@ -1,4 +1,4 @@
-export interface Player {
+export interface IPlayer {
   id: string;
   nickname: string;
   rank: number;
@@ -15,9 +15,9 @@ export interface Player {
   userId: string;
 }
 
-type Progress = "up" | "equal" | "down";
+type Progress = 'up' | 'equal' | 'down';
 
-export interface PlayerResponse {
-  players: Player[];
+export interface IPlayerResponse {
+  players: IPlayer[];
   status?: string;
 }

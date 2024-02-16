@@ -1,18 +1,21 @@
-import express from "express";
-import { authenticateUser } from "../../middleware/authenticateUser";
-import { uploadFile } from "../../middleware/uploadFile";
+import express from 'express';
+import { authenticateUser } from '../../middleware/authenticateUser';
+import { uploadFile } from '../../middleware/uploadFile';
 import {
+  getMeHandler,
   getTeamUsersHandler,
   getUserHandler,
   uploadUserImageHandler,
-} from "../controller/user.controller";
+} from '../controller/user.controller';
 
 const router = express.Router();
 
-router.get("/", authenticateUser, getUserHandler);
+router.get('/', authenticateUser, getUserHandler);
 
-router.post("/upload", authenticateUser, uploadFile, uploadUserImageHandler);
+router.post('/upload', authenticateUser, uploadFile, uploadUserImageHandler);
 
-router.get("/team", getTeamUsersHandler);
+router.get('/team', getTeamUsersHandler);
+
+router.get('/me', getMeHandler);
 
 export default router;

@@ -1,4 +1,8 @@
-import { RegisterResponse, VerifyEmailResponse } from '../types/auth';
+import {
+  ILoginResponse,
+  IRegisterResponse,
+  IVerifyEmailResponse,
+} from '../types/auth';
 import { HttpService } from './http.service';
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL;
@@ -19,7 +23,7 @@ export class AuthService extends HttpService {
     pseudo: string;
     passwordConfirm: string;
   }) {
-    const { data } = await this.instance.post<RegisterResponse>(
+    const { data } = await this.instance.post<IRegisterResponse>(
       `api/auth/register`,
       {
         email,
@@ -31,8 +35,19 @@ export class AuthService extends HttpService {
     return data;
   }
 
+  async login({ email, password }: { email: string; password: string }) {
+    const { data } = await this.instance.post<ILoginResponse>(
+      `api/auth/login`,
+      {
+        email,
+        password,
+      }
+    );
+    return data;
+  }
+
   async verifyEmail(verifyCode: string) {
-    const { data } = await this.instance.get<VerifyEmailResponse>(
+    const { data } = await this.instance.get<IVerifyEmailResponse>(
       `/api/auth/verifyemail/${verifyCode}`
     );
     return data;

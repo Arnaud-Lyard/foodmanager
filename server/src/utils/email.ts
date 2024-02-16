@@ -1,8 +1,7 @@
-import nodemailer from "nodemailer";
-import config from "config";
-import pug from "pug";
-import { convert } from "html-to-text";
-import { Prisma } from "@prisma/client";
+import nodemailer from 'nodemailer';
+import pug from 'pug';
+import { convert } from 'html-to-text';
+import { Prisma } from '@prisma/client';
 
 const smtp = {
   host: process.env.EMAIL_HOST,
@@ -12,19 +11,16 @@ const smtp = {
 };
 
 export default class Email {
-  #firstName: string;
+  #pseudo: string;
   #to: string;
   #from: string;
   constructor(private user: Prisma.UserCreateInput, private url: string) {
-    this.#firstName = user.pseudo.split(" ")[0];
+    this.#pseudo = user.pseudo.split(' ')[0];
     this.#to = user.email;
-    this.#from = `Team <team@relaxing-hippoquests.com>`;
+    this.#from = `Relaxing Hippoquests <team@relaxing-hippoquests.com>`;
   }
 
   private newTransport() {
-    // if (process.env.NODE_ENV === 'production') {
-    // }
-    console.log(smtp);
     return nodemailer.createTransport({
       ...smtp,
       auth: {
@@ -38,7 +34,7 @@ export default class Email {
     try {
       // Generate HTML template based on the template string
       const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
-        firstName: this.#firstName,
+        pseudo: this.#pseudo,
         subject,
         url: this.url,
       });
@@ -56,18 +52,18 @@ export default class Email {
       const info = await this.newTransport().sendMail(mailOptions);
       console.log(nodemailer.getTestMessageUrl(info));
     } catch (error) {
-      console.error("Error during send mail :", error);
+      console.error('Error during send mail :', error);
     }
   }
 
   async sendVerificationCode() {
-    await this.send("verificationCode", "Your account verification code");
+    await this.send('verificationCode', 'Your account verification code');
   }
 
   async sendPasswordResetToken() {
     await this.send(
-      "resetPassword",
-      "Your password reset token (valid for only 10 minutes)"
+      'resetPassword',
+      'Your password reset token (valid for only 10 minutes)'
     );
   }
 }

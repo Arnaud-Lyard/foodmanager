@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import fs from "fs-extra";
-import AppError from "../../utils/appError";
-import { getUserInformations } from "../../utils/getUserInformations";
-import { UserRepository } from "../repository/user.repository";
-import { getTeamUsers } from "../service/user.service";
+import { NextFunction, Request, Response } from 'express';
+import fs from 'fs-extra';
+import AppError from '../../utils/appError';
+import { getUserInformations } from '../../utils/getUserInformations';
+import { UserRepository } from '../repository/user.repository';
+import { getTeamUsers } from '../service/user.service';
 
 export const getUserHandler = async (
   req: Request,
@@ -17,7 +17,7 @@ export const getUserHandler = async (
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         user,
       },
@@ -40,10 +40,10 @@ export const uploadUserImageHandler = async (
 
     const file = req.file;
     if (!file) {
-      return next(new AppError(400, "Please upload a file"));
+      return next(new AppError(400, 'Please upload a file'));
     }
 
-    const fileName = user.avatar?.split("/uploads/")[1];
+    const fileName = user.avatar?.split('/uploads/')[1];
 
     if (fileName) {
       try {
@@ -52,7 +52,7 @@ export const uploadUserImageHandler = async (
         next(err);
       }
     }
-    const imageUrl = `${req.protocol}://${req.get("host")}/uploads/${
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${
       file.filename
     }`;
 
@@ -62,7 +62,7 @@ export const uploadUserImageHandler = async (
     });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
     });
   } catch (err: any) {
     next(err);
@@ -81,9 +81,40 @@ export const getTeamUsersHandler = async (
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       teamUsers,
     });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getMeHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    let access_token;
+
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith('Bearer')
+    ) {
+      access_token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies.access_token) {
+      access_token = req.cookies.access_token;
+    }
+
+    res
+      .status(200)
+      .status(200)
+      .json({
+        status: 'success',
+        data: {
+          isConnect: Boolean(access_token),
+        },
+      });
   } catch (err: any) {
     next(err);
   }
