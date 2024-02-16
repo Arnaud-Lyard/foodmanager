@@ -38,10 +38,10 @@ import {
   ChevronDownIcon,
 } from '@heroicons/vue/24/outline';
 import { onMounted, ref } from 'vue';
-import { Player } from '../types/player';
+import { IPlayer } from '../types/player';
 import { playerService } from '../services/player.service';
 
-const players = ref<Player[]>([])
+const players = ref<IPlayer[]>([])
 
 onMounted(async () => {
   try {
