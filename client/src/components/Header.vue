@@ -33,7 +33,7 @@
             </div>
             <div class="flex items-center">
               <div v-if="isLoggedIn" class="flex-shrink-0">
-                <button type="button"
+                <button type="button" @click="logout()"
                   class="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                   Déconnexion
                 </button>
@@ -67,11 +67,13 @@
 <script setup lang="ts">
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Bars3Icon, UserIcon, XMarkIcon } from '@heroicons/vue/24/outline'
-import { Ref } from 'vue';
+import { Ref, computed } from 'vue';
 import { useAuthStore } from '../store/auth';
+import { authService } from '../services/auth.service';
+import router from '../router/router';
 
 const authStore = useAuthStore();
-const isLoggedIn = authStore.isLoggedIn;
+const isLoggedIn = computed(() => authStore.isLoggedIn);
 
 const publicNavigations = [
   { name: 'Accueil', href: '/', current: false },
@@ -84,5 +86,11 @@ const privateNavigations = [
 
 function closeDisclosurePanel(close: (ref?: Ref | HTMLElement) => void) {
   close()
+}
+
+async function logout() {
+  authStore.logout();
+  await authService.logout();
+  router.push({ name: 'home' });
 }
 </script>

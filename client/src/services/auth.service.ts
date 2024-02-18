@@ -1,5 +1,6 @@
 import {
   ILoginResponse,
+  ILogoutResponse,
   IRegisterResponse,
   IVerifyEmailResponse,
 } from '../types/auth';
@@ -49,6 +50,13 @@ export class AuthService extends HttpService {
   async verifyEmail(verifyCode: string) {
     const { data } = await this.instance.get<IVerifyEmailResponse>(
       `/api/auth/verifyemail/${verifyCode}`
+    );
+    return data;
+  }
+
+  async logout() {
+    const { data } = await this.instance.get<ILogoutResponse>(
+      `/api/auth/logout`
     );
     return data;
   }
