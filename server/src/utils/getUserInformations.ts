@@ -1,26 +1,26 @@
-import { User } from "@prisma/client";
-import { Request } from "express";
-import { findUniqueUser } from "../user/service/user.service";
-import AppError from "../utils/appError";
-import { verifyJwt } from "../utils/jwt";
+import { Request } from 'express';
+import { IUserSafe } from '../types/user';
+import { findUniqueUser } from '../user/service/user.service';
+import AppError from '../utils/appError';
+import { verifyJwt } from '../utils/jwt';
 
 export const getUserInformations = async (
   req: Request
-): Promise<User | AppError> => {
+): Promise<IUserSafe | AppError> => {
   try {
     let access_token;
 
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
+      req.headers.authorization.startsWith('Bearer')
     ) {
-      access_token = req.headers.authorization.split(" ")[1];
+      access_token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.access_token) {
       access_token = req.cookies.access_token;
     }
 
     if (!access_token) {
-      return new AppError(401, "You are not logged in");
+      return new AppError(401, 'You are not logged in');
     }
 
     // Validate the access token
