@@ -2,7 +2,7 @@
 CREATE TYPE "RoleEnumType" AS ENUM ('user', 'admin');
 
 -- CreateEnum
-CREATE TYPE "GradeEnumType" AS ENUM ('player', 'manager');
+CREATE TYPE "GradeEnumType" AS ENUM ('user', 'player', 'manager');
 
 -- CreateEnum
 CREATE TYPE "ProgressEnumType" AS ENUM ('up', 'equal', 'down');
@@ -16,7 +16,7 @@ CREATE TABLE "user" (
     "verified" BOOLEAN DEFAULT false,
     "esl" VARCHAR(255),
     "twitter" VARCHAR(255),
-    "grade" "GradeEnumType" DEFAULT 'player',
+    "grade" "GradeEnumType" NOT NULL DEFAULT 'user',
     "password" TEXT NOT NULL,
     "role" "RoleEnumType" DEFAULT 'user',
     "verification_code" TEXT,
@@ -32,7 +32,8 @@ CREATE TABLE "user" (
 CREATE TABLE "player" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "nickname" VARCHAR(255) NOT NULL,
-    "faction" VARCHAR(255) NOT NULL,
+    "rank" INTEGER NOT NULL,
+    "race" VARCHAR(255) NOT NULL,
     "league" VARCHAR(255) NOT NULL,
     "win_rate" INTEGER NOT NULL,
     "mmr" INTEGER NOT NULL,

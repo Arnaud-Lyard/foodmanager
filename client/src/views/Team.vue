@@ -6,7 +6,13 @@
       <ul grade="list"
         class="mx-auto mt-5 mb-5 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-2">
         <li v-for="teamUser in teamUsers" :key="teamUser.pseudo">
-          <img class="mx-auto h-56 w-56 rounded-full" :src="teamUser.avatar" :alt="teamUser.avatar" />
+          <span v-if="!teamUser.avatar" class="inline-block h-56 w-56 overflow-hidden rounded-full bg-gray-100">
+            <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </span>
+          <img v-else class="mx-auto h-56 w-56 rounded-full" :src="teamUser.avatar" :alt="teamUser.avatar" />
           <h3 class="mt-6 text-base font-semibold leading-7 tracking-tight text-gray-900">{{ teamUser.pseudo }}</h3>
           <p class="text-sm leading-6 text-gray-600">{{ teamUser.grade }}</p>
           <ul grade="list" class="mt-6 flex justify-center gap-x-6">

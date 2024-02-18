@@ -5,6 +5,7 @@ import {
   getMeHandler,
   getTeamUsersHandler,
   getUserHandler,
+  updateUserHandler,
   uploadUserImageHandler,
 } from '../controller/user.controller';
 
@@ -17,5 +18,7 @@ router.post('/upload', authenticateUser, uploadFile, uploadUserImageHandler);
 router.get('/team', getTeamUsersHandler);
 
 router.get('/me', getMeHandler);
+
+router.post('/update', authenticateUser, uploadFile, updateUserHandler);
 
 export default router;

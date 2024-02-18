@@ -1,17 +1,17 @@
-version: "3.9"
+version: '3.9'
 
 services:
   relaxinghippoquestsdatabase:
     container_name: relaxinghippoquestsdatabase
     hostname: relaxinghippoquestsdatabase
     image: postgres:latest
-    restart: "no"
+    restart: 'no'
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password123
       POSTGRES_DB: relaxinghippoquests
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d relaxinghippoquests"]
+      test: ['CMD-SHELL', 'pg_isready -U admin -d relaxinghippoquests']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -26,11 +26,13 @@ services:
     depends_on:
       relaxinghippoquestsdatabase:
         condition: service_healthy
-    build: "./server"
+    build: './server'
     ports:
       - 4000:4000
     volumes:
       - ./server/src:/app/src
+      - relaxinghippoquestsfiles:/app/public/uploads
 
 volumes:
   relaxinghippoquestsdatabase:
+  relaxinghippoquestsfiles:

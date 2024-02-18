@@ -3,15 +3,16 @@ export interface IUser {
   pseudo: string;
   email: string;
   grade: Grade;
-  avatar: string;
-  esl: string;
-  twitter: string;
+  avatar?: string;
+  esl?: string;
+  twitter?: string;
+  stormgate?: string;
   role: Role;
   createdAt: Date;
   updatedAt: Date;
 }
 
-type Grade = 'player' | 'manager';
+type Grade = 'user' | 'player' | 'manager';
 
 type Role = 'user' | 'admin';
 
@@ -20,9 +21,23 @@ export interface ITeamUserResponse {
   status?: string;
 }
 
-export interface IUserResponse {
+export interface ILoggedUserResponse {
   status: string;
   data: {
     isConnect: boolean;
   };
 }
+
+export interface IUserResponse {
+  status: string;
+  data: {
+    user: IUser;
+  };
+}
+
+export interface IUpdateUserResponse {
+  status: Status;
+  message: string;
+}
+
+type Status = 'success' | 'fail';

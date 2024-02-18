@@ -3,7 +3,8 @@ import fs from 'fs-extra';
 import AppError from '../../utils/appError';
 import { getUserInformations } from '../../utils/getUserInformations';
 import { UserRepository } from '../repository/user.repository';
-import { getTeamUsers } from '../service/user.service';
+import { getTeamUsers, updateUser } from '../service/user.service';
+import { UpdateUserInput } from '../schema/user.schema';
 
 export const getUserHandler = async (
   req: Request,
@@ -106,15 +107,50 @@ export const getMeHandler = async (
       access_token = req.cookies.access_token;
     }
 
-    res
-      .status(200)
-      .status(200)
-      .json({
-        status: 'success',
-        data: {
-          isConnect: Boolean(access_token),
-        },
-      });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        isConnect: Boolean(access_token),
+      },
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const updateUserHandler = async (
+  req: Request<{}, {}, UpdateUserInput>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await getUserInformations(req);
+    if (user instanceof AppError) {
+      return next(user);
+    }
+
+    if (!req.body.email || !req.body.pseudo) {
+      return next(
+        new AppError(400, `L'adresse email et le pseudo sont requis`)
+      );
+    }
+
+    const file = req.file;
+    const { twitter, esl, pseudo, email } = req.body;
+
+    await updateUser({
+      req,
+      user,
+      twitter,
+      esl,
+      pseudo,
+      email,
+      file,
+    });
+
+    res.status(200).json({
+      status: 'success',
+    });
   } catch (err: any) {
     next(err);
   }

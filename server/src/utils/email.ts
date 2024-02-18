@@ -57,7 +57,7 @@ export default class Email {
   }
 
   async sendVerificationCode() {
-    await this.send('verificationCode', 'Your account verification code');
+    await this.send('verificationCode', `Votre code d'activation de compte`);
   }
 
   async sendPasswordResetToken() {

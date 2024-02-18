@@ -8,7 +8,7 @@
     "db:push": "npx prisma db push",
     "db:seed": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma db seed",
     "db:reset": "DATABASE_URL=postgresql://admin:password123@localhost:5434/relaxinghippoquests?schema=public npx prisma db seed npx prisma migrate reset",
-    "build": "tsc && cp -R src/views dist/src/",
+    "build": "tsc && mkdir -p dist/public/uploads/ && cp -R src/views dist/src/ && cp -R public/uploads dist/public/",
     "start:prod": "node dist/src/app.js"
   },
   "prisma": {
