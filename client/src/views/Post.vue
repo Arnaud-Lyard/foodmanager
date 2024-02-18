@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white px-6 py-6 lg:px-8">
     <div class="mx-auto max-w-3xl text-base leading-7 text-gray-700">
-      <p class="text-base font-semibold text-indigo-600">{{ post.category }}</p>
+      <p class="text-base font-semibold text-orange-600">{{ post.category }}</p>
       <h1 class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{{ post.title }}</h1>
       <p class="mt-6 ">{{ post.description }}</p>
       <figure class="mt-16">

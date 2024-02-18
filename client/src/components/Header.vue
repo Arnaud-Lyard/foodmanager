@@ -34,13 +34,13 @@
             <div class="flex items-center">
               <div v-if="isLoggedIn" class="flex-shrink-0">
                 <button type="button" @click="logout()"
-                  class="relative inline-flex items-center gap-x-1.5 rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                  class="relative inline-flex items-center gap-x-1.5 rounded-md bg-orange-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500">
                   Déconnexion
                 </button>
               </div>
               <div v-else>
                 <router-link :to="{ name: 'login' }">
-                  <UserIcon class="h-9 w-9 text-indigo-500 px-1 py-1 fill-current" aria-hidden="true" />
+                  <UserIcon class="h-9 w-9 text-orange-500 px-1 py-1 fill-current" aria-hidden="true" />
                 </router-link>
               </div>
             </div>

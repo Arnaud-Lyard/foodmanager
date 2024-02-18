@@ -13,7 +13,7 @@
             <label for="pseudo" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Pseudo</label>
             <div class="mt-2 sm:col-span-2 sm:mt-0">
               <input type="text" name="pseudo" id="pseudo" v-model="user.pseudo"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-xs sm:text-sm sm:leading-6" />
             </div>
           </div>
 
@@ -22,7 +22,7 @@
               connexion</label>
             <div class="mt-2 sm:col-span-2 sm:mt-0">
               <input type="text" name="email" id="email" v-model="user.email" disabled autocomplete="email"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6 bg-slate-100 cursor-not-allowed" />
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-xs sm:text-sm sm:leading-6 bg-slate-100 cursor-not-allowed" />
             </div>
           </div>
 
@@ -53,7 +53,7 @@
             <label for="twitter" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Twitter</label>
             <div class="mt-2 sm:col-span-2 sm:mt-0">
               <input type="text" name="twitter" id="twitter" v-model="user.twitter"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-md sm:text-sm sm:leading-6" />
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-md sm:text-sm sm:leading-6" />
             </div>
           </div>
 
@@ -62,7 +62,7 @@
               League</label>
             <div class="mt-2 sm:col-span-2 sm:mt-0">
               <input type="text" name="esl" id="esl" v-model="user.esl"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-md sm:text-sm sm:leading-6" />
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-md sm:text-sm sm:leading-6" />
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@
                     <div class="flex h-6 items-center">
                       <input id="stormgateProfile" name="stormgateProfile" type="checkbox"
                         @click="displayStormgateProfile()"
-                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+                        class="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600" />
                     </div>
                     <div class="text-sm leading-6 ">
                       <label for="stormgateProfile" class="font-medium text-gray-900">Lier mon compte Stormgate à mon
@@ -99,7 +99,7 @@
                     vers mon profil</label>
                   <div v-if="stormgateProfileActive" class="sm:col-span-2 sm:mt-0">
                     <input type="text" name="stormgate" id="stormgate" v-model="user.stormgate"
-                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-s sm:text-sm sm:leading-6" />
+                      class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-s sm:text-sm sm:leading-6" />
                   </div>
                 </div>
               </div>
@@ -194,6 +194,6 @@ function displayStormgateProfile() {
   stormgateProfileActive.value = !stormgateProfileActive.value
 }
 
-const activeClass = ref('inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600')
-const disabledClass = ref('inline-flex justify-center rounded-md bg-indigo-400 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 cursor-not-allowed')
+const activeClass = ref('inline-flex justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600')
+const disabledClass = ref('inline-flex justify-center rounded-md bg-orange-400 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 cursor-not-allowed')
 </script>
