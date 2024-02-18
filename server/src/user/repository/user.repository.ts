@@ -149,7 +149,7 @@ export class UserRepository {
     esl?: string;
     pseudo: string;
     email: string;
-    avatar: string | null;
+    avatar: string | null | undefined;
   }) {
     return await prisma.user.update({
       where: { id: userId },

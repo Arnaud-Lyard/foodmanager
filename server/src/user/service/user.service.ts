@@ -117,7 +117,7 @@ export async function updateUser({
   file,
 }: {
   req: Request;
-  user: User;
+  user: IUserSafe;
   twitter?: string;
   esl?: string;
   pseudo: string;
@@ -141,7 +141,7 @@ async function removeUnusedFiles({
   user,
   file,
 }: {
-  user: User;
+  user: IUserSafe;
   file: Express.Multer.File | undefined;
 }) {
   if (!file) return;
@@ -156,7 +156,7 @@ async function getAvatarUrl({
   req,
   file,
 }: {
-  user: User;
+  user: IUserSafe;
   req: Request;
   file: Express.Multer.File | undefined;
 }) {
