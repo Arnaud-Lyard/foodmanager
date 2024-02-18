@@ -40,7 +40,7 @@ services:
       - SERVER_URL=${SERVER_URL:-url}
     image: arnaudlyard/relaxing-hippoquests-server
     healthcheck:
-      test: "curl --fail --request GET -H 'content-type:application/json' --url '${SERVER_URL}/api'"
+      test: "curl --fail --request GET -H 'content-type:application/json' --url 'http://relaxinghippoquestsserver'"
       interval: 5s
       timeout: 5s
       retries: 10
