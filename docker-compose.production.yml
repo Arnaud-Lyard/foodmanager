@@ -1,6 +1,6 @@
 services:
   relaxinghippoquestsdatabase:
-    image: postgres:15-alpine
+    image: postgres:latest
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -40,7 +40,7 @@ services:
       - SERVER_URL=${SERVER_URL:-url}
     image: arnaudlyard/relaxing-hippoquests-server
     healthcheck:
-      test: "curl --fail --request GET -H 'content-type:application/json' --url 'http://localhost'"
+      test: ['CMD', 'curl', '-f', 'http://relaxinghippoquestsserver/api']
       interval: 5s
       timeout: 5s
       retries: 10
