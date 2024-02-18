@@ -8,14 +8,14 @@ datasource db {
 }
 
 model User {
-  id       String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  pseudo   String         @db.VarChar(255)
-  email    String         @unique
-  avatar   String?        @db.VarChar(255)
-  verified Boolean?       @default(false)
-  esl      String?        @db.VarChar(255)
-  twitter  String?        @db.VarChar(255)
-  grade    GradeEnumType? @default(player)
+  id       String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pseudo   String        @db.VarChar(255)
+  email    String        @unique
+  avatar   String?       @db.VarChar(255)
+  verified Boolean?      @default(false)
+  esl      String?       @db.VarChar(255)
+  twitter  String?       @db.VarChar(255)
+  grade    GradeEnumType @default(user)
 
   password String
   role     RoleEnumType? @default(user)
@@ -61,6 +61,7 @@ enum RoleEnumType {
 }
 
 enum GradeEnumType {
+  user
   player
   manager
 }

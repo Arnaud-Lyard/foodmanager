@@ -1,4 +1,9 @@
-import { ITeamUserResponse, IUserResponse } from '../types/user';
+import {
+  ILoggedUserResponse,
+  ITeamUserResponse,
+  IUpdateUserResponse,
+  IUserResponse,
+} from '../types/user';
 import { HttpService } from './http.service';
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL;
@@ -16,7 +21,27 @@ export class UserService extends HttpService {
   }
 
   async getMe() {
-    const { data } = await this.instance.get<IUserResponse>(`/api/users/me`);
+    const { data } = await this.instance.get<ILoggedUserResponse>(
+      `/api/users/me`
+    );
+    return data;
+  }
+
+  async getUser() {
+    const { data } = await this.instance.get<IUserResponse>(`/api/users/`);
+    return data;
+  }
+
+  async updateUser(formData: FormData) {
+    const { data } = await this.instance.post<IUpdateUserResponse>(
+      `/api/users/update`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
     return data;
   }
 }

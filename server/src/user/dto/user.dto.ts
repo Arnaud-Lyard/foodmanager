@@ -3,5 +3,4 @@ export interface UserDto {
   email: string;
   password: string;
   verificationCode?: string | null;
-  avatar: string;
 }

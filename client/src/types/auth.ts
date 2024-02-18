@@ -28,4 +28,8 @@ export interface ILoginResponse {
   ];
 }
 
+export interface ILogoutResponse {
+  status: Status;
+}
+
 type Status = 'success' | 'fail';

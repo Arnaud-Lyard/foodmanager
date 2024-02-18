@@ -1,7 +1,7 @@
-import { Prisma, User } from "@prisma/client";
-import prisma from "../../../prisma/client";
-import { UserDto } from "../dto/user.dto";
-import { UserArgs } from "@prisma/client/runtime/library";
+import { User } from '@prisma/client';
+import prisma from '../../../prisma/client';
+import { IUserSafe } from '../../types/user';
+import { UserDto } from '../dto/user.dto';
 
 export class UserRepository {
   static async createUser(user: UserDto): Promise<User> {
@@ -97,28 +97,29 @@ export class UserRepository {
     });
   }
 
-  static async findByUserId(userId: string): Promise<User | null> {
-    const select = this.excludeFields<Prisma.UserFieldRefs>(
-      prisma.user.fields,
-      [
-        "password",
-        "verified",
-        "verificationCode",
-        "passwordResetAt",
-        "passwordResetToken",
-      ]
-    );
+  static async findByUserId(userId: string): Promise<IUserSafe | null> {
     const user = await prisma.user.findFirst({
       where: { id: userId },
-      select,
+      select: {
+        id: true,
+        pseudo: true,
+        email: true,
+        grade: true,
+        avatar: true,
+        esl: true,
+        twitter: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
     return user;
   }
 
-  static async getTeamUsers() {
+  static async getTeamUsers(): Promise<IUserSafe[]> {
     return await prisma.user.findMany({
       where: {
-        OR: [{ grade: "player" }, { grade: "manager" }],
+        OR: [{ grade: 'player' }, { grade: 'manager' }],
       },
       select: {
         id: true,
@@ -135,18 +136,24 @@ export class UserRepository {
     });
   }
 
-  static excludeFields<T>(fields: T, excludes: (keyof T)[]): BooleanObject<T> {
-    let keys = Object.keys(fields!).filter(
-      (key) => !excludes.includes(key as keyof T)
-    ) as (keyof T)[];
-    let object: BooleanObject<T> = {};
-    for (let key of keys) {
-      object[key] = true;
-    }
-    return object;
+  static async updateUser({
+    userId,
+    twitter,
+    esl,
+    pseudo,
+    email,
+    avatar,
+  }: {
+    userId: string;
+    twitter?: string;
+    esl?: string;
+    pseudo: string;
+    email: string;
+    avatar: string | null;
+  }) {
+    return await prisma.user.update({
+      where: { id: userId },
+      data: { twitter, esl, pseudo, avatar },
+    });
   }
 }
-
-type BooleanObject<T> = {
-  [K in keyof T]?: boolean;
-};

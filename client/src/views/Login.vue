@@ -10,7 +10,7 @@
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Adresse email</label>
           <div class="mt-2">
             <input id="email" name="email" type="email" v-model="email" autocomplete="email" required=true
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
 
@@ -19,14 +19,14 @@
             <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de passe</label>
             <div class="text-sm">
               <router-link :to="{ name: 'forgotpassword' }"
-                class="font-semibold text-indigo-600 hover:text-indigo-500">Mot
+                class="font-semibold text-orange-600 hover:text-orange-500">Mot
                 de passe oublié ?</router-link>
             </div>
           </div>
           <div class="mt-2">
             <input id="password" name="password" type="password" v-model="password" autocomplete="current-password"
               required=true
-              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
 
@@ -43,7 +43,7 @@
         Pas encore inscrit ?
         {{ ' ' }}
         <router-link :to="{ name: 'register' }"
-          class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">S'inscrire</router-link>
+          class="font-semibold leading-6 text-orange-600 hover:text-orange-500">S'inscrire</router-link>
       </p>
     </div>
   </div>
@@ -67,8 +67,8 @@ const isFormValid = computed(() => {
   return email.value && password.value;
 });
 
-const activeClass = ref('flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600')
-const disabledClass = ref('flex w-full justify-center rounded-md bg-indigo-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 cursor-not-allowed')
+const activeClass = ref('flex w-full justify-center rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600')
+const disabledClass = ref('flex w-full justify-center rounded-md bg-orange-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 cursor-not-allowed')
 
 async function handleSubmit() {
 
