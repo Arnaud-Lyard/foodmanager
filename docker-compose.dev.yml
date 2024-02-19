@@ -31,8 +31,7 @@ services:
       - 4000:4000
     volumes:
       - ./server/src:/app/src
-      - relaxinghippoquestsfiles:/app/public/uploads
+      - ./uploads:/app/public/uploads
 
 volumes:
   relaxinghippoquestsdatabase:
-  relaxinghippoquestsfiles:

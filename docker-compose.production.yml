@@ -45,7 +45,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - relaxinghippoquestsfiles:/app/dist/public/uploads
+      - ./uploads:/app/public/uploads
 
   relaxinghippoquestsclient:
     image: arnaudlyard/relaxing-hippoquests-client
@@ -66,4 +66,3 @@ services:
 
 volumes:
   relaxinghippoquestsdatabase:
-  relaxinghippoquestsfiles:
