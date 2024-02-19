@@ -150,7 +150,7 @@ async function removeUnusedFiles({
   if (!fileUpload) return;
   if (user.avatar) {
     const fileToRemoveName = user.avatar?.split('/uploads/')[1];
-    await fs.unlink(`public/upsloads/${fileToRemoveName}`);
+    await fs.unlink(`public/uploads/${fileToRemoveName}`);
   }
 }
 
