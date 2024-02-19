@@ -61,7 +61,11 @@ async function bootstrap() {
     });
   });
 
-  const publicDirectoryPath = path.join(__dirname, '..', 'public');
+  const publicDirectoryPath =
+    process.env.NODE_ENV === 'production'
+      ? path.join(__dirname, '..', '..', 'public')
+      : path.join(__dirname, '..', 'public');
+
   app.use(express.static(publicDirectoryPath));
 
   // UNHANDLED ROUTES

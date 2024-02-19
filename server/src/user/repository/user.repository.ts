@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 import prisma from '../../../prisma/client';
 import { IUserSafe } from '../../types/user';
-import { UserDto } from '../dto/user.dto';
+import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 
 export class UserRepository {
   static async createUser(user: UserDto): Promise<User> {
@@ -136,23 +136,10 @@ export class UserRepository {
     });
   }
 
-  static async updateUser({
-    userId,
-    twitter,
-    esl,
-    pseudo,
-    email,
-    avatar,
-  }: {
-    userId: string;
-    twitter?: string;
-    esl?: string;
-    pseudo: string;
-    email: string;
-    avatar: string | null | undefined;
-  }) {
+  static async updateUser(userUpdate: IUserUpdateDto) {
+    const { id, twitter, esl, pseudo, avatar } = userUpdate;
     return await prisma.user.update({
-      where: { id: userId },
+      where: { id },
       data: { twitter, esl, pseudo, avatar },
     });
   }
