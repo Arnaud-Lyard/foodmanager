@@ -1,10 +1,10 @@
 import { Prisma, PrismaClient, User } from '@prisma/client';
-import { Request } from 'express';
 import fs from 'fs-extra';
-import { signJwt } from '../../utils/jwt';
-import { UserDto } from '../dto/user.dto';
-import { UserRepository } from '../repository/user.repository';
 import { IUserSafe } from '../../types/user';
+import AppError from '../../utils/appError';
+import { signJwt } from '../../utils/jwt';
+import { IUserUpdateDto, UserDto } from '../dto/user.dto';
+import { UserRepository } from '../repository/user.repository';
 
 const prisma = new PrismaClient();
 
@@ -108,7 +108,6 @@ export async function getTeamUsers() {
 }
 
 export async function updateUser({
-  req,
   user,
   twitter,
   esl,
@@ -116,7 +115,6 @@ export async function updateUser({
   email,
   file,
 }: {
-  req: Request;
   user: IUserSafe;
   twitter?: string;
   esl?: string;
@@ -124,42 +122,45 @@ export async function updateUser({
   email: string;
   file: Express.Multer.File | undefined;
 }) {
-  await removeUnusedFiles({ user, file });
-  const avatarUrl = await getAvatarUrl({ user, req, file });
-
-  return await UserRepository.updateUser({
-    userId: user.id,
-    twitter,
-    esl,
+  const userUpdate: IUserUpdateDto = {
+    id: user.id,
     pseudo,
     email,
-    avatar: avatarUrl,
-  });
+    esl,
+    twitter,
+  };
+  const fileUpload = file;
+  try {
+    await removeUnusedFiles({ user, fileUpload });
+    const avatarUrl = await getAvatarUrl({ user, fileUpload });
+    userUpdate.avatar = avatarUrl;
+  } catch (err: any) {
+    throw new AppError(422, 'Erreur lors de la mise à jour de votre avatar.');
+  }
+  return await UserRepository.updateUser(userUpdate);
 }
 
 async function removeUnusedFiles({
   user,
-  file,
+  fileUpload,
 }: {
   user: IUserSafe;
-  file: Express.Multer.File | undefined;
+  fileUpload: Express.Multer.File | undefined;
 }) {
-  if (!file) return;
+  if (!fileUpload) return;
   if (user.avatar) {
-    const fileName = user.avatar?.split('/uploads/')[1];
-    await fs.unlink(`public/uploads/${fileName}`);
+    const fileToRemoveName = user.avatar?.split('/uploads/')[1];
+    await fs.unlink(`public/upsloads/${fileToRemoveName}`);
   }
 }
 
 async function getAvatarUrl({
   user,
-  req,
-  file,
+  fileUpload,
 }: {
   user: IUserSafe;
-  req: Request;
-  file: Express.Multer.File | undefined;
+  fileUpload: Express.Multer.File | undefined;
 }) {
-  if (!file) return user.avatar;
-  return `${req.protocol}://${req.get('host')}/uploads/${file.filename}`;
+  if (!fileUpload) return user.avatar;
+  return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }

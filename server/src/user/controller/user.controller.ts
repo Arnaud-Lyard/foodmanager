@@ -139,13 +139,12 @@ export const updateUserHandler = async (
     const { twitter, esl, pseudo, email } = req.body;
 
     await updateUser({
-      req,
+      file,
       user,
       twitter,
       esl,
       pseudo,
       email,
-      file,
     });
 
     res.status(200).json({
