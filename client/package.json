@@ -11,6 +11,9 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.18",
     "@heroicons/vue": "^2.1.1",
+    "@tiptap/pm": "^2.2.3",
+    "@tiptap/starter-kit": "^2.2.3",
+    "@tiptap/vue-3": "^2.2.3",
     "axios": "^1.6.7",
     "pinia": "^2.1.7",
     "vue": "^3.3.11",

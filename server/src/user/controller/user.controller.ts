@@ -5,6 +5,7 @@ import { getUserInformations } from '../../utils/getUserInformations';
 import { UserRepository } from '../repository/user.repository';
 import { getTeamUsers, updateUser } from '../service/user.service';
 import { UpdateUserInput } from '../schema/user.schema';
+import { IUserSafe } from '../../types/user';
 
 export const getUserHandler = async (
   req: Request,
@@ -12,10 +13,7 @@ export const getUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     res.status(200).json({
       status: 'success',
@@ -34,10 +32,7 @@ export const uploadUserImageHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     const file = req.file;
     if (!file) {
@@ -124,10 +119,7 @@ export const updateUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     if (!req.body.email || !req.body.pseudo) {
       return next(

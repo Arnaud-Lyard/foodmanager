@@ -52,4 +52,4 @@ export interface ILogoutResponse {
   status: Status;
 }
 
-type Status = 'success' | 'fail';
+export type Status = 'success' | 'fail';

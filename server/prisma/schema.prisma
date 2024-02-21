@@ -29,6 +29,7 @@ model User {
   passwordResetAt    DateTime? @map("password_reset_at")
 
   player Player?
+  Post   Post[]
 
   @@unique([email, verificationCode, passwordResetToken])
   @@index([email, verificationCode, passwordResetToken])
@@ -53,6 +54,20 @@ model Player {
   userId   String            @unique @map("user_id") @db.Uuid
 
   @@map(name: "player")
+}
+
+model Post {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title     String   @db.VarChar(255)
+  category  String   @db.VarChar(255)
+  image     String   @db.VarChar(255)
+  content   String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id") @db.Uuid
+
+  @@map(name: "post")
 }
 
 enum RoleEnumType {
