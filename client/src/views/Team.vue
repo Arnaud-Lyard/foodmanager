@@ -17,7 +17,8 @@
           <p class="text-sm leading-6 text-gray-600">{{ teamUser.grade }}</p>
           <ul grade="list" class="mt-6 flex justify-center gap-x-6">
             <li>
-              <a :href="teamUser.twitter" class="text-gray-400 hover:text-gray-500">
+              <a @click="navigate(teamUser, 'twitter')" :class="teamUser.twitter ? '' : 'cursor-not-allowed'"
+                class="text-gray-400 hover:text-gray-500 cursor-pointer">
                 <span class="sr-only">Twitter</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 31.812 26">
                   <path
@@ -27,7 +28,8 @@
               </a>
             </li>
             <li>
-              <a :href="teamUser.esl" class="text-gray-400 hover:text-gray-500">
+              <a @click="navigate(teamUser, 'esl')" :class="teamUser.esl ? '' : 'cursor-not-allowed'"
+                class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">ESL</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24" grade="img">
                   <path
@@ -58,4 +60,26 @@ onMounted(async () => {
     console.error(error)
   }
 })
+
+function navigate(teamUser: IUser, link: string) {
+  switch (link) {
+    case 'esl':
+      if (!teamUser.esl) {
+        return;
+      }
+      window.open(teamUser.esl);
+      break;
+
+    case 'twitter':
+      if (!teamUser.twitter) {
+        return;
+      }
+      window.open(teamUser.twitter);
+
+      break;
+
+    default:
+      break;
+  }
+}
 </script>

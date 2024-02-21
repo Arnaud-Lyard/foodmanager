@@ -8,34 +8,34 @@ enum RoleEnumType {
 export const registerUserSchema = object({
   body: object({
     pseudo: string({
-      required_error: 'Pseudo is required',
+      required_error: 'Pseudo requis',
     }),
     email: string({
-      required_error: 'Email address is required',
-    }).email('Invalid email address'),
+      required_error: 'Adresse email requise',
+    }).email('Adresse email invalide'),
     password: string({
-      required_error: 'Password is required',
+      required_error: 'Mot de passe requis',
     })
-      .min(8, 'Password must be more than 8 characters')
-      .max(32, 'Password must be less than 32 characters'),
+      .min(8, 'Le mot de passe doit compter au moins 8 caractères')
+      .max(32, 'Le mot de passe ne doit pas excéder 32 caractères'),
     passwordConfirm: string({
-      required_error: 'Please confirm your password',
+      required_error: 'Confirmation de mot de passe requise',
     }),
     role: z.optional(z.nativeEnum(RoleEnumType)),
   }).refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
-    message: 'Passwords do not match',
+    message: 'Les mots de passes ne sont pas identiques',
   }),
 });
 
 export const loginUserSchema = object({
   body: object({
     email: string({
-      required_error: 'Email address is required',
-    }).email('Invalid email address'),
+      required_error: 'Adresse email requise',
+    }).email('Adresse email invalide'),
     password: string({
-      required_error: 'Password is required',
-    }).min(8, 'Invalid email or password'),
+      required_error: 'Mot de passe requis',
+    }).min(8, 'Adresse email ou mot de passe invalide'),
   }),
 });
 
@@ -48,8 +48,8 @@ export const verifyEmailSchema = object({
 export const forgotPasswordSchema = object({
   body: object({
     email: string({
-      required_error: 'Email is required',
-    }).email('Email is invalid'),
+      required_error: 'Adresse email requise',
+    }).email('Adresse email invalide'),
   }),
 });
 
@@ -59,13 +59,13 @@ export const resetPasswordSchema = object({
   }),
   body: object({
     password: string({
-      required_error: 'Password is required',
-    }).min(8, 'Password must be more than 8 characters'),
+      required_error: 'Mot de passe requis',
+    }).min(8, 'Le mot de passe doit compter au moins 8 caractères'),
     passwordConfirm: string({
-      required_error: 'Please confirm your password',
+      required_error: 'Confirmation de mot de passe requise',
     }),
   }).refine((data) => data.password === data.passwordConfirm, {
-    message: 'Passwords do not match',
+    message: 'Les mots de passes ne sont pas identiques',
     path: ['passwordConfirm'],
   }),
 });
