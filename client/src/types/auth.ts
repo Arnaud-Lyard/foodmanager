@@ -28,6 +28,26 @@ export interface ILoginResponse {
   ];
 }
 
+export interface IForgotPasswordResponse {
+  status: Status;
+  message?: string;
+  errors: [
+    {
+      message: string;
+    }
+  ];
+}
+
+export interface IResetPasswordResponse {
+  status: Status;
+  message?: string;
+  errors: [
+    {
+      message: string;
+    }
+  ];
+}
+
 export interface ILogoutResponse {
   status: Status;
 }

@@ -192,10 +192,9 @@ export const forgotPasswordHandler = async (
   next: NextFunction
 ) => {
   try {
-    // Get the user from the collection
     const user = await findByEmail(req.body.email.toLowerCase());
     const message =
-      'You will receive a reset email if user with that email exist';
+      'Vous allez recevoir un email pour réinitaliser votre mot de passe.';
     if (!user) {
       return res.status(200).json({
         status: 'success',
@@ -206,7 +205,7 @@ export const forgotPasswordHandler = async (
     if (!user.verified) {
       return res.status(403).json({
         status: 'fail',
-        message: 'Account not verified',
+        message: "Le compte n'est pas vérifié",
       });
     }
 
@@ -223,7 +222,7 @@ export const forgotPasswordHandler = async (
     });
 
     try {
-      const url = `${process.env.CLIENT_URL}/password/reset/${resetToken}`;
+      const url = `${process.env.CLIENT_URL}/reinitialiser-mot-de-passe/${resetToken}`;
       await new Email(user, url).sendPasswordResetToken();
 
       res.status(200).json({
@@ -275,7 +274,8 @@ export const resetPasswordHandler = async (
     if (!user) {
       return res.status(403).json({
         status: 'fail',
-        message: 'Invalid token or token has expired',
+        message:
+          "Le lien de réinitialisation de mot de passe n'est plus valide ou a expiré.",
       });
     }
 
@@ -291,7 +291,7 @@ export const resetPasswordHandler = async (
     logout(res);
     res.status(200).json({
       status: 'success',
-      message: 'Password data updated successfully',
+      message: 'Le mot de passe a été réinitialisé avec succès',
     });
   } catch (err: any) {
     next(err);

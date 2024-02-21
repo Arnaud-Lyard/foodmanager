@@ -63,7 +63,7 @@ export default class Email {
   async sendPasswordResetToken() {
     await this.send(
       'resetPassword',
-      'Your password reset token (valid for only 10 minutes)'
+      'Votre réinitialisation de mot de passe (valide pour seulement 10 minutes)'
     );
   }
 }

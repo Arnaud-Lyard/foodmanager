@@ -1,7 +1,9 @@
 import {
+  IForgotPasswordResponse,
   ILoginResponse,
   ILogoutResponse,
   IRegisterResponse,
+  IResetPasswordResponse,
   IVerifyEmailResponse,
 } from '../types/auth';
 import { HttpService } from './http.service';
@@ -50,6 +52,35 @@ export class AuthService extends HttpService {
   async verifyEmail(verifyCode: string) {
     const { data } = await this.instance.get<IVerifyEmailResponse>(
       `/api/auth/verifyemail/${verifyCode}`
+    );
+    return data;
+  }
+
+  async forgotPassword(email: string) {
+    const { data } = await this.instance.post<IForgotPasswordResponse>(
+      `/api/auth/forgotpassword`,
+      {
+        email,
+      }
+    );
+    return data;
+  }
+
+  async resetPassword({
+    password,
+    passwordConfirm,
+    resetToken,
+  }: {
+    password: string;
+    passwordConfirm: string;
+    resetToken: string;
+  }) {
+    const { data } = await this.instance.patch<IResetPasswordResponse>(
+      `/api/auth/resetpassword/${resetToken}`,
+      {
+        password,
+        passwordConfirm,
+      }
     );
     return data;
   }
