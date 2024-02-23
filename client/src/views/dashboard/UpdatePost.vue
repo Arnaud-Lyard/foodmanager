@@ -5,9 +5,9 @@
       <div>
         <div class="sm:flex sm:items-center">
           <div class="sm:flex-auto">
-            <h1 class="text-base font-semibold leading-6 text-gray-900">Ajouter un article</h1>
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Modifier un article</h1>
             <p class="mt-2 text-sm text-gray-700">
-              Rédiger un nouvel article.
+              Modifier un article existant.
             </p>
           </div>
           <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -55,26 +55,28 @@
 
     <editor v-model="post.content" />
     <span v-html="post.content"></span>
-    <p v-if="createPostResponse" class="text-sm font-medium leading-6 "
-      :class="createPostResponse.status === 'fail' ? 'text-red-500' : 'text-green-500'">{{ createPostResponse.message }}
+    <p v-if="updatePostResponse" class="text-sm font-medium leading-6 "
+      :class="updatePostResponse.status === 'fail' ? 'text-red-500' : 'text-green-500'">{{ updatePostResponse.message }}
     </p>
   </form>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Editor from '../../components/Editor.vue';
 import { postService } from '../../services/post.service';
+import { useRoute } from 'vue-router';
 import { Status } from '../../types/auth';
 
-const post = ref<{ title: string, category: string, content: string, image: File | null }>({
+const route = useRoute()
+const post = ref<{ id: string, title: string, category: string, image: File | null | string, content: string }>({
+  id: '',
   title: '',
   category: '',
-  content: '',
-  image: null
+  image: null,
+  content: ''
 })
-
-const createPostResponse = ref<{ status: Status, message?: string }>();
+const updatePostResponse = ref<{ status: Status, message?: string }>();
 
 const isFormValid = computed(() => {
   return post.value.title && post.value.category
@@ -99,19 +101,24 @@ async function handleSubmit() {
   formData.append('category', post.value.category ?? '')
   formData.append('content', post.value.content ?? '')
   try {
-    await postService.create(formData)
-    createPostResponse.value = { status: 'success', message: 'Article créé avec succès.' };
-    post.value = { title: '', category: '', content: '', image: null };
+    await postService.update(formData, post.value.id)
+    updatePostResponse.value = { status: 'success', message: 'L\'article a été modifié avec succès.' }
   } catch (error: any) {
     if (error.response.data.status === "fail" && error.response.data.errors) {
-      createPostResponse.value = { status: 'fail', message: error.response.data.errors[0].message };
+      updatePostResponse.value = { status: 'fail', message: error.response.data.errors[0].message };
     } else if (error.response.data.status === "fail") {
-      createPostResponse.value = { status: 'fail', message: error.response.data.message };
+      updatePostResponse.value = { status: 'fail', message: error.response.data.message };
     } else {
-      createPostResponse.value = { status: 'fail', message: 'Une erreur est survenue, veuillez réessayer plus tard.' };
+      updatePostResponse.value = { status: 'fail', message: 'Une erreur est survenue, veuillez réessayer plus tard.' };
     }
   }
 }
+
+onMounted(async () => {
+  const response = await postService.getPost(route.params.id as string)
+  post.value = response.post
+
+})
 
 const activeClass = ref('inline-flex justify-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600')
 const disabledClass = ref('inline-flex justify-center rounded-md bg-orange-400 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-400 cursor-not-allowed')

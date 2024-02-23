@@ -14,7 +14,7 @@ import ResetPassword from '../views/ResetPassword.vue';
 import Team from '../views/Team.vue';
 import VerifyEmail from '../views/VerifyEmail.vue';
 import PostList from '../views/dashboard/PostList.vue';
-import PostListItem from '../views/dashboard/PostListItem.vue';
+import UpdatePost from '../views/dashboard/UpdatePost.vue';
 import WritePost from '../views/dashboard/WritePost.vue';
 
 const routes = [
@@ -79,10 +79,10 @@ const routes = [
     component: PostList,
   },
   {
-    path: '/mes-articles/:id',
-    name: 'postlistitem',
+    path: '/modifier-article/:id',
+    name: 'updatepost',
     meta: { layout: User },
-    component: PostListItem,
+    component: UpdatePost,
   },
   {
     path: '/ecrire-article',

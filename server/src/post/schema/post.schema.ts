@@ -8,4 +8,16 @@ export const createPostSchema = object({
   }),
 });
 
-export type createPostInput = TypeOf<typeof createPostSchema>['body'];
+export const updatePostSchema = object({
+  params: object({
+    id: string({}),
+  }),
+  body: object({
+    title: string({}),
+    category: string({}).email('Invalid email address'),
+    content: string({}),
+  }),
+});
+
+export type CreatePostInput = TypeOf<typeof createPostSchema>['body'];
+export type UpdatePostInput = TypeOf<typeof updatePostSchema>;

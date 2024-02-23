@@ -56,85 +56,44 @@
 <script setup lang ="ts">
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import { watch } from 'vue';
 
-const emit = defineEmits(['update:modelValue']);
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: ''
+const props = withDefaults(
+  defineProps<{
+    modelValue?: string | null
+  }>(),
+  {
+    modelValue: '',
+  },
+)
+
+const emit = defineEmits<{
+  (event: 'update:modelValue', value?: string | null): void
+}>()
+
+watch(() => props.modelValue, (value) => {
+  const isSame = editor.value?.getHTML() === value
+
+  if (isSame) {
+    return
   }
-});
+
+  editor.value?.commands.setContent(value, false)
+})
 
 const editor = useEditor({
-  extensions: [StarterKit],
   content: props.modelValue,
-  onUpdate: ({ editor }) => {
-    emit('update:modelValue', editor.getHTML())
-  }
+  extensions: [
+    StarterKit,
+  ],
+  onUpdate: () => {
+    emit('update:modelValue', editor.value?.getHTML())
+  },
 })
 </script>
 
 
-
-<style >
-.tiptap {
-  >*+* {
-    margin-top: 0.75em;
-  }
-
-  ul,
-  ol {
-    padding: 0 1rem;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    line-height: 1.1;
-  }
-
-  code {
-    background-color: rgba(#616161, 0.1);
-    color: #616161;
-  }
-
-  pre {
-    background: #0D0D0D;
-    color: #FFF;
-    font-family: 'JetBrainsMono', monospace;
-    padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
-
-    code {
-      color: inherit;
-      padding: 0;
-      background: none;
-      font-size: 0.8rem;
-    }
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  blockquote {
-    padding-left: 1rem;
-    border-left: 2px solid rgba(#0D0D0D, 0.1);
-  }
-
-  hr {
-    border: none;
-    border-top: 2px solid rgba(#0D0D0D, 0.1);
-    margin: 2rem 0;
-  }
-
-
-}
-
+<style>
 .editor__header button {
   padding: 0.3rem 0.6rem;
   border: 1px solid #9ca3af;
@@ -143,14 +102,14 @@ const editor = useEditor({
   color: #374151;
   cursor: pointer;
   transition: background-color 0.2s ease;
+}
 
-  &:hover {
-    background: #d1d5db;
-  }
+.editor__header button:hover {
+  background: #d1d5db;
+}
 
-  &.is-active {
-    background: #d1d5db;
-  }
+.editor__header button.is-active {
+  background: #d1d5db;
 }
 
 .ProseMirror {

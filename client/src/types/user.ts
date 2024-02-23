@@ -40,4 +40,4 @@ export interface IUpdateUserResponse {
   message: string;
 }
 
-type Status = 'success' | 'fail';
+export type Status = 'success' | 'fail';
