@@ -1,4 +1,5 @@
 import { GradeEnumType, RoleEnumType } from '@prisma/client';
+import { omit } from 'lodash';
 
 export interface IUserSafe {
   id: string;
@@ -12,3 +13,5 @@ export interface IUserSafe {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IUserPublic extends Omit<IUserSafe, 'email' | 'role'> {}

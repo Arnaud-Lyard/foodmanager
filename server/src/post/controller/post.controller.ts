@@ -9,6 +9,7 @@ import {
   updatePost,
 } from '../service/post.service';
 import { IUserSafe } from '../../types/user';
+import { getAllPosts } from '../service/post.service';
 
 export const createPostHandler = async (
   req: Request<{}, {}, CreatePostInput>,
@@ -105,6 +106,23 @@ export const updatePostHandler = async (
     await updatePost({ file, title, category, content, user, id });
 
     res.status(200).json({
+      status: 'success',
+    });
+  } catch (err: any) {
+    next(err);
+  }
+};
+
+export const getAllPostsHandler = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const posts = await getAllPosts();
+
+    res.status(200).json({
+      posts,
       status: 'success',
     });
   } catch (err: any) {

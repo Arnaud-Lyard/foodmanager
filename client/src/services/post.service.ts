@@ -1,5 +1,6 @@
 import {
   ICreatePostResponse,
+  IGetAllPostsResponse,
   IGetPostResponse,
   IGetPostUserResponse,
   IUpdatePostResponse,
@@ -50,6 +51,11 @@ export class PostService extends HttpService {
         },
       }
     );
+    return data;
+  }
+
+  async getAllPosts() {
+    const { data } = await this.instance.get<IGetAllPostsResponse>(`api/posts`);
     return data;
   }
 }

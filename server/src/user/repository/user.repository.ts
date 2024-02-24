@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 import prisma from '../../../prisma/client';
-import { IUserSafe } from '../../types/user';
+import { IUserPublic, IUserSafe } from '../../types/user';
 import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 
 export class UserRepository {
@@ -116,7 +116,7 @@ export class UserRepository {
     return user;
   }
 
-  static async getTeamUsers(): Promise<IUserSafe[]> {
+  static async getTeamUsers(): Promise<IUserPublic[]> {
     return await prisma.user.findMany({
       where: {
         OR: [{ grade: 'player' }, { grade: 'manager' }],
@@ -124,12 +124,10 @@ export class UserRepository {
       select: {
         id: true,
         pseudo: true,
-        email: true,
         grade: true,
         avatar: true,
         esl: true,
         twitter: true,
-        role: true,
         createdAt: true,
         updatedAt: true,
       },

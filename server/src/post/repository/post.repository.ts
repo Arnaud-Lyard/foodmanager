@@ -52,7 +52,14 @@ export class PostRepository {
         content: true,
         createdAt: true,
         updatedAt: true,
+        user: {
+          select: {
+            pseudo: true,
+            avatar: true,
+          },
+        },
       },
+
       where: {
         id,
       },
@@ -81,6 +88,26 @@ export class PostRepository {
       },
       where: {
         id,
+      },
+    });
+  }
+
+  static async getAllPosts() {
+    return await prisma.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        category: true,
+        image: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          select: {
+            pseudo: true,
+            avatar: true,
+          },
+        },
       },
     });
   }

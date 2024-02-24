@@ -6,8 +6,12 @@ export interface IPost {
   category: string;
   image: string;
   content: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  user: {
+    pseudo: string;
+    avatar: string;
+  };
 }
 
 export interface ICreatePostResponse {
@@ -27,6 +31,11 @@ export interface IGetPostUserResponse {
 
 export interface IGetPostResponse {
   post: IPost;
+  status: Status;
+}
+
+export interface IGetAllPostsResponse {
+  posts: IPost[];
   status: Status;
 }
 

@@ -83,3 +83,7 @@ async function getPostImage({
   if (!fileUpload) return postRegistered!.image;
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
+
+export async function getAllPosts() {
+  return await PostRepository.getAllPosts();
+}

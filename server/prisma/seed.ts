@@ -3,9 +3,12 @@ const prisma = new PrismaClient();
 async function main() {
   /* Reset the database */
   await prisma.player.deleteMany();
+  await prisma.post.deleteMany();
   await prisma.user.deleteMany();
 
   /* Seed the database */
+
+  /* Users */
   const alice = await prisma.user.upsert({
     where: { id: '1a751e3a-8884-4f29-98d7-81d3f5cbc712' },
     update: {},
@@ -132,6 +135,8 @@ async function main() {
     },
   });
 
+  /* Players */
+
   const player1 = await prisma.player.upsert({
     where: { id: '1a751e3a-8884-4f29-98d7-81d3f5cbc715' },
     update: {},
@@ -172,9 +177,43 @@ async function main() {
     },
   });
 
+  /* Posts */
+
+  const post1 = await prisma.post.upsert({
+    where: { id: '1a751e3a-8884-4f29-98d7-81d3f5cbc717' },
+    update: {},
+    create: {
+      title: 'Mon premier post',
+      category: 'Replay',
+      image: 'https://i.pravatar.cc/150?u=post1',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a pharetra lacus, et fringilla sem. Morbi pellentesque tortor id vulputate placerat. Aenean ultrices, arcu vel congue eleifend, tortor mauris ultrices sem, quis posuere magna elit vel turpis. Maecenas non ultricies velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec semper enim nec ultrices vehicula. Phasellus tempor pharetra molestie Aenean id scelerisque risus, a pulvinar enim. Nulla nec maximus magna, ac dignissim justo. Donec maximus lacinia enim, ac volutpat enim. Vivamus vitae quam nec ante dictum elementum non in leo. Etiam ultricies sit amet nisl vulputate dignissim. Fusce vitae varius justo. Aenean quam felis, ornare gravida interdum nec, suscipit quis ipsumNam sollicitudin erat diam, in molestie justo interdum vitae. Phasellus vel enim ut mauris blandit dictum. Duis tincidunt neque vel purus feugiat, id commodo sapien dapibus. Etiam in iaculis eros. Phasellus dignissim eleifend lectus quis auctor. Suspendisse eu arcu vulputate, condimentum purus ut, luctus purus. Donec eleifend a nibh in sodales. Duis a maximus ligula. Aliquam erat volutpat. Aenean cursus lacinia est, eget suscipit ipsum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed condimentum tincidunt nisl non convallis. Nulla ac neque elit. Vestibulum magna odio, tincidunt ac felis nec, accumsan pulvinar est. Ut id quam quis magna maximus fringilla. Donec efficitur fermentum sapien, ut consequat eros semper in',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: alice.id,
+    },
+  });
+
+  const post2 = await prisma.post.upsert({
+    where: { id: '1a751e3a-8884-4f29-98d7-81d3f5cbc718' },
+    update: {},
+    create: {
+      title: 'Mon deuxième post',
+      category: 'Build',
+      image: 'https://i.pravatar.cc/150?u=post2',
+      content:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a pharetra lacus, et fringilla sem. Morbi pellentesque tortor id vulputate placerat. Aenean ultrices, arcu vel congue eleifend, tortor mauris ultrices sem, quis posuere magna elit vel turpis. Maecenas non ultricies velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec semper enim nec ultrices vehicula. Phasellus tempor pharetra molestie Aenean id scelerisque risus, a pulvinar enim. Nulla nec maximus magna, ac dignissim justo. Donec maximus lacinia enim, ac volutpat enim. Vivamus vitae quam nec ante dictum elementum non in leo. Etiam ultricies sit amet nisl vulputate dignissim. Fusce vitae varius justo. Aenean quam felis, ornare gravida interdum nec, suscipit quis ipsumNam sollicitudin erat diam, in molestie justo interdum vitae. Phasellus vel enim ut mauris blandit dictum. Duis tincidunt neque vel purus feugiat, id commodo sapien dapibus. Etiam in iaculis eros. Phasellus dignissim eleifend lectus quis auctor. Suspendisse eu arcu vulputate, condimentum purus ut, luctus purus. Donec eleifend a nibh in sodales. Duis a maximus ligula. Aliquam erat volutpat. Aenean cursus lacinia est, eget suscipit ipsum. Pellentesque habitant morbi tristique sen',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      userId: bob.id,
+    },
+  });
+
   console.log({ alice, bob, john, mat, user, admin });
 
   console.log({ player1, player2 });
+
+  console.log({ post1, post2 });
 }
 main()
   .then(async () => {
