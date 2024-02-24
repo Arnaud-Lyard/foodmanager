@@ -12,6 +12,7 @@ import AppError from './utils/appError';
 import multer from 'multer';
 import path from 'path';
 import playerRouter from './player/routes/player.routes';
+import postRouter from './post/routes/post.routes';
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -52,6 +53,7 @@ async function bootstrap() {
   app.use('/api/auth', authRouter);
   app.use('/api/users', userRouter);
   app.use('/api/players', playerRouter);
+  app.use('/api/posts', postRouter);
 
   // Testing
   app.get('/api/', (_, res: Response) => {

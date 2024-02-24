@@ -10,7 +10,7 @@
             </div>
             <div>
               <div class="flex items-center gap-x-4 text-xs">
-                <time :datetime="post.date" class="text-gray-500">{{ post.date }}</time>
+                <time :datetime="post.updatedAt" class="text-gray-500">{{ post.updatedAt }}</time>
                 <div class="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-gray-600 ">{{
                   post.category }} </div>
               </div>
@@ -21,17 +21,21 @@
                     {{ post.title }}
                   </router-link>
                 </h3>
-                <p class="mt-5 text-sm leading-6 text-gray-600">{{ post.description }}</p>
+                <p class="mt-5 text-sm leading-6 text-gray-600"><span v-html="post.content"></span></p>
               </div>
               <div class="mt-6 flex border-t border-gray-900/5 pt-6">
                 <div class="relative flex items-center gap-x-4">
-                  <img :src="post.author.image" alt="" class="h-10 w-10 rounded-full bg-gray-50" />
+                  <span v-if="!post.user.avatar" class="inline-block h-10 w-10 overflow-hidden rounded-full bg-gray-100">
+                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                  </span>
+                  <img v-else :src="post.user.avatar" alt="" class="h-10 w-10 rounded-full bg-gray-50" />
                   <div class="text-sm leading-6">
                     <p class="font-semibold text-gray-900">
-                      <span class="absolute inset-0" />
-                      {{ post.author.name }}
+                      {{ post.user.pseudo }}
                     </p>
-                    <p class="text-gray-600">{{ post.author.grade }}</p>
                   </div>
                 </div>
               </div>
@@ -44,105 +48,30 @@
 </template>
 
 <script setup lang="ts">
-const posts = [
-  {
-    id: "1",
-    title: 'Boost your conversion rate',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-17',
-    category: "Strategy",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-  {
-    id: "2",
-    title: 'Boost your conversion rate',
-    href: '#',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-16',
-    category: "Replay",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-  {
-    id: "3",
-    title: 'Boost your conversion rate',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-17',
-    category: "Strategy",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-  {
-    id: "4",
-    title: 'Boost your conversion rate',
-    href: '#',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-16',
-    category: "Replay",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-  {
-    id: "5",
-    title: 'Boost your conversion rate',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-17',
-    category: "Strategy",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-  {
-    id: "6",
-    title: 'Boost your conversion rate',
-    href: '#',
-    description:
-      'Illo sint voluptas. Error voluptates culpa eligendi. Hic vel totam vitae illo. Non aliquid explicabo necessitatibus unde. Sed exercitationem placeat consectetur nulla deserunt vel iusto corrupti dicta laboris incididunt.',
-    image:
-      'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80',
-    date: '2020-03-16',
-    category: "Replay",
-    author: {
-      name: 'Michael Foster',
-      grade: 'Manager',
-      image:
-        'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-  },
-]
+import { onMounted, ref } from 'vue';
+import { IPost } from '../types/post';
+import { postService } from '../services/post.service';
+import { limitStringLength } from '../utils/limitStringLength';
+import { formatDate } from '../utils/formatDate';
+
+const posts = ref<IPost[]>()
+onMounted(async () => {
+  const response = await postService.getAllPosts();
+  posts.value = response.posts.map((post: IPost) => {
+    return {
+      id: post.id,
+      title: post.title,
+      category: post.category,
+      image: post.image,
+      createdAt: formatDate(post.createdAt),
+      content: limitStringLength(post.content, 200),
+      updatedAt: formatDate(post.updatedAt),
+      user: {
+        pseudo: post.user.pseudo,
+        avatar: post.user.avatar
+      }
+    };
+  })
+})
+
 </script>

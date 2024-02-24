@@ -4,7 +4,7 @@ import User from '../layouts/User.vue';
 import Visitor from '../layouts/Visitor.vue';
 import { userService } from '../services/user.service';
 import { useAuthStore } from '../store/auth';
-import Dashboard from '../views/Dashboard.vue';
+import Dashboard from '../views/dashboard/Dashboard.vue';
 import ForgotPassword from '../views/ForgotPassword.vue';
 import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
@@ -13,6 +13,9 @@ import Register from '../views/Register.vue';
 import ResetPassword from '../views/ResetPassword.vue';
 import Team from '../views/Team.vue';
 import VerifyEmail from '../views/VerifyEmail.vue';
+import PostList from '../views/dashboard/PostList.vue';
+import UpdatePost from '../views/dashboard/UpdatePost.vue';
+import WritePost from '../views/dashboard/WritePost.vue';
 
 const routes = [
   {
@@ -69,6 +72,24 @@ const routes = [
     meta: { layout: User },
     component: Dashboard,
   },
+  {
+    path: '/mes-articles',
+    name: 'postlist',
+    meta: { layout: User },
+    component: PostList,
+  },
+  {
+    path: '/modifier-article/:id',
+    name: 'updatepost',
+    meta: { layout: User },
+    component: UpdatePost,
+  },
+  {
+    path: '/ecrire-article',
+    name: 'writepost',
+    meta: { layout: User },
+    component: WritePost,
+  },
 ];
 
 const router = createRouter({
@@ -83,7 +104,7 @@ router.beforeEach(async () => {
     authStore.logout();
     return;
   }
-  authStore.login();
+  authStore.login(data);
 });
 
 export default router;

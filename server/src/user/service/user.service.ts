@@ -129,15 +129,15 @@ export async function updateUser({
     esl,
     twitter,
   };
-  const fileUpload = file;
   try {
+    const fileUpload = file;
     await removeUnusedFiles({ user, fileUpload });
     const avatarUrl = await getAvatarUrl({ user, fileUpload });
     userUpdate.avatar = avatarUrl;
+    return await UserRepository.updateUser(userUpdate);
   } catch (err: any) {
     throw new AppError(422, 'Erreur lors de la mise à jour de votre avatar.');
   }
-  return await UserRepository.updateUser(userUpdate);
 }
 
 async function removeUnusedFiles({
@@ -163,4 +163,8 @@ async function getAvatarUrl({
 }) {
   if (!fileUpload) return user.avatar;
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
+}
+
+export async function getUserRole(userId: string) {
+  return await UserRepository.getUserRole(userId);
 }

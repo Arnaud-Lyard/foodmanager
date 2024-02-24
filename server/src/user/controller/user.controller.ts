@@ -5,6 +5,8 @@ import { getUserInformations } from '../../utils/getUserInformations';
 import { UserRepository } from '../repository/user.repository';
 import { getTeamUsers, updateUser } from '../service/user.service';
 import { UpdateUserInput } from '../schema/user.schema';
+import { IUserSafe } from '../../types/user';
+import { getUserRoleByToken } from '../../utils/getUserRoleByToken';
 
 export const getUserHandler = async (
   req: Request,
@@ -12,10 +14,7 @@ export const getUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     res.status(200).json({
       status: 'success',
@@ -34,10 +33,7 @@ export const uploadUserImageHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     const file = req.file;
     if (!file) {
@@ -97,7 +93,6 @@ export const getMeHandler = async (
 ) => {
   try {
     let access_token;
-
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
@@ -106,11 +101,13 @@ export const getMeHandler = async (
     } else if (req.cookies.access_token) {
       access_token = req.cookies.access_token;
     }
+    const role = await getUserRoleByToken(next, access_token);
 
     res.status(200).json({
       status: 'success',
       data: {
         isConnect: Boolean(access_token),
+        role,
       },
     });
   } catch (err: any) {
@@ -124,10 +121,7 @@ export const updateUserHandler = async (
   next: NextFunction
 ) => {
   try {
-    const user = await getUserInformations(req);
-    if (user instanceof AppError) {
-      return next(user);
-    }
+    const user = (await getUserInformations(req, next)) as IUserSafe;
 
     if (!req.body.email || !req.body.pseudo) {
       return next(

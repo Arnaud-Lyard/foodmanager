@@ -126,8 +126,8 @@
 <script setup lang="ts">
 import { UserCircleIcon } from '@heroicons/vue/24/solid'
 import { computed, onMounted, ref } from 'vue';
-import { userService } from '../services/user.service';
-import { IUser } from '../types/user';
+import { userService } from '../../services/user.service';
+import { IUser } from '../../types/user';
 
 const user = ref<IUser>({
   id: '',
@@ -175,7 +175,6 @@ async function handleSubmit() {
       await userService.updateUser(formData);
       registerSuccess.value = true;
     } catch (error: any) {
-      console.error(error)
       registerError.value = error.response.data.message
     }
   }

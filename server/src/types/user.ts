@@ -12,3 +12,7 @@ export interface IUserSafe {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface IUserPublic extends Omit<IUserSafe, 'email' | 'role'> {}
+
+export type IRoleType = 'admin' | 'user';

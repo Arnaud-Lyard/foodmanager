@@ -17,12 +17,11 @@
                 enter-to="opacity-100" leave="ease-in-out duration-300" leave-from="opacity-100" leave-to="opacity-0">
                 <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
                   <button type="button" class="-m-2.5 p-2.5" @click="sidebarOpen = false">
-                    <span class="sr-only">Close sidebar</span>
+                    <span class="sr-only">Fermer la barre de navigation</span>
                     <XMarkIcon class="h-6 w-6 text-white" aria-hidden="true" />
                   </button>
                 </div>
               </TransitionChild>
-              <!-- Sidebar component, swap this element with another sidebar if you like -->
               <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
                 <div class="flex h-16 shrink-0 items-center">
                   <img class="h-14 w-auto" src="/images/relaxing-hippoquests.png" alt="relaxing hippoquests logo" />
@@ -31,11 +30,12 @@
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
                       <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
-                          <router-link :to="item.href"
-                            :class="[item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
-                            <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
-                            {{ item.name }}
+                        <li v-for="navigation in navigations" :key="navigation.name">
+                          <router-link :to="navigation.href"
+                            v-if="!navigation.admin || (navigation.admin && isLoggedUserAdmin)"
+                            :class="[navigation.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                            <component :is="navigation.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                            {{ navigation.name }}
                           </router-link>
                         </li>
                       </ul>
@@ -51,7 +51,6 @@
 
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-      <!-- Sidebar component, swap this element with another sidebar if you like -->
       <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6">
         <div class="flex h-16 shrink-0 items-center">
           <img class="h-14 w-auto" src="/images/relaxing-hippoquests.png" alt="relaxing hippoquests logo" />
@@ -60,11 +59,11 @@
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
             <li>
               <ul role="list" class="-mx-2 space-y-1">
-                <li v-for="item in navigation" :key="item.name">
-                  <router-link :to="item.href"
-                    :class="[item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
-                    <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
-                    {{ item.name }}
+                <li v-for="navigation in navigations" :key="navigation.name">
+                  <router-link :to="navigation.href" v-if="!navigation.admin || (navigation.admin && isLoggedUserAdmin)"
+                    :class="[navigation.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                    <component :is="navigation.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                    {{ navigation.name }}
                   </router-link>
                 </li>
               </ul>
@@ -75,7 +74,7 @@
                 <img class="h-8 w-8 rounded-full bg-gray-800"
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                   alt="" />
-                <span class="sr-only">Your profile</span>
+                <span class="sr-only">Votre profil</span>
                 <span aria-hidden="true">Tom Cook</span>
               </a>
             </li>
@@ -86,10 +85,12 @@
 
     <div class="sticky top-0 z-40 flex items-center gap-x-6 bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
       <button type="button" class="-m-2.5 p-2.5 text-gray-400 lg:hidden" @click="sidebarOpen = true">
-        <span class="sr-only">Open sidebar</span>
+        <span class="sr-only">Ouvrir la barre de navigation</span>
         <Bars3Icon class="h-6 w-6" aria-hidden="true" />
       </button>
-      <div class="flex-1 text-sm font-semibold leading-6 text-white">Dashboard</div>
+      <div class="flex-1 text-sm font-semibold leading-6 text-white">
+        {{ handleNavigationActiveName?.name }}
+      </div>
       <a href="#">
         <span class="sr-only">Your profile</span>
         <img class="h-8 w-8 rounded-full bg-gray-800"
@@ -107,19 +108,47 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {
   Bars3Icon,
   HomeIcon,
   XMarkIcon,
   ArrowLeftStartOnRectangleIcon,
+  PencilIcon,
 } from '@heroicons/vue/24/outline'
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '../store/auth';
+const route = useRoute()
+const authStore = useAuthStore()
 
-const navigation = [
-  { name: 'Tableau de bord', href: '/tableau-de-bord', icon: HomeIcon, current: true },
-  { name: 'Retour vers le site', href: '/', icon: ArrowLeftStartOnRectangleIcon, current: false },
-]
+const navigations = ref([
+  { name: 'Tableau de bord', href: '/tableau-de-bord', icon: HomeIcon, current: false, admin: false },
+  { name: 'Mes articles', href: '/mes-articles', icon: PencilIcon, current: false, admin: true },
+  { name: 'Retour vers le site', href: '/', icon: ArrowLeftStartOnRectangleIcon, current: false, admin: false },
+])
 
 const sidebarOpen = ref(false)
+
+function handleActiveLink() {
+  navigations.value.forEach((link) => {
+    link.current = link.href === route.path
+  })
+}
+
+const handleNavigationActiveName = computed(() => {
+  return navigations.value.find((link) => link.current)
+})
+
+const isLoggedUserAdmin = computed(() => {
+  return authStore.isAdmin
+})
+onMounted(() => {
+  handleActiveLink()
+})
+
+watch(route, () => {
+  handleActiveLink()
+})
+
 </script>
