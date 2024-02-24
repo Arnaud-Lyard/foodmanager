@@ -164,3 +164,7 @@ async function getAvatarUrl({
   if (!fileUpload) return user.avatar;
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
+
+export async function getUserRole(userId: string) {
+  return await UserRepository.getUserRole(userId);
+}

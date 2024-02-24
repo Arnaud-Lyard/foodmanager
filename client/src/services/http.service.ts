@@ -20,7 +20,7 @@ export class HttpService {
       (error) => {
         if (error.response) {
           if (error.response.status === 401) {
-            globalRouter.router?.push({ name: 'login' });
+            globalRouter.router?.push({ name: 'home' });
             const authStore = useAuthStore();
             authStore.logout();
           }

@@ -61,11 +61,22 @@
 import { onMounted, ref } from 'vue';
 import { postService } from '../../services/post.service';
 import { IPost } from '../../types/post';
+import { formatDate } from '../../utils/formatDate';
 
 const posts = ref<IPost[]>()
 
 onMounted(async () => {
   const response = await postService.getMyPosts();
-  posts.value = response.posts;
+  posts.value = response.posts.map((post: IPost) => {
+    return {
+      id: post.id,
+      title: post.title,
+      category: post.category,
+      updatedAt: formatDate(post.updatedAt),
+      createdAt: formatDate(post.createdAt),
+      content: post.content,
+      image: post.image,
+    };
+  });
 });
 </script>

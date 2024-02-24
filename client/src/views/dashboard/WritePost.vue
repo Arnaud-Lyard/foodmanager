@@ -54,7 +54,7 @@
     </div>
 
     <editor v-model="post.content" />
-    <span v-html="post.content"></span>
+    <div class="mt-5" v-html="post.content"></div>
     <p v-if="createPostResponse" class="text-sm font-medium leading-6 "
       :class="createPostResponse.status === 'fail' ? 'text-red-500' : 'text-green-500'">{{ createPostResponse.message }}
     </p>

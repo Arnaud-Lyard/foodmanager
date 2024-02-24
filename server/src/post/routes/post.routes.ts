@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateUser } from '../../middleware/authenticateUser';
+import { authenticateAdmin } from '../../middleware/authenticateAdmin';
 import { uploadFile } from '../../middleware/uploadFile';
 import {
   createPostHandler,
@@ -11,13 +11,13 @@ import {
 
 const router = express.Router();
 
-router.post('/', authenticateUser, uploadFile, createPostHandler);
+router.post('/', authenticateAdmin, uploadFile, createPostHandler);
 
-router.get('/owner', authenticateUser, getPostUserHandler);
+router.get('/owner', authenticateAdmin, getPostUserHandler);
 
 router.get('/:id', getPostHandler);
 
-router.patch('/:id', authenticateUser, uploadFile, updatePostHandler);
+router.patch('/:id', authenticateAdmin, uploadFile, updatePostHandler);
 
 router.get('/', getAllPostsHandler);
 

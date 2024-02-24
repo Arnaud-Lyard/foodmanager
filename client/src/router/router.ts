@@ -104,7 +104,7 @@ router.beforeEach(async () => {
     authStore.logout();
     return;
   }
-  authStore.login();
+  authStore.login(data);
 });
 
 export default router;

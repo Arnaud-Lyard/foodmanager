@@ -14,7 +14,7 @@ export interface IUser {
 
 type Grade = 'user' | 'player' | 'manager';
 
-type Role = 'user' | 'admin';
+export type Role = 'user' | 'admin';
 
 export interface ITeamUserResponse {
   teamUsers: IUser[];
@@ -25,6 +25,7 @@ export interface ILoggedUserResponse {
   status: string;
   data: {
     isConnect: boolean;
+    role: Role;
   };
 }
 

@@ -30,11 +30,12 @@
                   <ul role="list" class="flex flex-1 flex-col gap-y-7">
                     <li>
                       <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
-                          <router-link :to="item.href"
-                            :class="[item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
-                            <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
-                            {{ item.name }}
+                        <li v-for="navigation in navigations" :key="navigation.name">
+                          <router-link :to="navigation.href"
+                            v-if="!navigation.admin || (navigation.admin && isLoggedUserAdmin)"
+                            :class="[navigation.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                            <component :is="navigation.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                            {{ navigation.name }}
                           </router-link>
                         </li>
                       </ul>
@@ -58,11 +59,11 @@
           <ul role="list" class="flex flex-1 flex-col gap-y-7">
             <li>
               <ul role="list" class="-mx-2 space-y-1">
-                <li v-for="item in navigation" :key="item.name">
-                  <router-link :to="item.href"
-                    :class="[item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
-                    <component :is="item.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
-                    {{ item.name }}
+                <li v-for="navigation in navigations" :key="navigation.name">
+                  <router-link :to="navigation.href" v-if="!navigation.admin || (navigation.admin && isLoggedUserAdmin)"
+                    :class="[navigation.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                    <component :is="navigation.icon" class="h-6 w-6 shrink-0" aria-hidden="true" />
+                    {{ navigation.name }}
                   </router-link>
                 </li>
               </ul>
@@ -117,26 +118,31 @@ import {
   PencilIcon,
 } from '@heroicons/vue/24/outline'
 import { useRoute } from 'vue-router';
+import { useAuthStore } from '../store/auth';
 const route = useRoute()
+const authStore = useAuthStore()
 
-const navigation = ref([
-  { name: 'Tableau de bord', href: '/tableau-de-bord', icon: HomeIcon, current: false },
-  { name: 'Mes articles', href: '/mes-articles', icon: PencilIcon, current: false },
-  { name: 'Retour vers le site', href: '/', icon: ArrowLeftStartOnRectangleIcon, current: false },
+const navigations = ref([
+  { name: 'Tableau de bord', href: '/tableau-de-bord', icon: HomeIcon, current: false, admin: false },
+  { name: 'Mes articles', href: '/mes-articles', icon: PencilIcon, current: false, admin: true },
+  { name: 'Retour vers le site', href: '/', icon: ArrowLeftStartOnRectangleIcon, current: false, admin: false },
 ])
 
 const sidebarOpen = ref(false)
 
 function handleActiveLink() {
-  navigation.value.forEach((link) => {
+  navigations.value.forEach((link) => {
     link.current = link.href === route.path
   })
 }
 
 const handleNavigationActiveName = computed(() => {
-  return navigation.value.find((link) => link.current)
+  return navigations.value.find((link) => link.current)
 })
 
+const isLoggedUserAdmin = computed(() => {
+  return authStore.isAdmin
+})
 onMounted(() => {
   handleActiveLink()
 })

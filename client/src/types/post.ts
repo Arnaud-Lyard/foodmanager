@@ -8,10 +8,12 @@ export interface IPost {
   content: string;
   createdAt: string;
   updatedAt: string;
-  user: {
-    pseudo: string;
-    avatar: string;
-  };
+  user?: UserInformation;
+}
+
+export interface UserInformation {
+  pseudo: string;
+  avatar: string;
 }
 
 export interface ICreatePostResponse {
