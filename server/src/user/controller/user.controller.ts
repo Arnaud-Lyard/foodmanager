@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs-extra';
+import { getPlayerByUserId } from '../../player/service/player.service';
+import { IUserSafe } from '../../types/user';
 import AppError from '../../utils/appError';
 import { getUserInformations } from '../../utils/getUserInformations';
-import { UserRepository } from '../repository/user.repository';
-import { getTeamUsers, updateUser } from '../service/user.service';
-import { UpdateUserInput } from '../schema/user.schema';
-import { IUserSafe } from '../../types/user';
 import { getUserInformationsByToken } from '../../utils/getUserInformationsByToken';
+import { UserRepository } from '../repository/user.repository';
+import { UpdateUserInput } from '../schema/user.schema';
+import { getTeamUsers, updateUser } from '../service/user.service';
 
 export const getUserHandler = async (
   req: Request,
@@ -15,11 +16,12 @@ export const getUserHandler = async (
 ) => {
   try {
     const user = (await getUserInformations(req, next)) as IUserSafe;
-
+    const player = await getPlayerByUserId(user.id);
     res.status(200).json({
       status: 'success',
       data: {
         user,
+        player,
       },
     });
   } catch (err: any) {
@@ -130,7 +132,7 @@ export const updateUserHandler = async (
     }
 
     const file = req.file;
-    const { twitter, esl, pseudo, email } = req.body;
+    const { twitter, esl, pseudo, email, stormgate } = req.body;
 
     await updateUser({
       file,
@@ -139,6 +141,7 @@ export const updateUserHandler = async (
       esl,
       pseudo,
       email,
+      stormgate,
     });
 
     res.status(200).json({

@@ -142,6 +142,7 @@ async function main() {
     update: {},
     create: {
       userId: alice.id,
+      stormgateWorldId: '123457',
       nickname: 'alicename',
       rank: 10,
       race: 'vanguard',
@@ -162,6 +163,7 @@ async function main() {
     update: {},
     create: {
       userId: bob.id,
+      stormgateWorldId: '123456',
       nickname: 'bobname',
       rank: 11,
       race: 'infernal',

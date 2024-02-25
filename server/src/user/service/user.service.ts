@@ -5,6 +5,7 @@ import AppError from '../../utils/appError';
 import { signJwt } from '../../utils/jwt';
 import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 import { UserRepository } from '../repository/user.repository';
+import { PlayerRepository } from '../../player/repository/player.repository';
 
 const prisma = new PrismaClient();
 
@@ -114,6 +115,7 @@ export async function updateUser({
   pseudo,
   email,
   file,
+  stormgate,
 }: {
   user: IUserSafe;
   twitter?: string;
@@ -121,6 +123,7 @@ export async function updateUser({
   pseudo: string;
   email: string;
   file: Express.Multer.File | undefined;
+  stormgate?: string;
 }) {
   const userUpdate: IUserUpdateDto = {
     id: user.id,
@@ -130,14 +133,22 @@ export async function updateUser({
     twitter,
   };
   try {
+    /* file management */
     const fileUpload = file;
     await removeUnusedFiles({ user, fileUpload });
     const avatarUrl = await getAvatarUrl({ user, fileUpload });
     userUpdate.avatar = avatarUrl;
-    return await UserRepository.updateUser(userUpdate);
+
+    await updateStormgateProfile({ stormgate, user });
+
+    await UserRepository.updateUser(userUpdate);
   } catch (err: any) {
-    throw new AppError(422, 'Erreur lors de la mise à jour de votre avatar.');
+    throw new AppError(400, 'Erreur lors de la mise à jour du profil.');
   }
+}
+
+export async function getUserInformations(userId: string) {
+  return await UserRepository.getUserInformations(userId);
 }
 
 async function removeUnusedFiles({
@@ -165,6 +176,27 @@ async function getAvatarUrl({
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
 
-export async function getUserInformations(userId: string) {
-  return await UserRepository.getUserInformations(userId);
+async function updateStormgateProfile({
+  stormgate,
+  user,
+}: {
+  stormgate: string | undefined;
+  user: IUserSafe;
+}) {
+  const userRegistered = await UserRepository.findPlayerByUserId(user.id);
+
+  if (!userRegistered?.player?.stormgateWorldId && !stormgate) return;
+  if (!userRegistered?.player?.stormgateWorldId && stormgate) {
+    await PlayerRepository.createNewPlayer({
+      userId: user.id,
+      stormgateWorldId: stormgate,
+    });
+  }
+
+  if (userRegistered?.player?.stormgateWorldId && stormgate) {
+    await PlayerRepository.updatePlayerById({
+      playerId: userRegistered.player.id,
+      stormgateWorldId: stormgate,
+    });
+  }
 }

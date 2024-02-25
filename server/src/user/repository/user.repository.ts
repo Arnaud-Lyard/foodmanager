@@ -136,10 +136,11 @@ export class UserRepository {
 
   static async updateUser(userUpdate: IUserUpdateDto) {
     const { id, twitter, esl, pseudo, avatar } = userUpdate;
-    return await prisma.user.update({
+    const user = await prisma.user.update({
       where: { id },
       data: { twitter, esl, pseudo, avatar },
     });
+    return user;
   }
 
   static async getUserInformations(
@@ -154,5 +155,12 @@ export class UserRepository {
       },
     });
     return userinfos;
+  }
+
+  static async findPlayerByUserId(userId: string) {
+    return await prisma.user.findFirst({
+      include: { player: true },
+      where: { id: userId },
+    });
   }
 }

@@ -37,6 +37,9 @@ export interface IUserResponse {
   status: string;
   data: {
     user: IUser;
+    player: {
+      stormgateWorldId: string;
+    };
   };
 }
 

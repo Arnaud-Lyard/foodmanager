@@ -85,7 +85,7 @@
                   <div class="relative flex gap-x-3">
                     <div class="flex h-6 items-center">
                       <input id="stormgateProfile" name="stormgateProfile" type="checkbox"
-                        @click="displayStormgateProfile()"
+                        @click="displayStormgateProfile()" :checked="stormgateProfileActive"
                         class="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600" />
                     </div>
                     <div class="text-sm leading-6 ">
@@ -95,8 +95,7 @@
 
                   </div>
                   <label v-if="stormgateProfileActive" for="stormgate"
-                    class="block text-sm font-medium text-gray-600">Lien
-                    vers mon profil</label>
+                    class="block text-sm font-medium text-gray-600">Copie de l'identifiant joueur Stormgate world</label>
                   <div v-if="stormgateProfileActive" class="sm:col-span-2 sm:mt-0">
                     <input type="text" name="stormgate" id="stormgate" v-model="user.stormgate"
                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-s sm:text-sm sm:leading-6" />
@@ -149,6 +148,11 @@ const registerSuccess = ref(false)
 onMounted(async () => {
   const userPayload = await userService.getUser();
   user.value = userPayload.data.user;
+  user.value.stormgate = userPayload.data.player.stormgateWorldId;
+  if (!user.value.stormgate) {
+    return
+  }
+  displayStormgateProfile()
 })
 
 const isFormValid = computed(() => {

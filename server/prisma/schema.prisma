@@ -37,21 +37,22 @@ model User {
 }
 
 model Player {
-  id       String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  nickname String            @db.VarChar(255)
-  rank     Int               @db.Integer
-  race     String            @db.VarChar(255)
-  league   String            @db.VarChar(255)
-  winrate  Int               @map("win_rate") @db.Integer
-  mmr      Int               @db.Integer
-  points   Int               @db.Integer
-  wins     Int               @db.Integer
-  losses   Int               @db.Integer
-  ties     Int               @db.Integer
-  matches  Int               @db.Integer
-  progress ProgressEnumType? @default(equal)
-  user     User              @relation(fields: [userId], references: [id])
-  userId   String            @unique @map("user_id") @db.Uuid
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  stormgateWorldId String            @unique @map("stormgate_world_id") @db.VarChar(255)
+  nickname         String?           @db.VarChar(255)
+  rank             Int?              @db.Integer
+  race             String?           @db.VarChar(255)
+  league           String?           @db.VarChar(255)
+  winrate          Int?              @map("win_rate") @db.Integer
+  mmr              Int?              @db.Integer
+  points           Int?              @db.Integer
+  wins             Int?              @db.Integer
+  losses           Int?              @db.Integer
+  ties             Int?              @db.Integer
+  matches          Int?              @db.Integer
+  progress         ProgressEnumType? @default(equal)
+  user             User              @relation(fields: [userId], references: [id])
+  userId           String            @unique @map("user_id") @db.Uuid
 
   @@map(name: "player")
 }

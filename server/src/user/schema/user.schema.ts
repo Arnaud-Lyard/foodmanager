@@ -6,6 +6,7 @@ export const updateUserSchema = object({
     email: string({}).email('Invalid email address'),
     twitter: string({}).optional(),
     esl: string({}).optional(),
+    stormgate: string({}).optional(),
   }),
 });
 
