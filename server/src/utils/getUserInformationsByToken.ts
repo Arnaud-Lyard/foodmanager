@@ -1,9 +1,12 @@
 import { NextFunction } from 'express';
-import { findUniqueUser, getUserRole } from '../user/service/user.service';
+import {
+  findUniqueUser,
+  getUserInformations,
+} from '../user/service/user.service';
 import AppError from './appError';
 import { verifyJwt } from './jwt';
 
-export async function getUserRoleByToken(
+export async function getUserInformationsByToken(
   next: NextFunction,
   access_token: string
 ) {
@@ -25,6 +28,6 @@ export async function getUserRoleByToken(
     return next(new AppError(401, `Invalid token or session has expired`));
   }
 
-  const role = await getUserRole(user.id);
-  return role;
+  const userInfos = await getUserInformations(user.id);
+  return userInfos;
 }

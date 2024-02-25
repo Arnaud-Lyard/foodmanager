@@ -25,7 +25,11 @@ export interface ILoggedUserResponse {
   status: string;
   data: {
     isConnect: boolean;
-    role: Role;
+    informations: {
+      role: Role;
+      pseudo: string;
+      avatar: string;
+    };
   };
 }
 

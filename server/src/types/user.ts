@@ -16,3 +16,9 @@ export interface IUserSafe {
 export interface IUserPublic extends Omit<IUserSafe, 'email' | 'role'> {}
 
 export type IRoleType = 'admin' | 'user';
+
+export interface IUserInformations {
+  role: RoleEnumType | null;
+  pseudo: string;
+  avatar: string | null;
+}

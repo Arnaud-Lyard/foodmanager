@@ -1,6 +1,6 @@
-import { RoleEnumType, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import prisma from '../../../prisma/client';
-import { IRoleType, IUserPublic, IUserSafe } from '../../types/user';
+import { IUserInformations, IUserPublic, IUserSafe } from '../../types/user';
 import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 
 export class UserRepository {
@@ -142,15 +142,17 @@ export class UserRepository {
     });
   }
 
-  static async getUserRole(
+  static async getUserInformations(
     userId: string
-  ): Promise<RoleEnumType | null | undefined> {
-    const user = await prisma.user.findFirst({
+  ): Promise<IUserInformations | null> {
+    const userinfos = await prisma.user.findFirst({
       where: { id: userId },
       select: {
         role: true,
+        pseudo: true,
+        avatar: true,
       },
     });
-    return user?.role;
+    return userinfos;
   }
 }

@@ -165,6 +165,6 @@ async function getAvatarUrl({
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
 
-export async function getUserRole(userId: string) {
-  return await UserRepository.getUserRole(userId);
+export async function getUserInformations(userId: string) {
+  return await UserRepository.getUserInformations(userId);
 }
