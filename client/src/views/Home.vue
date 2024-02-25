@@ -49,15 +49,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { IPost } from '../types/post';
+import { IPostUser } from '../types/post';
 import { postService } from '../services/post.service';
 import { limitStringLength } from '../utils/limitStringLength';
 import { formatDate } from '../utils/formatDate';
 
-const posts = ref<IPost[]>()
+const posts = ref<IPostUser[]>()
 onMounted(async () => {
   const response = await postService.getAllPosts();
-  posts.value = response.posts.map((post: IPost) => {
+  posts.value = response.posts.map((post: IPostUser) => {
     return {
       id: post.id,
       title: post.title,

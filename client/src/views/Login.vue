@@ -52,9 +52,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { authService } from '../services/auth.service';
-import { useAuthStore } from '../store/auth';
 import { useRouter } from 'vue-router';
-const authStore = useAuthStore();
 const router = useRouter();
 
 const email = ref('');
@@ -76,9 +74,9 @@ async function handleSubmit() {
     try {
       await authService.login({ email: email.value, password: password.value });
       router.push({ name: 'home' });
+      /* The hook beforeEach in router is executed and get user information */
       email.value = '';
       password.value = '';
-      authStore.login();
     } catch (error: any) {
       if (error.response.data.status === "fail" && error.response.data.errors) {
         loginError.value = { status: true, message: error.response.data.errors[0].message };

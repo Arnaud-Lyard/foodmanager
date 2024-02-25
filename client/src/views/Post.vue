@@ -23,12 +23,12 @@
 import { UserIcon } from '@heroicons/vue/20/solid'
 import { PencilIcon } from '@heroicons/vue/24/outline';
 import { onMounted, ref } from 'vue';
-import { IPost } from '../types/post';
+import { IPostUser } from '../types/post';
 import { postService } from '../services/post.service';
 import { useRoute } from 'vue-router';
 import { formatDate } from '../utils/formatDate';
 const route = useRoute()
-const post = ref<IPost>()
+const post = ref<IPostUser>()
 onMounted(async () => {
   const response = await postService.getPost(route.params.id as string)
   post.value = { ...response.post, updatedAt: formatDate(response.post.updatedAt) }
