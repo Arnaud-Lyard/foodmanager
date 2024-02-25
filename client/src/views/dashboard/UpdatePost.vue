@@ -66,7 +66,7 @@ import { computed, onMounted, ref } from 'vue';
 import Editor from '../../components/Editor.vue';
 import { postService } from '../../services/post.service';
 import { useRoute } from 'vue-router';
-import { Status } from '../../types/auth';
+import { Status } from '../../types/server'
 
 const route = useRoute()
 const post = ref<{ id: string, title: string, category: string, image: File | null | string, content: string }>({

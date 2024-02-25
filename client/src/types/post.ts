@@ -1,4 +1,4 @@
-import { Status } from './auth';
+import { Status } from './user';
 
 export interface IPost {
   id: string;
@@ -8,12 +8,13 @@ export interface IPost {
   content: string;
   createdAt: string;
   updatedAt: string;
-  user?: UserInformation;
 }
 
-export interface UserInformation {
-  pseudo: string;
-  avatar: string;
+export interface IPostUser extends IPost {
+  user: {
+    pseudo: string;
+    avatar: string;
+  };
 }
 
 export interface ICreatePostResponse {
@@ -32,12 +33,12 @@ export interface IGetPostUserResponse {
 }
 
 export interface IGetPostResponse {
-  post: IPost;
+  post: IPostUser;
   status: Status;
 }
 
 export interface IGetAllPostsResponse {
-  posts: IPost[];
+  posts: IPostUser[];
   status: Status;
 }
 

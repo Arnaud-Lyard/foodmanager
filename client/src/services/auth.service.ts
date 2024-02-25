@@ -1,11 +1,5 @@
-import {
-  IForgotPasswordResponse,
-  ILoginResponse,
-  ILogoutResponse,
-  IRegisterResponse,
-  IResetPasswordResponse,
-  IVerifyEmailResponse,
-} from '../types/auth';
+import { ILogoutResponse } from '../types/auth';
+import { IServerResponse } from '../types/server';
 import { HttpService } from './http.service';
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL;
@@ -26,7 +20,7 @@ export class AuthService extends HttpService {
     pseudo: string;
     passwordConfirm: string;
   }) {
-    const { data } = await this.instance.post<IRegisterResponse>(
+    const { data } = await this.instance.post<IServerResponse>(
       `api/auth/register`,
       {
         email,
@@ -39,7 +33,7 @@ export class AuthService extends HttpService {
   }
 
   async login({ email, password }: { email: string; password: string }) {
-    const { data } = await this.instance.post<ILoginResponse>(
+    const { data } = await this.instance.post<IServerResponse>(
       `api/auth/login`,
       {
         email,
@@ -50,14 +44,14 @@ export class AuthService extends HttpService {
   }
 
   async verifyEmail(verifyCode: string) {
-    const { data } = await this.instance.get<IVerifyEmailResponse>(
+    const { data } = await this.instance.get<IServerResponse>(
       `/api/auth/verifyemail/${verifyCode}`
     );
     return data;
   }
 
   async forgotPassword(email: string) {
-    const { data } = await this.instance.post<IForgotPasswordResponse>(
+    const { data } = await this.instance.post<IServerResponse>(
       `/api/auth/forgotpassword`,
       {
         email,
@@ -75,7 +69,7 @@ export class AuthService extends HttpService {
     passwordConfirm: string;
     resetToken: string;
   }) {
-    const { data } = await this.instance.patch<IResetPasswordResponse>(
+    const { data } = await this.instance.patch<IServerResponse>(
       `/api/auth/resetpassword/${resetToken}`,
       {
         password,
