@@ -1,18 +1,17 @@
 require('dotenv').config();
-import express, { NextFunction, Request, Response, response } from 'express';
-import config from 'config';
-import cors from 'cors';
-import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import { validateEnv } from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
-import authRouter from './auth/routes/auth.routes';
-import userRouter from './user/routes/user.routes';
-import AppError from './utils/appError';
-import multer from 'multer';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
+import morgan from 'morgan';
 import path from 'path';
+import authRouter from './auth/routes/auth.routes';
+import stormgateWorldCronJob from './cron/stormgateWorld';
 import playerRouter from './player/routes/player.routes';
 import postRouter from './post/routes/post.routes';
+import userRouter from './user/routes/user.routes';
+import AppError from './utils/appError';
+import { validateEnv } from './utils/validateEnv';
 
 // import nodemailer from 'nodemailer';
 // (async function () {
@@ -89,6 +88,7 @@ async function bootstrap() {
   const port = process.env.PORT;
   app.listen(port, () => {
     console.log(`Server on port: ${port}`);
+    stormgateWorldCronJob.start();
   });
 }
 

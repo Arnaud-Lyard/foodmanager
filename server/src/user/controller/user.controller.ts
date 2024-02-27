@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs-extra';
-import { getPlayerByUserId } from '../../player/service/player.service';
 import { IUserSafe } from '../../types/user';
 import AppError from '../../utils/appError';
 import { getUserInformations } from '../../utils/getUserInformations';
@@ -16,12 +15,10 @@ export const getUserHandler = async (
 ) => {
   try {
     const user = (await getUserInformations(req, next)) as IUserSafe;
-    const player = await getPlayerByUserId(user.id);
     res.status(200).json({
       status: 'success',
       data: {
         user,
-        player,
       },
     });
   } catch (err: any) {

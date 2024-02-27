@@ -23,6 +23,8 @@ const envSchema = z.object({
   EMAIL_PASS: z.string(),
   EMAIL_HOST: z.string(),
   EMAIL_PORT: z.string(),
+
+  STORMGATE_WORLD_API_ENDPOINT: z.string(),
 });
 
 export function validateEnv() {
@@ -47,6 +49,8 @@ export function validateEnv() {
     EMAIL_PASS: process.env.EMAIL_PASS,
     EMAIL_HOST: process.env.EMAIL_HOST,
     EMAIL_PORT: process.env.EMAIL_PORT,
+
+    STORMGATE_WORLD_API_ENDPOINT: process.env.STORMGATE_WORLD_API_ENDPOINT,
   });
 
   if (!envServer.success) {

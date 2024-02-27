@@ -5,7 +5,6 @@ import AppError from '../../utils/appError';
 import { signJwt } from '../../utils/jwt';
 import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 import { UserRepository } from '../repository/user.repository';
-import { PlayerRepository } from '../../player/repository/player.repository';
 
 const prisma = new PrismaClient();
 
@@ -131,6 +130,7 @@ export async function updateUser({
     email,
     esl,
     twitter,
+    stormgate,
   };
   try {
     /* file management */
@@ -138,8 +138,6 @@ export async function updateUser({
     await removeUnusedFiles({ user, fileUpload });
     const avatarUrl = await getAvatarUrl({ user, fileUpload });
     userUpdate.avatar = avatarUrl;
-
-    await updateStormgateProfile({ stormgate, user });
 
     await UserRepository.updateUser(userUpdate);
   } catch (err: any) {
@@ -175,28 +173,6 @@ async function getAvatarUrl({
   if (!fileUpload) return user.avatar;
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
-
-async function updateStormgateProfile({
-  stormgate,
-  user,
-}: {
-  stormgate: string | undefined;
-  user: IUserSafe;
-}) {
-  const userRegistered = await UserRepository.findPlayerByUserId(user.id);
-
-  if (!userRegistered?.player?.stormgateWorldId && !stormgate) return;
-  if (!userRegistered?.player?.stormgateWorldId && stormgate) {
-    await PlayerRepository.createNewPlayer({
-      userId: user.id,
-      stormgateWorldId: stormgate,
-    });
-  }
-
-  if (userRegistered?.player?.stormgateWorldId && stormgate) {
-    await PlayerRepository.updatePlayerById({
-      playerId: userRegistered.player.id,
-      stormgateWorldId: stormgate,
-    });
-  }
-}
+export const getAllUsersActive = async () => {
+  return await UserRepository.getAllUsersActive();
+};

@@ -17,6 +17,7 @@ CREATE TABLE "user" (
     "esl" VARCHAR(255),
     "twitter" VARCHAR(255),
     "grade" "GradeEnumType" NOT NULL DEFAULT 'user',
+    "stormgate_world_id" VARCHAR(255),
     "password" TEXT NOT NULL,
     "role" "RoleEnumType" DEFAULT 'user',
     "verification_code" TEXT,
@@ -31,13 +32,13 @@ CREATE TABLE "user" (
 -- CreateTable
 CREATE TABLE "player" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "stormgate_world_id" VARCHAR(255) NOT NULL,
     "nickname" VARCHAR(255),
     "rank" INTEGER,
     "race" VARCHAR(255),
     "league" VARCHAR(255),
-    "win_rate" INTEGER,
-    "mmr" INTEGER,
+    "tier" INTEGER,
+    "win_rate" DOUBLE PRECISION,
+    "mmr" DOUBLE PRECISION,
     "points" INTEGER,
     "wins" INTEGER,
     "losses" INTEGER,
@@ -67,6 +68,9 @@ CREATE TABLE "post" (
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "user_stormgate_world_id_key" ON "user"("stormgate_world_id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "user_verification_code_key" ON "user"("verification_code");
 
 -- CreateIndex
@@ -74,12 +78,6 @@ CREATE INDEX "user_email_verification_code_password_reset_token_idx" ON "user"("
 
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_verification_code_password_reset_token_key" ON "user"("email", "verification_code", "password_reset_token");
-
--- CreateIndex
-CREATE UNIQUE INDEX "player_stormgate_world_id_key" ON "player"("stormgate_world_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "player_user_id_key" ON "player"("user_id");
 
 -- AddForeignKey
 ALTER TABLE "player" ADD CONSTRAINT "player_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

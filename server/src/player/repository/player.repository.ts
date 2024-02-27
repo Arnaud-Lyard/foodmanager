@@ -1,4 +1,6 @@
+import { Player, ProgressEnumType } from '@prisma/client';
 import prisma from '../../../prisma/client';
+import { IPlayerUpdateDto } from '../dto/player.dto';
 
 export class PlayerRepository {
   static async getAllPlayers() {
@@ -14,43 +16,87 @@ export class PlayerRepository {
     });
   }
 
+  static async findPlayerByNicknameAndRace(player: IPlayerUpdateDto) {
+    return await prisma.player.findFirst({
+      where: {
+        nickname: player.nickname,
+        race: player.race,
+      },
+    });
+  }
+
   static async createNewPlayer({
+    player,
     userId,
-    stormgateWorldId,
   }: {
+    player: IPlayerUpdateDto;
     userId: string;
-    stormgateWorldId: string;
   }) {
     return await prisma.player.create({
+      include: { user: true },
       data: {
-        userId,
-        stormgateWorldId,
+        nickname: player.nickname,
+        rank: player.rank,
+        race: player.race,
+        league: player.league,
+        tier: player.tier,
+        winrate: player.winrate,
+        mmr: player.mmr,
+        points: player.points,
+        wins: player.wins,
+        losses: player.losses,
+        ties: player.ties,
+        matches: player.matches,
+        user: {
+          connect: {
+            id: userId,
+          },
+        },
       },
     });
   }
 
-  static async updatePlayerById({
-    playerId,
-    stormgateWorldId,
+  static async updatePlayer({
+    player,
+    playerData,
   }: {
-    playerId: string;
-    stormgateWorldId: string;
+    player: Player | null;
+    playerData: IPlayerUpdateDto;
   }) {
     return await prisma.player.update({
-      where: { id: playerId },
+      where: {
+        id: player!.id,
+      },
       data: {
-        stormgateWorldId,
+        nickname: playerData.nickname,
+        rank: playerData.rank,
+        race: playerData.race,
+        league: playerData.league,
+        tier: playerData.tier,
+        winrate: playerData.winrate,
+        mmr: playerData.mmr,
+        points: playerData.points,
+        wins: playerData.wins,
+        losses: playerData.losses,
+        ties: playerData.ties,
+        matches: playerData.matches,
       },
     });
   }
 
-  static async getPlayerByUserId(userId: string) {
-    return await prisma.player.findUnique({
-      select: {
-        stormgateWorldId: true,
-      },
+  static async updatePlayerProgression({
+    player,
+    progression,
+  }: {
+    player: Player | null;
+    progression: ProgressEnumType;
+  }) {
+    return await prisma.player.update({
       where: {
-        userId,
+        id: player!.id,
+      },
+      data: {
+        progress: progression,
       },
     });
   }

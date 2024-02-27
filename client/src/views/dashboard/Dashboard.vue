@@ -130,6 +130,7 @@ import { IUser } from '../../types/user';
 
 const user = ref<IUser>({
   id: '',
+  stormgateWorldId: '',
   pseudo: '',
   email: '',
   grade: 'user',
@@ -148,7 +149,8 @@ const registerSuccess = ref(false)
 onMounted(async () => {
   const userPayload = await userService.getUser();
   user.value = userPayload.data.user;
-  user.value.stormgate = userPayload.data.player.stormgateWorldId;
+  user.value.stormgate = userPayload.data.user.stormgateWorldId
+
   if (!user.value.stormgate) {
     return
   }

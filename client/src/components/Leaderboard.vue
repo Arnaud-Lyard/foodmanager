@@ -46,8 +46,15 @@ const players = ref<IPlayer[]>([])
 onMounted(async () => {
   try {
     const playersData = await playerService.getAllPlayers();
-    players.value = playersData.players.sort((a, b) => b.mmr - a.mmr);
-  } catch (error) {
+    players.value = playersData.players.sort((a, b) => b.mmr - a.mmr).map((player: IPlayer) => {
+      return {
+        ...player,
+        mmr: Math.trunc(player.mmr),
+        winrate: Math.trunc(player.winrate)
+      }
+    })
+  }
+  catch (error) {
     console.error(error)
   }
 })

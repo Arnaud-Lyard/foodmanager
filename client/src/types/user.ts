@@ -1,5 +1,6 @@
 export interface IUser {
   id: string;
+  stormgateWorldId: string;
   pseudo: string;
   email: string;
   grade: Grade;
@@ -37,9 +38,6 @@ export interface IUserResponse {
   status: string;
   data: {
     user: IUser;
-    player: {
-      stormgateWorldId: string;
-    };
   };
 }
 
