@@ -3,8 +3,9 @@ import axios from 'axios';
 import cron from 'node-cron';
 import { StormgateWorldInput } from '../api/stormgateworld.schema';
 import { getAllUsersActive } from '../user/service/user.service';
+import { logger } from '../app';
 export default cron.schedule('1 0 * * *', async () => {
-  console.log('executing getStormgateWorldLeaderboard cron job');
+  logger.info('executing getStormgateWorldLeaderboard cron job');
   const users = await getAllUsersActive();
   if (!users) return;
   const url = process.env.STORMGATE_WORLD_API_ENDPOINT;
@@ -37,9 +38,8 @@ export default cron.schedule('1 0 * * *', async () => {
     }
   });
   for (const error of errors) {
-    console.log(
-      'error during fetching player from Stormgateworld API for path:',
-      error.request.path
+    logger.error(
+      `error during fetching player from Stormgateworld API for path: ${error.request.path}`
     );
   }
   await createNewPlayerOrUpdatePlayer(datas);

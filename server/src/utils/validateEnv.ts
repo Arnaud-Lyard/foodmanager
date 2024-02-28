@@ -25,6 +25,7 @@ const envSchema = z.object({
   EMAIL_PORT: z.string(),
 
   STORMGATE_WORLD_API_ENDPOINT: z.string(),
+  LOGTAIL_SOURCE_TOKEN: z.string(),
 });
 
 export function validateEnv() {
@@ -51,6 +52,7 @@ export function validateEnv() {
     EMAIL_PORT: process.env.EMAIL_PORT,
 
     STORMGATE_WORLD_API_ENDPOINT: process.env.STORMGATE_WORLD_API_ENDPOINT,
+    LOGTAIL_SOURCE_TOKEN: process.env.LOGTAIL_SOURCE_TOKEN,
   });
 
   if (!envServer.success) {
@@ -59,7 +61,6 @@ export function validateEnv() {
     process.exit(1);
   }
 }
-// export const envServerSchema = envServer.data;
 
 type EnvSchemaType = z.infer<typeof envSchema>;
 

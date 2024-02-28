@@ -81,8 +81,6 @@ async function calculateProgression({
   player: Player | null;
   playerData: IPlayerUpdateDto;
 }) {
-  console.log('player', player);
-  console.log('playerData', playerData);
   if (!player) return;
   let progression: ProgressEnumType;
   if (player.mmr === playerData.mmr) {
@@ -92,8 +90,6 @@ async function calculateProgression({
   } else {
     progression = 'down';
   }
-
-  console.log('progression', progression);
 
   await PlayerRepository.updatePlayerProgression({
     player,

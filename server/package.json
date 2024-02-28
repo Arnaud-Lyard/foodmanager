@@ -34,6 +34,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@logtail/node": "^0.4.19",
+    "@logtail/winston": "^0.4.19",
     "@prisma/client": "^5.7.0",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
@@ -53,6 +55,7 @@
     "pug": "^3.0.2",
     "redis": "^4.1.0",
     "ts-node-dev": "^2.0.0",
+    "winston": "^3.11.0",
     "zod": "^3.15.1"
   }
 }
