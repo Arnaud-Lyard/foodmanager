@@ -39,6 +39,7 @@ services:
       - CLIENT_URL=${CLIENT_URL:-url}
       - SERVER_URL=${SERVER_URL:-url}
       - STORMGATE_WORLD_API_ENDPOINT=${STORMGATE_WORLD_API_ENDPOINT:-url}
+      - LOGTAIL_SOURCE_TOKEN=${LOGTAIL_SOURCE_TOKEN:-token}
     image: arnaudlyard/relaxing-hippoquests-server
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:4000/api']
