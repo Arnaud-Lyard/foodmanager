@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import pug from 'pug';
 import { convert } from 'html-to-text';
 import { Prisma } from '@prisma/client';
+import { logger } from '../app';
 
 const smtp = {
   host: process.env.EMAIL_HOST,
@@ -50,9 +51,9 @@ export default class Email {
 
       // Send email
       const info = await this.newTransport().sendMail(mailOptions);
-      console.log(nodemailer.getTestMessageUrl(info));
+      // console.log(nodemailer.getTestMessageUrl(info));
     } catch (error) {
-      console.error('Error during send mail :', error);
+      logger.error(`Error during send mail: ${error}`);
     }
   }
 

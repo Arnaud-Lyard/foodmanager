@@ -98,6 +98,7 @@ async function main() {
     update: {},
     create: {
       pseudo: 'user',
+      stormgateWorldId: '123460',
       email: 'user@prisma.io',
       avatar: 'https://i.pravatar.cc/150?u=user',
       verified: true,

@@ -12,4 +12,5 @@ export interface IUserUpdateDto {
   avatar?: string | null;
   esl?: string | null;
   twitter?: string | null;
+  stormgate?: string | null;
 }

@@ -64,7 +64,7 @@ onMounted(async () => {
       category: post.category,
       image: post.image,
       createdAt: formatDate(post.createdAt),
-      content: limitStringLength(post.content, 200),
+      content: limitStringLength(post.content, 200) + '...',
       updatedAt: formatDate(post.updatedAt),
       user: {
         pseudo: post.user.pseudo,

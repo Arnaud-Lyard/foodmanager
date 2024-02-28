@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import fs from 'fs-extra';
+import { IUserSafe } from '../../types/user';
 import AppError from '../../utils/appError';
 import { getUserInformations } from '../../utils/getUserInformations';
+import { getUserInformationsByToken } from '../../utils/getUserInformationsByToken';
 import { UserRepository } from '../repository/user.repository';
-import { getTeamUsers, updateUser } from '../service/user.service';
 import { UpdateUserInput } from '../schema/user.schema';
-import { IUserSafe } from '../../types/user';
-import { getUserRoleByToken } from '../../utils/getUserRoleByToken';
+import { getTeamUsers, updateUser } from '../service/user.service';
 
 export const getUserHandler = async (
   req: Request,
@@ -15,7 +15,6 @@ export const getUserHandler = async (
 ) => {
   try {
     const user = (await getUserInformations(req, next)) as IUserSafe;
-
     res.status(200).json({
       status: 'success',
       data: {
@@ -101,13 +100,13 @@ export const getMeHandler = async (
     } else if (req.cookies.access_token) {
       access_token = req.cookies.access_token;
     }
-    const role = await getUserRoleByToken(next, access_token);
+    const userInfos = await getUserInformationsByToken(next, access_token);
 
     res.status(200).json({
       status: 'success',
       data: {
         isConnect: Boolean(access_token),
-        role,
+        informations: userInfos,
       },
     });
   } catch (err: any) {
@@ -130,7 +129,7 @@ export const updateUserHandler = async (
     }
 
     const file = req.file;
-    const { twitter, esl, pseudo, email } = req.body;
+    const { twitter, esl, pseudo, email, stormgate } = req.body;
 
     await updateUser({
       file,
@@ -139,6 +138,7 @@ export const updateUserHandler = async (
       esl,
       pseudo,
       email,
+      stormgate,
     });
 
     res.status(200).json({

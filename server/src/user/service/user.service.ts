@@ -114,6 +114,7 @@ export async function updateUser({
   pseudo,
   email,
   file,
+  stormgate,
 }: {
   user: IUserSafe;
   twitter?: string;
@@ -121,6 +122,7 @@ export async function updateUser({
   pseudo: string;
   email: string;
   file: Express.Multer.File | undefined;
+  stormgate?: string;
 }) {
   const userUpdate: IUserUpdateDto = {
     id: user.id,
@@ -128,16 +130,23 @@ export async function updateUser({
     email,
     esl,
     twitter,
+    stormgate,
   };
   try {
+    /* file management */
     const fileUpload = file;
     await removeUnusedFiles({ user, fileUpload });
     const avatarUrl = await getAvatarUrl({ user, fileUpload });
     userUpdate.avatar = avatarUrl;
-    return await UserRepository.updateUser(userUpdate);
+
+    await UserRepository.updateUser(userUpdate);
   } catch (err: any) {
-    throw new AppError(422, 'Erreur lors de la mise à jour de votre avatar.');
+    throw new AppError(400, 'Erreur lors de la mise à jour du profil.');
   }
+}
+
+export async function getUserInformations(userId: string) {
+  return await UserRepository.getUserInformations(userId);
 }
 
 async function removeUnusedFiles({
@@ -164,7 +173,6 @@ async function getAvatarUrl({
   if (!fileUpload) return user.avatar;
   return `${process.env.SERVER_URL}/uploads/${fileUpload.filename}`;
 }
-
-export async function getUserRole(userId: string) {
-  return await UserRepository.getUserRole(userId);
-}
+export const getAllUsersActive = async () => {
+  return await UserRepository.getAllUsersActive();
+};

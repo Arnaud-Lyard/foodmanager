@@ -1,6 +1,6 @@
-import { RoleEnumType, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import prisma from '../../../prisma/client';
-import { IRoleType, IUserPublic, IUserSafe } from '../../types/user';
+import { IUserInformations, IUserPublic, IUserSafe } from '../../types/user';
 import { IUserUpdateDto, UserDto } from '../dto/user.dto';
 
 export class UserRepository {
@@ -102,6 +102,7 @@ export class UserRepository {
       where: { id: userId },
       select: {
         id: true,
+        stormgateWorldId: true,
         pseudo: true,
         email: true,
         grade: true,
@@ -135,22 +136,60 @@ export class UserRepository {
   }
 
   static async updateUser(userUpdate: IUserUpdateDto) {
-    const { id, twitter, esl, pseudo, avatar } = userUpdate;
-    return await prisma.user.update({
+    const { id, twitter, esl, pseudo, avatar, stormgate } = userUpdate;
+    const user = await prisma.user.update({
       where: { id },
-      data: { twitter, esl, pseudo, avatar },
+      data: { twitter, esl, pseudo, avatar, stormgateWorldId: stormgate },
     });
+    return user;
   }
 
-  static async getUserRole(
+  static async getUserInformations(
     userId: string
-  ): Promise<RoleEnumType | null | undefined> {
-    const user = await prisma.user.findFirst({
+  ): Promise<IUserInformations | null> {
+    const userinfos = await prisma.user.findFirst({
       where: { id: userId },
       select: {
         role: true,
+        pseudo: true,
+        avatar: true,
       },
     });
-    return user?.role;
+    return userinfos;
+  }
+
+  static async findPlayerByUserId(userId: string) {
+    return await prisma.user.findFirst({
+      include: { player: true },
+      where: { id: userId },
+    });
+  }
+
+  static async getAllUsersActive() {
+    return await prisma.user.findMany({
+      where: {
+        stormgateWorldId: {
+          not: null,
+        },
+      },
+      select: {
+        id: true,
+        stormgateWorldId: true,
+        pseudo: true,
+        grade: true,
+        avatar: true,
+        esl: true,
+        twitter: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
+
+  static async findUserByStormgateId(stormgateWorldId: string) {
+    return await prisma.user.findFirst({
+      include: { player: true },
+      where: { stormgateWorldId },
+    });
   }
 }

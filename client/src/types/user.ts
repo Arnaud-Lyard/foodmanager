@@ -1,5 +1,6 @@
 export interface IUser {
   id: string;
+  stormgateWorldId: string;
   pseudo: string;
   email: string;
   grade: Grade;
@@ -25,7 +26,11 @@ export interface ILoggedUserResponse {
   status: string;
   data: {
     isConnect: boolean;
-    role: Role;
+    informations: {
+      role: Role;
+      pseudo: string;
+      avatar: string;
+    };
   };
 }
 

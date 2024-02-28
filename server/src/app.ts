@@ -1,29 +1,48 @@
 require('dotenv').config();
-import express, { NextFunction, Request, Response, response } from 'express';
-import config from 'config';
-import cors from 'cors';
-import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
-import { validateEnv } from './utils/validateEnv';
 import { PrismaClient } from '@prisma/client';
-import authRouter from './auth/routes/auth.routes';
-import userRouter from './user/routes/user.routes';
-import AppError from './utils/appError';
-import multer from 'multer';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
+import morgan from 'morgan';
 import path from 'path';
+import authRouter from './auth/routes/auth.routes';
+import stormgateWorldCronJob from './cron/stormgateWorld';
 import playerRouter from './player/routes/player.routes';
 import postRouter from './post/routes/post.routes';
+import userRouter from './user/routes/user.routes';
+import AppError from './utils/appError';
+import { validateEnv } from './utils/validateEnv';
+import winston from 'winston';
+import { Logtail } from '@logtail/node';
+import { LogtailTransport } from '@logtail/winston';
 
-// import nodemailer from 'nodemailer';
-// (async function () {
-//   const credentials = await nodemailer.createTestAccount();
-//   console.log(credentials);
-// })();
+let logtail;
+if (process.env.NODE_ENV === 'production') {
+  logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN);
+}
 
 validateEnv();
 
 const prisma = new PrismaClient();
 const app = express();
+
+const { combine, timestamp, json } = winston.format;
+export const logger = winston.createLogger({
+  level: 'http',
+  format: combine(
+    timestamp({
+      format: 'YYYY-MM-DD hh:mm:ss.SSS A',
+    }),
+    json()
+  ),
+  transports:
+    process.env.NODE_ENV === 'production'
+      ? [
+          new winston.transports.Console(),
+          new LogtailTransport(logtail as Logtail),
+        ]
+      : [new winston.transports.Console()],
+});
 
 async function bootstrap() {
   // TEMPLATE ENGINE
@@ -47,7 +66,29 @@ async function bootstrap() {
   );
 
   // 3. Logger
-  if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+  const morganMiddleware = morgan(
+    function (tokens, req, res) {
+      return JSON.stringify({
+        method: tokens.method(req, res),
+        url: tokens.url(req, res),
+        status: Number.parseFloat(tokens.status(req, res) as string),
+        content_length: tokens.res(req, res, 'content-length'),
+        response_time: Number.parseFloat(
+          tokens['response-time'](req, res) as string
+        ),
+      });
+    },
+    {
+      stream: {
+        write: (message) => {
+          const data = JSON.parse(message);
+          logger.http(`incoming-request`, data);
+        },
+      },
+    }
+  );
+
+  app.use(morganMiddleware);
 
   // ROUTES
   app.use('/api/auth', authRouter);
@@ -88,7 +129,8 @@ async function bootstrap() {
 
   const port = process.env.PORT;
   app.listen(port, () => {
-    console.log(`Server on port: ${port}`);
+    logger.info(`Server on port: ${port}`);
+    stormgateWorldCronJob.start();
   });
 }
 
