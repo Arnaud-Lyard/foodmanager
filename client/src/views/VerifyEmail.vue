@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full flex-1 mt-[-64px] flex-col justify-center px-6 lg:px-8">
+  <div class="flex h-full flex-1 sm:mt-[200px] flex-col justify-center px-6 lg:px-8">
     <div class="rounded-md bg-green-50 p-4">
       <div class="flex">
         <div class="flex-shrink-0">

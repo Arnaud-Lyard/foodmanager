@@ -9,7 +9,7 @@
         <div>
           <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Mot de passe</label>
           <div class="mt-2">
-            <input id="password" name="password" type="password" v-model="password" autocomplete="password" required=true
+            <input id="password" name="password" type="password" v-model="password" required=true
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
@@ -20,8 +20,7 @@
               passe</label>
           </div>
           <div class="mt-2">
-            <input id="passwordConfirm" name="passwordConfirm" type="password" v-model="passwordConfirm"
-              autocomplete="password" required=true
+            <input id="passwordConfirm" name="passwordConfirm" type="password" v-model="passwordConfirm" required=true
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" />
           </div>
         </div>
