@@ -1,7 +1,7 @@
 export function formatDate(date: string): string {
   const dateFormat = new Date(date);
   const year = dateFormat.getFullYear();
-  let month = dateFormat.getMonth();
+  let month = dateFormat.getMonth() + 1;
   let dateTime = dateFormat.getDate();
 
   if (dateTime < 10) {
