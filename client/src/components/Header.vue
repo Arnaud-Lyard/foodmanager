@@ -52,8 +52,8 @@
               @click=closeDisclosurePanel(close)
               :class="[navigation.href === $route.path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
               :aria-current="navigation.href === $route.path ? 'page' : undefined">{{ navigation.name }}</router-link>
-            <router-link v-for="navigation in privateNavigations" :key="navigation.name" :to="navigation.href"
-              @click=closeDisclosurePanel(close)
+            <router-link v-if="isLoggedIn" v-for="navigation in privateNavigations" :key="navigation.name"
+              :to="navigation.href" @click=closeDisclosurePanel(close)
               :class="[navigation.href === $route.path ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block rounded-md px-3 py-2 text-base font-medium']"
               :aria-current="navigation.href === $route.path ? 'page' : undefined">{{ navigation.name }}</router-link>
 
