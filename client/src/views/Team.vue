@@ -17,8 +17,9 @@
           <p class="text-sm leading-6 text-gray-600">{{ teamUser.grade }}</p>
           <ul grade="list" class="mt-6 flex justify-center gap-x-6">
             <li>
-              <a @click="navigate(teamUser, 'twitter')" :class="teamUser.twitter ? '' : 'cursor-not-allowed'"
-                class="text-gray-400 hover:text-gray-500 cursor-pointer">
+              <a @click="navigate(teamUser, 'twitter')"
+                :class="teamUser.twitter ? 'cursor-pointer' : 'cursor-not-allowed'"
+                class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">Twitter</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 31.812 26">
                   <path
@@ -28,7 +29,7 @@
               </a>
             </li>
             <li>
-              <a @click="navigate(teamUser, 'esl')" :class="teamUser.esl ? '' : 'cursor-not-allowed'"
+              <a @click="navigate(teamUser, 'esl')" :class="teamUser.esl ? 'cursor-pointer' : 'cursor-not-allowed'"
                 class="text-gray-400 hover:text-gray-500">
                 <span class="sr-only">ESL</span>
                 <svg fill="currentColor" width="20px" height="20px" viewBox="0 0 24 24" grade="img">

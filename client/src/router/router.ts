@@ -16,6 +16,8 @@ import VerifyEmail from '../views/VerifyEmail.vue';
 import PostList from '../views/dashboard/PostList.vue';
 import UpdatePost from '../views/dashboard/UpdatePost.vue';
 import WritePost from '../views/dashboard/WritePost.vue';
+import LegalNotice from '../views/LegalNotice.vue';
+import PrivacyPolicy from '../views/PrivacyPolicy.vue';
 
 const routes = [
   {
@@ -65,6 +67,18 @@ const routes = [
     name: 'resetpassword',
     meta: { layout: Auth },
     component: ResetPassword,
+  },
+  {
+    path: '/mentions-legales',
+    name: 'legalnotice',
+    meta: { layout: Auth },
+    component: LegalNotice,
+  },
+  {
+    path: '/politique-de-confidentialite',
+    name: 'privacypolicy',
+    meta: { layout: Auth },
+    component: PrivacyPolicy,
   },
   {
     path: '/tableau-de-bord',
